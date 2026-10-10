@@ -9,7 +9,7 @@ Su diferencia con otras apps de superación personal es el rigor:
 - el XP mide la práctica y no se confunde con el nivel;
 - un objetivo solo se marca como logrado con evidencia evaluada.
 
-> Proyecto abierto en preparación. Iniciativa y autoría: **Omar** ([@Omar8485](https://github.com/Omar8485)). Licencias: código bajo **AGPL-3.0-or-later** (`LICENSE`); ontología, catálogo y textos bajo **CC BY-SA 4.0** (`LICENSE-CONTENIDO.md`). ¿Quieres colaborar? Lee `CONTRIBUTING.md`.
+> Proyecto abierto en preparación. Iniciativa y autoría: **Omar** ([@Omar8485](https://github.com/Omar8485)). Licencias: código bajo **AGPL-3.0-or-later** (`LICENSE`); ontología, catálogo y textos bajo **CC BY-SA 4.0** (`LICENSE-CONTENIDO.md`). ¿Quieres colaborar? Lee `CONTRIBUTING.md`. Para reportar un problema de seguridad, lee `SECURITY.md`.
 
 ## Estado
 
