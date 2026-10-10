@@ -22,5 +22,5 @@ export interface Evidencia {
   /** Contexto en el que se ejecutó la habilidad; dos evidencias con el mismo contexto cuentan como uno. */
   contexto: string
   /** `reto-senda`: reto generado y corregido por el modelo dentro de la app (D-009). */
-  origen?: 'reto-senda'
+  fuente?: 'reto-senda' | 'logro' | 'manual'
 }

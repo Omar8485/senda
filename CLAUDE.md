@@ -67,7 +67,7 @@ Senda es la app de Omar en claude.ai (https://claude.ai/artifact/JS7eTwNbd4sACDn
 
 Hay dos repositorios y una carpeta que los reúne:
 
-- **github.com/Omar8485/senda**: el proyecto abierto (modelo genérico, reglas, app y docs). Se hará público: **nunca subas aquí datos personales** (valores, inventario, evidencias, notas de conversación). `perfil/`, `datos/` y `notas/` están en `.gitignore`.
+- **github.com/Omar8485/senda**: el proyecto abierto (modelo genérico, reglas, app y docs). Es **público**: **nunca subas aquí datos personales, claves ni tokens** (valores, inventario, evidencias, notas de conversación). `perfil/`, `datos/` y `notas/` están en `.gitignore`.
 - **github.com/Omar8485/senda-omar**: privado siempre. Contiene `perfil/` (fichas y `perfil/ESTADO.md`), `datos/senda-db/` (foto de la base de Senda) y `notas/`. La rama `respaldo-historial-senda` guarda el historial anterior a la separación.
 - **Carpeta de Omar** (`C:\Users\omar_\Documents\MODELO HABILIDADES`): la copia de trabajo diaria. La raíz corresponde a `senda` y `perfil/` + `datos/` corresponden a `senda-omar`.
 

@@ -43,12 +43,11 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 ## Siguiente acción
 
 0. **Senda v1:** B.0 hecha en la rama `claude/lucid-cori-csscqq` (ver `docs/arquitectura.md` §13). Pendiente de Omar:
-   - activar GitHub Pages (Settings → Pages → Source: "GitHub Actions"). Con el repositorio privado, Pages exige GitHub Pro; al hacerlo público es gratis;
-   - unir la rama a `main` para el primer despliegue;
+   - unir el PR #1 a `main` para el primer despliegue (Pages ya está activado y el repositorio es público);
    - confirmar la respuesta a la pregunta 3 (la v1 es PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
    - pregunta 4 (respuestas de referencia de los retos de inglés): pendiente por decisión de Omar, se necesita en B.2.
    
-   Siguiente: **fase B.1** (Senda local: datos en IndexedDB, importador del prototipo, adaptadores de modelos, prompts versionados y pantallas).
+   **Fase B.1 en curso.** El avance paso a paso, cómo retomar y las preguntas pendientes están en **`docs/construccion-v1.md`**. PR abierto: https://github.com/Omar8485/senda/pull/1.
 1. **Fase 5:** completar las áreas pendientes de Omar con la skill `habilidades-orientacion` (detalle en `perfil/ESTADO.md`).
 2. **Fase 2 (cuando Omar quiera):** contrastar `modelo/familias.md` con ESCO/O\*NET y reclasificar las 20 habilidades de la auditoría.
 
@@ -75,7 +74,7 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
   - la raíz corresponde a `Omar8485/senda`;
   - `perfil/` y `datos/` corresponden a `Omar8485/senda-omar`.
 - **Repositorios:**
-  - `github.com/Omar8485/senda`: privado por ahora, se hará público. Contiene modelo, reglas, app y docs.
+  - `github.com/Omar8485/senda`: **público** desde el 2026-10-10. Contiene modelo, reglas, app y docs.
   - `github.com/Omar8485/senda-omar`: privado siempre. Contiene `perfil/`, `datos/`, `notas/` y la rama `respaldo-historial-senda`.
 - **Terminal remota (device_bash):** funciona desde el 2026-10-10, tras la actualización KB5129195.
 - **App v1 (`app/`):** Node 22.12+. `npm ci` y `npm run check` (lint, tipos y pruebas del núcleo); `npm run build` y `npm run test:e2e` (Playwright). La CI corre todo, más el validador, en cada push.
@@ -113,3 +112,4 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 - **2026-10-10:** Omar eligió AGPL-3.0 para el código. Se agregan `LICENSE`, `CONTRIBUTING.md` (DCO), `CODE_OF_CONDUCT.md` y encabezados SPDX. Con su autorización, se reescribió el historial de `senda` sin datos personales. `senda-omar` usa `main` como rama principal. El validador ignora los `ESTADO.md`.
 - **2026-10-10:** `docs/arquitectura.md` v0.1 (borrador): local primero, sin backend, React + TS + Vite como PWA, IndexedDB/Dexie, núcleo del método determinista, prompts versionados, adaptadores Anthropic y OpenAI-compatible con evaluaciones firmadas por modelo, banco de pruebas para certificar modelos, sincronización con la nube del usuario (Drive primero, cifrado opcional), social sobre AT Protocol (necesita dominio propio) y fases B.0 a E. Correo de contacto del código de conducta: infostark.computer@gmail.com.
 - **2026-10-10:** Omar responde §12 de la arquitectura: React + TypeScript, Google Drive primero, pregunta si la v1 es app de móvil (Claude: sí, como PWA; falta su confirmación) y deja pendientes las respuestas de referencia. **Fase B.0 hecha** desde la nube: `app/` (Vite 8, React 19, TypeScript 6, oxlint), núcleo con topes de nivel (regla 02), retos (D-009), XP y racha, 26 pruebas de Vitest y 4 de Playwright (escritorio y móvil), política de seguridad de contenido, CI en GitHub Actions, despliegue a Pages desde `main` y Dependabot. Arquitectura v0.2.
+- **2026-10-10:** El repositorio pasa a ser público y Pages queda activado (Omar). Revisión de secretos con gitleaks sobre todo el historial: sin hallazgos. La CI escanea secretos en cada push; se agrega `SECURITY.md`. PR #1 abierto. B.1a (datos) completa. La bitácora de construcción de la v1 pasa a `docs/construccion-v1.md`.

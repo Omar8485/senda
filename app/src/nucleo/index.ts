@@ -6,3 +6,4 @@
 export * from './tipos'
 export * from './niveles'
 export * from './xp'
+export * from './logros'

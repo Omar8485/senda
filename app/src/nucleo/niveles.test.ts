@@ -8,7 +8,7 @@ import type { Evidencia } from './tipos'
 const propia = (contexto: string): Evidencia => ({ tipo: 'autoobservacion', externa: false, contexto })
 const curso = (contexto: string): Evidencia => ({ tipo: 'formacion', externa: true, contexto })
 const externa = (contexto: string): Evidencia => ({ tipo: 'retroalimentacion', externa: true, contexto })
-const reto = (contexto: string): Evidencia => ({ tipo: 'evaluacion', externa: true, contexto, origen: 'reto-senda' })
+const reto = (contexto: string): Evidencia => ({ tipo: 'evaluacion', externa: true, contexto, fuente: 'reto-senda' })
 
 describe('topeNivel (regla 02 §3)', () => {
   it('sin evidencia, el tope es 0', () => {

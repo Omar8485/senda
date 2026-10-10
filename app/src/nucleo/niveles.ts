@@ -34,7 +34,7 @@ export function topeNivel(evidencias: readonly Evidencia[]): NivelHabilidad {
   if (ejecucion.length === 0) return 0
 
   const contextos = contextosDistintos(ejecucion)
-  const externaRevisada = ejecucion.some((e) => e.externa && e.origen !== 'reto-senda')
+  const externaRevisada = ejecucion.some((e) => e.externa && e.fuente !== 'reto-senda')
   const externa = ejecucion.some((e) => e.externa)
 
   if (externaRevisada && contextos >= 2) return 4

@@ -230,3 +230,4 @@ Los resultados se publican en el repositorio (`banco/resultados/`) y cualquiera 
   - CI (`.github/workflows/ci.yml`): lint, tipos, pruebas, compilación, pruebas de interfaz y validador de fichas, en cada push y pull request.
   - Despliegue (`.github/workflows/pages.yml`): en cada push a `main`. Requiere activar Pages con origen "GitHub Actions". Mientras el repositorio sea privado, GitHub Pages exige un plan de pago (GitHub Pro); al hacerlo público es gratis.
   - Herramientas que difieren de §3: Vite 8 y TypeScript 6 (las versiones actuales) y **oxlint** como linter, el que trae la plantilla de Vite.
+- **B.1 (en curso):** avance paso a paso, decisiones de implementación y cómo retomar en `docs/construccion-v1.md`.
