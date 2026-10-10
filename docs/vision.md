@@ -14,7 +14,7 @@ Omar es el **autor de la iniciativa**. El proyecto queda abierto a colaboradores
 | Id | Decisión | Estado |
 |---|---|---|
 | P-001 | **Código abierto y uso libre y gratuito.** No se cobra por usar Senda. Se aceptan contribuciones externas. Si alguien la replica o crea algo mejor, bienvenido. | Decidida por Omar |
-| P-002 | **Dominio `.org`.** Senda es una iniciativa, no una empresa. No hace falta para funcionar: la v1 vive gratis en GitHub Pages (`omar8485.github.io/senda`). El `.org` se compra al lanzar al público. | Decidida (compra diferida) |
+| P-002 | **Dominio `.org`.** Senda es una iniciativa, no una empresa. No hace falta para funcionar: la v1 vive gratis en GitHub Pages (`omar8485.github.io/senda`). El `.org` se compra al lanzar al público o antes de la fase social: AT Protocol exige un dominio propio para nombrar los tipos de registro de Senda (ver `docs/arquitectura.md` §9). | Decidida (compra diferida) |
 | P-003 | **Funciona con el modelo de IA que el usuario elija, incluidos modelos locales.** Se avisa de forma explícita que la calidad y la veracidad dependen del modelo elegido y del usuario. | Decidida por Omar |
 | P-004 | **Los datos viven en la nube por defecto, para no perderse.** También se puede usar en modo solo local, y la cuenta en la nube es necesaria para tener amigos y seguidores. | Decidida por Omar |
 | P-005 | **Capa social.** Cada persona puede tener seguidores, recibir reacciones de ánimo ("me encanta", "sigue adelante") sobre sus objetivos, habilidades y valores, ser invitada a un proyecto o a un trabajo, y dejar que otros copien su ruta de habilidades. | Decidida por Omar (forma concreta: propuesta abajo) |

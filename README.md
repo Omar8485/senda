@@ -31,7 +31,7 @@ Su diferencia con otras apps de superación personal es el rigor:
 | `skills/` | Copias de referencia de las skills de Claude. |
 | `herramientas/validar.py` | Validador de esquema y reglas (`python herramientas/validar.py`). |
 | `sistema/` | Diseño (`DISENO.md`) y código del prototipo (`senda.html`). |
-| `docs/` | Visión de producto (`vision.md`) y viabilidad (`viabilidad.md`). |
+| `docs/` | Visión de producto (`vision.md`), arquitectura de la v1 (`arquitectura.md`) y viabilidad (`viabilidad.md`). |
 
 Los datos personales del autor como usuario de Senda (`perfil/`, `datos/`) viven en un repositorio privado y están excluidos con `.gitignore`.
 

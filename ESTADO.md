@@ -42,7 +42,7 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 
 ## Siguiente acción
 
-0. **Senda abierta:** escribir `docs/arquitectura.md` para la v1 con costo cero: app estática, local primero, sincronización con la nube del usuario, adaptadores de modelos, banco de pruebas de modelos y capa social sobre AT Protocol. Antes de hacer público el repo, falta un correo de contacto en `CODE_OF_CONDUCT.md`.
+0. **Senda v1:** Omar revisa `docs/arquitectura.md` (borrador 0.1) y responde sus 4 preguntas (§12). Después: fase B.0 (base del repo `app/`, CI y despliegue a GitHub Pages).
 1. **Fase 5:** completar las áreas pendientes de Omar con la skill `habilidades-orientacion` (detalle en `perfil/ESTADO.md`).
 2. **Fase 2 (cuando Omar quiera):** contrastar `modelo/familias.md` con ESCO/O\*NET y reclasificar las 20 habilidades de la auditoría.
 
@@ -104,3 +104,4 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
   - Datos personales movidos a `Omar8485/senda-omar`.
   - P-011 (propuesta): arquitectura de costo cero para el proyecto.
 - **2026-10-10:** Omar eligió AGPL-3.0 para el código. Se agregan `LICENSE`, `CONTRIBUTING.md` (DCO), `CODE_OF_CONDUCT.md` y encabezados SPDX. Con su autorización, se reescribió el historial de `senda` sin datos personales. `senda-omar` usa `main` como rama principal. El validador ignora los `ESTADO.md`.
+- **2026-10-10:** `docs/arquitectura.md` v0.1 (borrador): local primero, sin backend, React + TS + Vite como PWA, IndexedDB/Dexie, núcleo del método determinista, prompts versionados, adaptadores Anthropic y OpenAI-compatible con evaluaciones firmadas por modelo, banco de pruebas para certificar modelos, sincronización con la nube del usuario (Drive primero, cifrado opcional), social sobre AT Protocol (necesita dominio propio) y fases B.0 a E. Correo de contacto del código de conducta: infostark.computer@gmail.com.
