@@ -1,0 +1,750 @@
+<!-- Senda · Copyright (C) 2026 Omar (github.com/Omar8485) y colaboradores · SPDX-License-Identifier: AGPL-3.0-or-later -->
+<title>Senda de Omar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: app de una columna con barra de pestañas; Inicio = personaje + ficha de habilidades; Ruta = camino serpenteante de sesiones; Valor nuevo = asistente en 3 pasos. Modal fuera de la vista para no perderse al refrescar datos. */
+:root{
+  --bg:#EDF1F3; --surface:#FFFFFF; --ink:#17212B; --muted:#5A6875; --line:#D3DCE2;
+  --accent:#0E7C6B; --accent-ink:#FFFFFF; --accent-soft:#D5EEE8; --ochre:#B4730C; --ochre-soft:#F6E6C6;
+  --plum:#6E4AA8; --plum-soft:#E9E1F6; --warn:#A3471B; --warn-soft:#F7E2D7; --skin:#E2B28F; --hair:#2B2420; --shirt:#0E7C6B;
+  --f-display:"Young Serif", Georgia, serif; --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F151B; --surface:#17202A; --ink:#E6ECF1; --muted:#97A6B3; --line:#2A3744;
+  --accent:#3FC1A9; --accent-ink:#0F151B; --accent-soft:#143A34; --ochre:#E4AA4C; --ochre-soft:#3A2D15;
+  --plum:#B49AE6; --plum-soft:#2D2440; --warn:#F08B5B; --warn-soft:#3B2219; --skin:#D9A67F; --hair:#16110E; --shirt:#2FA690; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F151B; --surface:#17202A; --ink:#E6ECF1; --muted:#97A6B3; --line:#2A3744;
+  --accent:#3FC1A9; --accent-ink:#0F151B; --accent-soft:#143A34; --ochre:#E4AA4C; --ochre-soft:#3A2D15;
+  --plum:#B49AE6; --plum-soft:#2D2440; --warn:#F08B5B; --warn-soft:#3B2219; --skin:#D9A67F; --hair:#16110E; --shirt:#2FA690; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:900px;margin:0 auto;padding-inline:16px;padding-block:16px 96px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-size:1.6rem;margin:0}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-weight:700;font-size:.88rem;font-variant-numeric:tabular-nums;display:flex;gap:6px;align-items:center}
+.stat small{font-weight:500;color:var(--muted)}
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;gap:4px;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+.tab{border:none;background:transparent;border-radius:12px;padding:8px 14px;font-weight:700;font-size:.9rem;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;min-width:84px}
+.tab svg{width:22px;height:22px}
+.tab[aria-selected="true"]{color:var(--accent);background:var(--accent-soft)}
+.status{font-size:.8rem;color:var(--muted);min-height:1.2em;margin:6px 0 10px}
+.status.err{color:var(--warn)}
+.h2{font-family:var(--f-display);font-weight:400;font-size:1.3rem;margin:0}
+.muted{color:var(--muted)}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 16px;font-weight:700}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* inicio */
+.home{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:720px){.home{grid-template-columns:1fr}}
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.hero svg.avatar,.hero img.avatar{width:180px;height:auto;max-width:100%}
+img.avatar.foto{border-radius:50%;aspect-ratio:1;object-fit:cover;border:4px solid var(--accent-soft)}
+.avbtn{border:none;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:4px}
+.avbtn span{font-size:.75rem;font-weight:700;color:var(--accent)}
+.avpick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.avopt{border:2px solid var(--line);background:var(--bg);border-radius:14px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.8rem;font-weight:700}
+.avopt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+svg.mini{width:100%;max-width:90px;height:auto}
+.hero .name{font-family:var(--f-display);font-size:1.4rem;margin:0}
+.lvl{font-size:.8rem;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.xpbar{width:100%;height:10px;border-radius:6px;background:var(--bg);overflow:hidden;border:1px solid var(--line)}
+.xpbar i{display:block;height:100%;background:var(--ochre)}
+.vals{display:flex;flex-direction:column;gap:6px;width:100%;text-align:left}
+.val{font-size:.82rem;background:var(--plum-soft);border-radius:10px;padding:6px 10px;border:1px solid transparent;text-align:left;width:100%;display:block}
+button.val:hover{border-color:var(--plum)}
+.val.lim{background:var(--bg);border-color:var(--line)}
+.valhead{display:flex;justify-content:space-between;align-items:baseline;width:100%;margin-top:6px}
+.valhead h2{font-family:var(--f-display);font-weight:400;font-size:1.05rem;margin:0}
+.src{background:var(--bg);border-radius:10px;padding:10px 12px;font-size:.85rem}
+.src b{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.scale{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.scale button{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:7px 0;font-weight:700;font-variant-numeric:tabular-nums;min-width:0}
+.scale button[aria-pressed="true"]{background:var(--plum);border-color:var(--plum);color:var(--surface)}
+.val b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--plum)}
+.vgrp{display:flex;flex-direction:column;gap:4px}
+.vgh{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--plum);font-weight:700;margin-top:2px}
+.info{width:16px;height:16px;border-radius:50%;border:1px solid var(--plum);color:var(--plum);background:transparent;font:italic 700 .66rem/14px Georgia,serif;text-transform:none;padding:0;display:inline-block;vertical-align:-3px;margin-left:2px;cursor:help}
+.info:hover,.vgh.open .info{background:var(--plum);color:var(--bg)}
+.tip{display:none;flex-basis:100%;margin-top:2px;background:var(--ink,#222);color:var(--bg,#fff);padding:8px 10px;border-radius:8px;font-size:.78rem;font-weight:400;line-height:1.35;text-transform:none;letter-spacing:0;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.vgh:has(.info:hover) .tip,.vgh.open .tip{display:block}
+.sheet{display:flex;flex-direction:column;gap:14px}
+.group{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.group h3{margin:0;font-size:1rem;font-weight:800}
+.ghead{display:flex;flex-direction:column;gap:4px}
+.gk{align-self:flex-start;font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--bg);color:var(--muted)}
+.gk.o{background:var(--ochre-soft);color:var(--ink)} .gk.v{background:var(--plum-soft);color:var(--ink)}
+.gtxt{margin:0;font-size:.85rem;color:var(--muted)}
+.sheethead p{margin:2px 0 0;font-size:.85rem}
+.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;border:none;background:transparent;border-radius:9px;padding:8px;font-weight:800;color:var(--muted)}
+.seg button small{font-weight:600;opacity:.8}
+.seg button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.fchips{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-weight:700;font-size:.85rem;display:flex;gap:6px;align-items:center}
+.fchip small{color:var(--muted);font-weight:600}
+.fchip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.sit{border-top:1px dashed var(--line);padding-top:8px;margin-top:4px}
+.sitt{margin:0;font-size:.8rem;font-weight:800;color:var(--plum)}
+.crit summary{cursor:pointer;font-weight:700;font-size:.85rem;color:var(--accent)}
+.crit p{margin:6px 0 0;font-size:.85rem;color:var(--muted)}
+.src2{font-weight:700}
+.resp{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:.85rem;color:var(--muted)}
+.vchip{background:var(--plum-soft)}
+.seg.small{padding:3px}.seg.small button{padding:5px 10px;font-size:.82rem;flex:none}
+.fchip input{margin:0}
+details.paused summary{cursor:pointer;font-weight:800;font-size:.9rem;color:var(--muted)}
+.pz{border-top:1px solid var(--line);padding:8px 0;font-size:.9rem}
+.skill{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.skill:first-of-type{border-top:none}
+.skill .sn{font-weight:700;font-size:.95rem;min-width:0}
+.skill .sn small{display:block;font-weight:500;color:var(--muted);font-size:.78rem}
+.pips{display:flex;gap:4px;align-items:center}
+.pip{width:22px;height:12px;border-radius:4px;background:var(--bg);border:1px solid var(--line);position:relative}
+.pip.on{background:var(--accent);border-color:var(--accent)}
+.pip.sus{background:repeating-linear-gradient(135deg,var(--accent-soft) 0 4px,transparent 4px 7px);border:1px dashed var(--accent)}
+.pip.req::after{content:"";position:absolute;left:-1px;right:-1px;bottom:-6px;height:3px;border-radius:2px;background:var(--ochre)}
+.sk-meta{grid-column:1 / -1;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.78rem;color:var(--muted)}
+.tag{font-size:.7rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:999px}
+.tag.ind{background:var(--accent-soft);color:var(--ink)} .tag.esp{background:var(--plum-soft);color:var(--ink)} .tag.obj{background:var(--ochre-soft);color:var(--ink)}
+.linkbtn{border:none;background:none;color:var(--accent);font-weight:700;padding:0;font-size:.8rem}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.75rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend .pip{width:14px;height:9px}
+/* ruta */
+.path{display:flex;flex-direction:column;align-items:center;gap:12px;padding:8px 0 24px}
+.unit{width:100%;max-width:520px;background:var(--accent);color:var(--accent-ink);border-radius:16px;padding:12px 16px;margin-top:12px}
+.unit b{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.unit span{font-weight:700;font-size:1.05rem}
+.node{width:72px;height:72px;border-radius:50%;border:none;display:grid;place-items:center;position:relative;box-shadow:0 6px 0 var(--line);background:var(--surface);transition:transform .1s}
+.node svg{width:30px;height:30px}
+.node.done{background:var(--accent);color:var(--accent-ink);box-shadow:0 6px 0 color-mix(in srgb,var(--accent) 60%,black)}
+.node.current{background:var(--ochre);color:var(--surface);box-shadow:0 6px 0 color-mix(in srgb,var(--ochre) 60%,black)}
+.node.locked{background:var(--bg);color:var(--muted);border:2px solid var(--line)}
+.node.reto.current,.node.reto.done{background:var(--plum);box-shadow:0 6px 0 color-mix(in srgb,var(--plum) 60%,black);color:var(--surface)}
+.node:active{transform:translateY(3px)}
+.nwrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.nlabel{font-size:.78rem;font-weight:700;color:var(--muted);max-width:160px;text-align:center}
+.start{position:absolute;top:-30px;background:var(--surface);border:2px solid var(--ochre);color:var(--ink);font-size:.72rem;font-weight:800;padding:2px 8px;border-radius:8px;white-space:nowrap}
+@media (prefers-reduced-motion:no-preference){.node.current{animation:pulse 1.8s ease-in-out infinite}@keyframes pulse{50%{transform:scale(1.06)}}}
+/* asistente */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px}
+label{font-weight:700}
+input[type=text],textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{resize:vertical}
+.field{display:flex;flex-direction:column;gap:6px}
+.field small{color:var(--muted);font-weight:400}
+.think{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:.9rem}
+.dot3 span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:3px;animation:b 1s infinite}
+.dot3 span:nth-child(2){animation-delay:.15s}.dot3 span:nth-child(3){animation-delay:.3s}
+@keyframes b{50%{opacity:.25}}
+.class{background:var(--plum-soft);border-radius:12px;padding:10px 12px}
+.ctx{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.ctx h4{margin:0;font-size:.95rem}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start;background:var(--bg);border-radius:10px;padding:8px 10px}
+.pick p{margin:0;font-size:.85rem;color:var(--muted)}
+.notice{background:var(--warn-soft);border-radius:10px;padding:10px 12px;font-size:.9rem}
+.ok{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:.9rem}
+/* modal */
+.overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 45%,transparent);display:flex;align-items:flex-end;justify-content:center;z-index:10;padding:16px}
+@media (min-width:700px){.overlay{align-items:center}}
+.modal{background:var(--surface);border-radius:20px;width:100%;max-width:560px;max-height:88vh;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
+.modal h3{font-family:var(--f-display);font-weight:400;font-size:1.3rem;margin:0}
+.task{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:start;padding:8px 0;border-top:1px solid var(--line)}
+.task:first-child{border-top:none}
+.task span.min{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.close{align-self:flex-end;border:none;background:none;font-size:1.4rem;line-height:1;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;z-index:20}
+.ev{font-size:.82rem;background:var(--bg);border-radius:8px;padding:6px 10px}
+</style>
+
+<div class="app">
+  <div class="top">
+    <h1 class="brand">Senda</h1>
+    <div class="stats" id="stats"></div>
+  </div>
+  <div class="status" id="status" role="status">Conectando…</div>
+  <main id="view"></main>
+</div>
+<nav class="tabs" role="tablist" aria-label="Secciones">
+  <button class="tab" role="tab" data-tab="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="7" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Inicio</button>
+  <button class="tab" role="tab" data-tab="ruta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H14a3.5 3.5 0 0 0 0-7h-4a3.5 3.5 0 0 1 0-7h5.5"/></svg>Ruta</button>
+  <button class="tab" role="tab" data-tab="valor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Agregar</button>
+</nav>
+<div id="modalRoot"></div>
+
+<script>
+/* ---------- estado ---------- */
+const S={valores:{},habilidades:{},rutas:{},objetivos:{},jugador:{xp:0,racha:0,ultimo_dia:null,minutos_dia:60}};
+let db=null, sample=null, tab="inicio", wizard={paso:1};
+let foco={modo:"objetivos",id:null}; try{foco=JSON.parse(localStorage.getItem("senda-foco"))||foco}catch(e){}
+function setFoco(f){foco={...foco,...f};try{localStorage.setItem("senda-foco",JSON.stringify(foco))}catch(e){};render()}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const hoy=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const slug=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"x";
+function setStatus(t,err){const s=$("#status");s.textContent=t;s.classList.toggle("err",!!err)}
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+const XP_NIVEL=500; // XP de personaje por nivel de personaje (solo progreso visual, no dominio)
+
+/* ---------- persistencia ---------- */
+async function put(path,data){ if(!db){setStatus("Abre la app desde claude.ai para guardar.",true);throw new Error("no-db")}
+  await db.doc(path).set(data); }
+async function patch(path,data){ if(!db)throw new Error("no-db"); await db.doc(path).update(data); }
+
+/* ---------- personaje ---------- */
+const AVATARES={
+ a1:{n:"Clásico",shirt:"var(--shirt)",hair:'<path d="M56 92c0-30 20-46 44-46s44 16 44 44c-10-10-24-16-44-16-18 0-32 6-44 18z" fill="var(--hair)"/>',extra:""},
+ a2:{n:"Barba y lentes",shirt:"var(--plum)",hair:'<path d="M58 88c2-26 20-40 42-40s40 14 42 40c-8-6-22-12-42-12s-34 6-42 12z" fill="var(--hair)"/>',
+  extra:'<path d="M64 108c4 30 18 42 36 42s32-12 36-42c-6 12-18 18-36 18s-30-6-36-18z" fill="var(--hair)"/><circle cx="84" cy="101" r="10" fill="none" stroke="var(--ink)" stroke-width="3"/><circle cx="116" cy="101" r="10" fill="none" stroke="var(--ink)" stroke-width="3"/><path d="M94 101h12" stroke="var(--ink)" stroke-width="3"/>'},
+ a3:{n:"Rizos",shirt:"var(--ochre)",hair:'<g fill="var(--hair)"><circle cx="66" cy="78" r="16"/><circle cx="84" cy="62" r="17"/><circle cx="104" cy="56" r="18"/><circle cx="124" cy="64" r="17"/><circle cx="138" cy="82" r="14"/><circle cx="60" cy="96" r="10"/><circle cx="142" cy="98" r="10"/></g>',extra:""}
+};
+function avatarSVG(key,cls){const a=AVATARES[key]||AVATARES.a1;return `<svg class="${cls||"avatar"}" viewBox="0 0 200 240" role="img" aria-label="Avatar ${esc(a.n)}">
+ <ellipse cx="100" cy="228" rx="62" ry="8" fill="var(--line)"/>
+ <path d="M40 228c4-52 28-78 60-78s56 26 60 78z" fill="${a.shirt}"/>
+ <path d="M84 150h32v14c0 9-7 16-16 16s-16-7-16-16z" fill="var(--skin)"/>
+ <circle cx="100" cy="98" r="44" fill="var(--skin)"/>
+ ${a.hair}
+ <circle cx="84" cy="102" r="4" fill="var(--hair)"/><circle cx="116" cy="102" r="4" fill="var(--hair)"/>
+ <path d="M88 122c7 6 17 6 24 0" stroke="var(--hair)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+ ${a.extra}
+</svg>`}
+function avatarActual(){const j=S.jugador;
+ if(j.avatar==="foto"&&j.avatar_img)return `<img class="avatar foto" src="${esc(j.avatar_img)}" alt="Tu foto">`;
+ return avatarSVG(j.avatar||"a1");}
+function openAvatar(){const j=S.jugador;
+ modal(`<span class="lvl">Personaje</span><h3>Elige tu avatar</h3>
+  <div class="avpick">${Object.entries(AVATARES).map(([k,a])=>`<button class="avopt" data-av="${k}" aria-pressed="${(j.avatar||"a1")===k}">${avatarSVG(k,"mini")}<span>${esc(a.n)}</span></button>`).join("")}</div>
+  <div class="field"><label for="avf">O sube una imagen de tu computadora</label><input type="file" id="avf" accept="image/*"><small>Se recorta en cuadrado y se reduce a 256 px; se guarda solo en esta app.</small></div>
+  ${j.avatar_img?`<div class="row"><img class="avatar foto" src="${esc(j.avatar_img)}" alt="Tu foto" style="width:72px"><button class="btn" data-av="foto">Usar mi foto</button><button class="btn ghost" id="avdel">Quitar foto</button></div>`:""}`);
+ document.querySelectorAll("[data-av]").forEach(b=>b.onclick=async()=>{try{await put("jugador/estado",{...S.jugador,avatar:b.dataset.av});closeModal();toast("Avatar actualizado")}catch(e){setStatus("No se pudo guardar el avatar.",true)}});
+ const del=$("#avdel"); if(del)del.onclick=async()=>{const n={...S.jugador,avatar:"a1"};delete n.avatar_img;try{await put("jugador/estado",n);closeModal();toast("Foto quitada")}catch(e){setStatus("No se pudo quitar la foto.",true)}};
+ $("#avf").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;
+  const fr=new FileReader();fr.onload=()=>{const img=new Image();img.onload=async()=>{
+   const c=document.createElement("canvas");c.width=c.height=256;const x=c.getContext("2d");const m=Math.min(img.width,img.height);
+   x.drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,256,256);const url=c.toDataURL("image/jpeg",0.82);
+   try{await put("jugador/estado",{...S.jugador,avatar:"foto",avatar_img:url});closeModal();toast("Foto guardada")}catch(e){setStatus("No se pudo guardar la foto.",true)}};
+   img.onerror=()=>toast("No se pudo leer esa imagen");img.src=fr.result};fr.readAsDataURL(f)};
+}
+
+function stats(){const j=S.jugador;const lvl=1+Math.floor((j.xp||0)/XP_NIVEL);
+ $("#stats").innerHTML=`<span class="stat">⚡ ${j.xp||0}<small>XP</small></span><span class="stat">🔥 ${j.racha||0}<small>días</small></span><span class="stat">★ ${lvl}<small>personaje</small></span>`}
+
+function pips(h){const n=h.nivel??-1, s=h.sospechado??-1, r=h.requerido??-1;let out="";
+ for(let i=1;i<=5;i++){const cls=i<=n?"on":(i<=s?"sus":"");out+=`<span class="pip ${cls} ${i===r?"req":""}" aria-hidden="true"></span>`}
+ return `<span class="pips" role="img" aria-label="Nivel ${n<0?"por evaluar":n}${s>n?", declarado "+s:""}${r>0?", requerido "+r:""}">${out}</span>`}
+
+function renderInicio(){
+ const j=S.jugador, lvl=1+Math.floor((j.xp||0)/XP_NIVEL), into=(j.xp||0)%XP_NIVEL;
+ const vivos=Object.entries(S.valores).filter(([,v])=>v.estado!=="archivado");
+ const vals=vivos.filter(([,v])=>v.tipo!=="principio"), lims=vivos.filter(([,v])=>v.tipo==="principio");
+ const todasH=Object.entries(S.habilidades).filter(([,h])=>h.estado!=="descartada");
+ const habs=todasH.filter(([,h])=>h.estado!=="pausada"), pausadas=todasH.filter(([,h])=>h.estado==="pausada");
+ const skillRow=([id,h])=>`
+   <div class="skill"><div class="sn">${esc(h.nombre)}<small>${h.nivel==null?"Por evaluar":"Nivel "+h.nivel}${h.sospechado>h.nivel?" · declarado "+h.sospechado:""} · confianza ${esc(h.confianza||"baja")}</small></div>${pips(h)}
+   <div class="sk-meta">${h.clase==="indispensable"||h.clase==="especializar"?`<span class="tag ${h.clase==="indispensable"?"ind":"esp"}">${h.clase==="indispensable"?"Indispensable":"Especializar"}</span>`:""}${h.requerido?`<span>Meta: nivel ${h.requerido}</span>`:""}<span>⚡ ${h.xp||0} XP de práctica</span><button class="linkbtn" data-reto="${esc(id)}">Ponerme a prueba</button><button class="linkbtn" data-evid="${esc(id)}">Subir evidencia</button></div></div>`;
+ const objsAll=Object.entries(S.objetivos).filter(([,o])=>o.estado!=="archivado");
+ const estObj=foco.estObj||"activo";
+ const objs=objsAll.filter(([,o])=>estObj==="logrado"?o.estado==="logrado":o.estado!=="logrado");
+ const deFuente=fid=>habs.filter(([,h])=>(h.fuentes||[]).includes(fid));
+ const modo=foco.modo||"objetivos";
+ const items=modo==="objetivos"?objs:modo==="valores"?vals:[];
+ let selId=foco.id&&items.some(([id])=>id===foco.id)?foco.id:(items[0]||[])[0];
+ let focusHtml="";
+ if(modo==="todas"){
+  focusHtml=`<section class="group"><div class="ghead"><span class="gk">Todas</span><h3>${habs.length} habilidades</h3></div><p class="gtxt">Cada una muestra para qué objetivo o valor la necesitas.</p>${habs.map(([id,h])=>skillRow([id,h]).replace('<div class="sk-meta">',`<div class="sk-meta"><span class="src2">Para: ${esc((h.fuentes||[]).map(f=>(S.objetivos[f]?.titulo)||(S.valores[f]?.corto)||f).join(", "))}</span>`)).join("")||'<p class="muted">Sin habilidades todavía.</p>'}</section>`;
+ } else if(!selId){
+  focusHtml=`<section class="group"><p class="muted">${modo==="objetivos"?"No tienes objetivos activos todavía.":"No tienes valores todavía."}</p></section>`;
+ } else if(modo==="objetivos"){
+  const o=S.objetivos[selId], act=deFuente(selId);
+  const logrado=o.estado==="logrado";
+  focusHtml=`<section class="group focus"><div class="ghead"><span class="gk o">${logrado?"Objetivo logrado ✓":"Objetivo en curso"}</span><h3>${esc(o.titulo)}</h3></div>
+   ${logrado?`<div class="ok">Logrado el ${esc(o.fecha_logro||"")}. Las habilidades que desarrollaste siguen en tu ficha.${o.evidencia_logro?`<br><b>Evidencia:</b> ${esc(o.evidencia_logro.descripcion)}${o.evidencia_logro.enlace?" · "+esc(o.evidencia_logro.enlace):""}${o.evidencia_logro.imagen?" · imagen adjunta":""}<br><b>Evaluación de Claude:</b> ${esc(o.evidencia_logro.evaluacion||"")}`:""}</div>`:""}
+   ${(()=>{const vs=(o.valores||[]).filter(v=>S.valores[v]&&S.valores[v].estado!=="archivado");return vs.length
+     ?`<div class="resp"><span>Responde a ${vs.length>1?"tus valores":"tu valor"}:</span>${vs.map(v=>`<button class="fchip vchip" data-irval="${esc(v)}">${esc(S.valores[v].corto||S.valores[v].enunciado)}</button>`).join("")}<button class="linkbtn" id="oval" data-o="${esc(selId)}">Cambiar</button></div>`
+     :`<div class="notice">Este objetivo todavía no dice a qué valor responde. <button class="linkbtn" id="oval" data-o="${esc(selId)}">Asignar valor</button></div>`})()}
+   <p class="gtxt">${esc(o.enunciado||"")}${o.fecha_limite?` · Fecha: <b>${esc(o.fecha_limite)}</b>`:""}</p>
+   ${o.criterio?`<details class="crit"><summary>¿Cómo sabré que lo logré?</summary><p>${esc(o.criterio)}</p></details>`:""}
+   <p class="gtxt"><b>Habilidades que exige (${act.length}):</b></p>${act.map(skillRow).join("")||'<p class="muted">Sin habilidades asociadas.</p>'}
+   <div class="row" style="margin-top:6px">${logrado?`<button class="btn ghost" id="oreab" data-o="${esc(selId)}">Reabrir objetivo</button>`:`<button class="btn" id="olog" data-o="${esc(selId)}">Presentar evidencia del logro</button><small class="muted">Para marcarlo como logrado necesitas evidencia y que Claude la evalúe contra tu criterio.</small>`}</div></section>`;
+ } else {
+  const v=S.valores[selId], list=deFuente(selId);
+  const usados=new Set(); const ctx=(v.contextos||[]).map(c=>{const hs=list.filter(([,h])=>(c.habilidades||[]).includes(h.nombre));hs.forEach(([id])=>usados.add(id));return {sit:c.situacion,hs}}).filter(c=>c.hs.length);
+  const resto=list.filter(([id])=>!usados.has(id));
+  focusHtml=`<section class="group focus"><div class="ghead"><span class="gk v">Valor · ${esc(areaLabel(v))}</span><h3>${esc(v.corto||"Valor")}</h3></div>
+   <p class="gtxt">${esc(v.enunciado)}</p>
+   ${(()=>{const os=Object.entries(S.objetivos).filter(([,o])=>(o.valores||[]).includes(selId)&&o.estado!=="archivado");return os.length?`<div class="resp"><span>Objetivos que lo sirven:</span>${os.map(([oid,o])=>`<button class="fchip" data-irobj="${esc(oid)}">${esc(o.titulo)}${o.estado==="logrado"?" ✓":""}</button>`).join("")}</div>`:""})()}
+   ${list.length?ctx.map(c=>`<div class="sit"><p class="sitt">Situación: ${esc(c.sit)}</p>${c.hs.map(skillRow).join("")}</div>`).join("")+(resto.length?`<div class="sit"><p class="sitt">Otras habilidades de este valor</p>${resto.map(skillRow).join("")}</div>`:"")
+    :`<div class="ok">Todavía no derivaste habilidades de este valor. Claude puede buscar las situaciones donde se pone a prueba y proponerte las habilidades.</div><button class="btn primary" id="derivar" data-v="${esc(selId)}">Derivar habilidades con Claude</button>`}</section>`;
+ }
+ const chips=items.map(([id,x])=>`<button class="fchip" data-foco="${esc(id)}" aria-pressed="${id===selId}">${esc(modo==="objetivos"?x.titulo:(x.corto||x.enunciado))}<small>${deFuente(id).filter(([,h])=>h.estado!=="pausada").length} hab.</small></button>`).join("");
+ const gHtml=`<div class="seg" role="tablist" aria-label="Ver habilidades por">
+   <button role="tab" data-modo="objetivos" aria-selected="${modo==="objetivos"}">Objetivos <small>${objs.length}</small></button>
+   <button role="tab" data-modo="valores" aria-selected="${modo==="valores"}">Valores <small>${vals.length}</small></button>
+   <button role="tab" data-modo="todas" aria-selected="${modo==="todas"}">Todas <small>${habs.length}</small></button></div>
+  ${modo==="objetivos"?`<div class="row" style="justify-content:space-between"><div class="seg small"><button data-est="activo" aria-selected="${estObj!=="logrado"}">En curso <small>${objsAll.filter(([,o])=>o.estado!=="logrado").length}</small></button><button data-est="logrado" aria-selected="${estObj==="logrado"}">Logrados <small>${objsAll.filter(([,o])=>o.estado==="logrado").length}</small></button></div><button class="linkbtn" id="addobj">+ Nuevo objetivo</button></div>`:""}
+  ${modo!=="todas"?`<div class="fchips">${chips}</div>`:""}
+  ${focusHtml}
+  ${pausadas.length?`<details class="group paused"><summary>Habilidades en pausa (${pausadas.length})</summary><p class="gtxt">No están en tu plan ahora. Se reactivan si un objetivo o valor las vuelve a exigir.</p>${pausadas.map(([id,h])=>`<div class="pz"><b>${esc(h.nombre)}</b> · nivel ${h.nivel??"por evaluar"}<br><small class="muted">En pausa en: ${esc((h.fuentes||[]).map(f=>(S.objetivos[f]?.titulo?"objetivo "+S.objetivos[f].titulo:null)||(S.valores[f]?.corto?"valor "+S.valores[f].corto:f)).join(", "))}${h.motivo_pausa?" · Motivo: "+esc(h.motivo_pausa):""}</small></div>`).join("")}</details>`:""}`;
+ $("#view").innerHTML=`<div class="home">
+  <aside class="hero"><button class="avbtn" id="avbtn" title="Cambiar avatar">${avatarActual()}<span>Cambiar avatar</span></button><p class="name">Omar</p><div class="lvl">Personaje nivel ${lvl}</div>
+   <div class="xpbar" title="${into} de ${XP_NIVEL} XP"><i style="width:${into/XP_NIVEL*100}%"></i></div>
+   <small class="muted">El XP mide tu práctica. El nivel de cada habilidad solo sube con retos aprobados o evidencia.</small>
+   <div class="valhead"><h2>Mi brújula</h2><button class="linkbtn" id="addval">+ Agregar</button></div>
+   <div class="vals">${gruposArea(vals).map(([k,lab,desc,items])=>`<div class="vgrp"><div class="vgh"><span>${esc(lab)}${desc?` <button type="button" class="info" data-info aria-label="¿Qué es ${esc(lab)}?" aria-expanded="false">i</button>`:""}</span>${desc?`<span class="tip" role="tooltip">${esc(desc)}</span>`:""}</div>${items.map(([id,v])=>`<button class="val" data-val="${esc(id)}" title="Ver o editar">${esc(v.corto||v.enunciado)}</button>`).join("")}</div>`).join("")||'<p class="muted">Sin valores todavía.</p>'}</div>
+   <small class="muted">Toca un valor para editarlo o ver de dónde salió.</small>
+  </aside>
+  <div class="sheet">
+   <div class="sheethead"><h2 class="h2">Mis habilidades</h2><p class="muted">Elige un objetivo o un valor para ver de cerca qué habilidades exige. Las barras muestran tu nivel de 0 a 5.</p></div>
+   <div class="legend"><span><span class="pip on"></span>Nivel con evidencia</span><span><span class="pip sus"></span>Declarado sin evidencia</span><span><span class="pip req"></span>Nivel requerido</span></div>
+   ${gHtml}
+  </div></div>`;
+ document.querySelectorAll("[data-reto]").forEach(b=>b.onclick=()=>openReto(b.dataset.reto));
+ document.querySelectorAll("[data-evid]").forEach(b=>b.onclick=()=>openEvidencia(b.dataset.evid));
+ document.querySelectorAll("[data-val]").forEach(b=>b.onclick=()=>openValorEdit(b.dataset.val));
+ document.querySelectorAll("[data-info]").forEach(b=>b.onclick=e=>{e.stopPropagation();const g=b.closest(".vgh"),on=!g.classList.contains("open");document.querySelectorAll(".vgh.open").forEach(x=>{x.classList.remove("open");x.querySelector("[data-info]").setAttribute("aria-expanded","false")});if(on){g.classList.add("open");b.setAttribute("aria-expanded","true")}});
+ const ab=$("#avbtn"); if(ab)ab.onclick=openAvatar;
+ document.querySelectorAll("[data-modo]").forEach(b=>b.onclick=()=>setFoco({modo:b.dataset.modo,id:null}));
+ document.querySelectorAll("[data-foco]").forEach(b=>b.onclick=()=>setFoco({id:b.dataset.foco}));
+ document.querySelectorAll("[data-est]").forEach(b=>b.onclick=()=>setFoco({estObj:b.dataset.est,id:null}));
+ document.querySelectorAll("[data-irval]").forEach(b=>b.onclick=()=>setFoco({modo:"valores",id:b.dataset.irval}));
+ document.querySelectorAll("[data-irobj]").forEach(b=>b.onclick=()=>{const o=S.objetivos[b.dataset.irobj];setFoco({modo:"objetivos",estObj:o&&o.estado==="logrado"?"logrado":"activo",id:b.dataset.irobj})});
+ const ov=$("#oval"); if(ov)ov.onclick=()=>openValoresObjetivo(ov.dataset.o);
+ const ao=$("#addobj"); if(ao)ao.onclick=()=>{tab="valor";wizard={paso:1,tipo:"objetivo"};render();window.scrollTo({top:0})};
+ const ol=$("#olog"); if(ol)ol.onclick=()=>openLogro(ol.dataset.o);
+ const orb=$("#oreab"); if(orb)orb.onclick=async()=>{const id=orb.dataset.o;try{await put("objetivos/"+id,{...S.objetivos[id],estado:"activo",fecha_logro:null,pendiente_ficha:true});setFoco({estObj:"activo"})}catch(e){setStatus("No se pudo guardar.",true)}};
+ const dv=$("#derivar"); if(dv)dv.onclick=()=>{const v=S.valores[dv.dataset.v];tab="valor";wizard={paso:1,texto:v.enunciado,area:v.area,vidExistente:dv.dataset.v};render();window.scrollTo({top:0})};
+ const av=$("#addval"); if(av)av.onclick=()=>{tab="valor";wizard={paso:1};render();window.scrollTo({top:0})};
+}
+
+/* ---------- valores de un objetivo ---------- */
+function openValoresObjetivo(oid){const o=S.objetivos[oid];
+ const vals=Object.entries(S.valores).filter(([,v])=>v.tipo!=="principio"&&v.estado!=="archivado");
+ modal(`<span class="lvl">Objetivo · ${esc(o.titulo)}</span><h3>¿A qué valor responde?</h3><p class="muted" style="margin:0">Todo objetivo debe servir al menos a un valor. Si ninguno encaja, quizá falta registrar un valor.</p>
+  <div class="fchips">${vals.map(([id,v])=>`<label class="fchip"><input type="checkbox" data-sv="${esc(id)}" ${(o.valores||[]).includes(id)?"checked":""}> ${esc(v.corto||v.enunciado)}</label>`).join("")}</div>
+  <button class="btn primary" id="svok">Guardar</button>`);
+ $("#svok").onclick=async()=>{const sel=[...document.querySelectorAll("[data-sv]:checked")].map(i=>i.dataset.sv);if(!sel.length){toast("Elige al menos un valor");return}
+  try{await put("objetivos/"+oid,{...o,valores:sel,pendiente_ficha:true});closeModal();toast("Valores del objetivo guardados")}catch(e){setStatus("No se pudo guardar.",true)}};
+}
+
+/* ---------- editar valores y límites ---------- */
+function origenTxt(id,v){
+ const f=v.fecha||"2026-10-10";
+ if(v.origen==="senda")return `Lo creaste en Senda → Valor nuevo el ${esc(f)}.${v.texto_original?`<br>Lo que escribiste: "${esc(v.texto_original)}"`:""}${v.clasificacion?`<br>Claude lo clasificó como: ${esc(v.clasificacion)}.`:""}`;
+ return v.tipo==="principio"
+  ? `Lo nombraste como "antivalor" en la Brújula de valores y en el chat con Claude, el ${esc(f)}.<br>Ficha en tu carpeta: <code>perfil/orientacion/principios/${esc(id)}.md</code>`
+  : `Lo formulaste con Claude en el chat, en la Fase 5 (mapa de orientación), el ${esc(f)}: tú diste las palabras, Claude las ordenó y tú confirmaste la frase. La importancia y la consistencia de la última semana son tus propias notas.<br>Ficha en tu carpeta: <code>perfil/orientacion/valores/${esc(id)}.md</code>`;
+}
+function scaleHtml(name,val){return `<div class="scale" data-scale="${name}">${Array.from({length:10},(_,i)=>i+1).map(n=>`<button type="button" data-v="${n}" aria-pressed="${val===n}">${n}</button>`).join("")}</div>`}
+function openValorEdit(id){
+ const v=S.valores[id]; if(!v)return; const esLim=v.tipo==="principio";
+ const st={imp:v.importancia??null,con:v.consistencia??null};
+ modal(`<span class="lvl">${esLim?"Mis límites":"Mi brújula"}</span><h3>${esc(esLim?"Límite":(v.corto||"Valor"))}</h3>
+  ${esLim?"":`<div class="field"><label for="vc">Nombre corto</label><input type="text" id="vc" value="${esc(v.corto||"")}"></div>`}
+  <div class="field"><label for="vn">${esLim?"Lo que no harías":"Cómo quieres actuar"}</label><textarea id="vn" rows="3">${esc(v.enunciado||"")}</textarea></div>
+  ${esLim?"":`<div class="field"><label for="vaa">Área de vida</label><select id="vaa">${AREAS.map(([k,n])=>`<option value="${k}" ${v.area===k?"selected":""}>${n}</option>`).join("")}</select></div>
+  <div class="field"><label>Importancia hoy</label>${scaleHtml("imp",st.imp)}</div>
+  <div class="field"><label>Cuánto actuaste así la última semana</label>${scaleHtml("con",st.con)}</div>`}
+  <div class="src"><b>De dónde salió</b>${origenTxt(id,v)}${(v.historial||[]).length?`<br><br><b>Cambios</b>${v.historial.slice(-5).reverse().map(h=>`${esc(h.fecha)}: ${esc(h.cambio)}`).join("<br>")}`:""}</div>
+  <div class="row"><button class="btn primary" id="vsave">Guardar cambios</button><button class="btn ghost" id="varch">Archivar</button></div>
+  <small class="muted">Puedes cambiarlo cuando quieras. Al sincronizar Senda, Claude actualiza la ficha de tu carpeta con estos cambios.</small>`);
+ document.querySelectorAll("[data-scale] button").forEach(b=>b.onclick=()=>{const k=b.parentElement.dataset.scale;st[k]=+b.dataset.v;b.parentElement.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+ $("#vsave").onclick=async()=>{
+  const nuevo={...v,enunciado:$("#vn").value.trim()||v.enunciado};
+  if(!esLim){nuevo.corto=$("#vc").value.trim();nuevo.area=$("#vaa").value;nuevo.area_nombre=(AREAS.find(x=>x[0]===nuevo.area)||[])[1]||nuevo.area;nuevo.importancia=st.imp;nuevo.consistencia=st.con;if(st.con!==v.consistencia)nuevo.fecha_consistencia=hoy();}
+  const campos=["enunciado","corto","area","importancia","consistencia"].filter(k=>JSON.stringify(nuevo[k]??null)!==JSON.stringify(v[k]??null));
+  if(!campos.length){closeModal();return}
+  nuevo.historial=[...(v.historial||[]),{fecha:hoy(),cambio:"editado: "+campos.join(", ")}].slice(-20);
+  nuevo.editado=hoy(); nuevo.pendiente_ficha=true;
+  try{await put("valores/"+id,nuevo);closeModal();toast("Cambios guardados");}catch(e){setStatus("No se pudo guardar. Intenta de nuevo.",true)}};
+ let armed=false;
+ $("#varch").onclick=async()=>{ if(!armed){armed=true;$("#varch").textContent="Confirmar: archivar";return}
+  try{await put("valores/"+id,{...v,estado:"archivado",historial:[...(v.historial||[]),{fecha:hoy(),cambio:"archivado"}].slice(-20),pendiente_ficha:true});closeModal();toast("Archivado");}catch(e){setStatus("No se pudo archivar.",true)}};
+}
+
+/* ---------- ruta ---------- */
+const ICON={sesion:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3l2.6 5.6 6.1.7-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6L3.3 9.3l6.1-.7z"/></svg>',
+ reto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>',
+ repaso:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>',
+ recuperacion:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>',
+ hecho:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg>'};
+function renderRuta(){
+ const rutas=Object.entries(S.rutas);
+ if(!rutas.length){$("#view").innerHTML=`<div class="card"><p class="h2">Sin rutas todavía</p><p class="muted">Agrega un valor nuevo y genera su ruta, o espera a que se cargue la de inglés.</p></div>`;return}
+ let html="";
+ rutas.forEach(([rid,r])=>{
+  let foundCurrent=false;
+  html+=`<div class="card" style="margin-bottom:8px"><p class="h2">${esc(r.titulo)}</p><p class="muted" style="margin:0">${esc(r.descripcion||"")}</p></div><div class="path">`;
+  (r.unidades||[]).forEach((u,ui)=>{
+   html+=`<div class="unit"><b>Unidad ${ui+1}</b><span>${esc(u.titulo)}</span></div>`;
+   (u.nodos||[]).forEach((n,ni)=>{
+    let st=n.estado==="hecho"?"done":(!foundCurrent?(foundCurrent=true,"current"):"locked");
+    const off=Math.round(Math.sin((ni+ui*2)*0.9)*70);
+    html+=`<div class="nwrap" style="transform:translateX(${off}px)"><button class="node ${st} ${n.tipo==="reto"?"reto":""}" data-r="${esc(rid)}" data-u="${ui}" data-n="${ni}" aria-label="${esc(n.titulo)} (${st==="done"?"hecho":st==="current"?"siguiente":"bloqueado"})">${st==="current"?'<span class="start">EMPEZAR</span>':""}${st==="done"?ICON.hecho:ICON[n.tipo]||ICON.sesion}</button><span class="nlabel">${esc(n.titulo)}</span></div>`;
+   });
+  });
+  html+=`</div>`;
+ });
+ $("#view").innerHTML=html;
+ document.querySelectorAll(".node").forEach(b=>b.onclick=()=>{
+  if(b.classList.contains("locked")){toast("Primero completa la sesión anterior");return}
+  openNodo(b.dataset.r,+b.dataset.u,+b.dataset.n)});
+ const cur=document.querySelector(".node.current"); if(cur)cur.scrollIntoView({block:"center",behavior:"smooth"});
+}
+
+function modal(html){$("#modalRoot").innerHTML=`<div class="overlay" id="ov"><div class="modal" role="dialog" aria-modal="true"><button class="close" aria-label="Cerrar" id="mx">×</button>${html}</div></div>`;
+ $("#mx").onclick=closeModal; $("#ov").onclick=e=>{if(e.target.id==="ov")closeModal()};}
+function closeModal(){$("#modalRoot").innerHTML="";if(tab!=="valor")render()}
+
+function openNodo(rid,ui,ni){
+ const r=S.rutas[rid], n=r.unidades[ui].nodos[ni];
+ if(n.tipo==="reto"&&n.estado!=="hecho"){openReto((n.habilidades||[])[0],{rid,ui,ni});return}
+ const done=n.estado==="hecho";
+ const total=(n.tareas||[]).reduce((a,t)=>a+(+t.min||0),0);
+ modal(`<span class="lvl">${esc(n.tipo==="recuperacion"?"Recuperación":n.tipo==="repaso"?"Repaso semanal":"Sesión")} · ${total} min · +${n.xp||total} XP</span><h3>${esc(n.titulo)}</h3>
+  ${n.nota?`<p class="muted" style="margin:0">${esc(n.nota)}</p>`:""}
+  <div>${(n.tareas||[]).map((t,i)=>`<label class="task"><input type="checkbox" ${done?"checked disabled":""} data-t="${i}"><span>${esc(t.texto)}</span><span class="min">${+t.min||0} min</span></label>`).join("")}</div>
+  ${done?`<div class="ok">Completada el ${esc(n.fecha||"")}.</div>`:`<button class="btn primary" id="fin" disabled>Completar sesión</button><small class="muted">Marca las tareas que hiciste. Puedes completar la sesión aunque falte alguna: lo pendiente se recupera el fin de semana.</small>`}`);
+ if(done)return;
+ const boxes=[...document.querySelectorAll(".task input")]; const fin=$("#fin");
+ boxes.forEach(b=>b.onchange=()=>{fin.disabled=!boxes.some(x=>x.checked)});
+ fin.onclick=async()=>{fin.disabled=true;
+  const hechas=boxes.filter(b=>b.checked).map(b=>+b.dataset.t);
+  const mins=hechas.reduce((a,i)=>a+(+n.tareas[i].min||0),0);
+  try{ await completarNodo(rid,ui,ni,hechas,mins); closeModal(); toast(`+${mins} XP · ¡sesión completada!`);}catch(e){fin.disabled=false;setStatus("No se pudo guardar la sesión. Intenta de nuevo.",true)}};
+}
+
+async function sumarXP(xp,habIds){
+ const j={...S.jugador}; const d=hoy();
+ if(j.ultimo_dia!==d){const ayer=new Date();ayer.setDate(ayer.getDate()-1);const a=fmt(ayer);
+  j.racha=(j.ultimo_dia===a)?(j.racha||0)+1:1; j.ultimo_dia=d;}
+ j.xp=(j.xp||0)+xp; await put("jugador/estado",j);
+ const ids=(habIds||[]).filter(id=>S.habilidades[id]); const each=ids.length?Math.round(xp/ids.length):0;
+ for(const id of ids){await patch("habilidades/"+id,{xp:(S.habilidades[id].xp||0)+each});}
+}
+async function completarNodo(rid,ui,ni,hechas,mins){
+ const r=JSON.parse(JSON.stringify(S.rutas[rid])); const n=r.unidades[ui].nodos[ni];
+ n.estado="hecho"; n.fecha=hoy(); n.tareas_hechas=hechas; n.minutos_reales=mins;
+ await put("rutas/"+rid,r); await sumarXP(mins,n.habilidades);
+}
+
+/* ---------- reglas que se envían a Claude ---------- */
+const REGLAS=`Reglas del Modelo de Habilidades de Omar (respétalas siempre):
+- VALOR: cualidad elegida de la ACCIÓN, continua; no se puede tachar como logrado. "Ser puntual" describe a la persona (disposición); "cumplir a tiempo lo que comprometo" es la acción (valor). PRINCIPIO: límite que no se cruza. OBJETIVO: se puede tachar y tiene fecha. Un SENTIMIENTO (estar tranquilo) no es valor.
+- HABILIDAD: saber hacer aprendido que cumple 4 tests: entrenable con un método, aislable en un ejercicio de menos de 1 hora, evaluable por la huella que deja, y disociable del conocimiento. Se nombra verbo + objeto ("estimar tiempos de traslado"). No son habilidades: rasgos o disposiciones (paciencia), aptitudes biológicas (memoria), conocimientos, términos paraguas (liderazgo, comunicación, pensamiento crítico: descomponlos en habilidades concretas).
+- Escala de dominio 0-5 (Dreyfus): 0 sin exposición; 1 novato con instrucciones; 2 resuelve casos simples con apoyo; 3 competente: autónomo y consistente en casos habituales; 4 avanzado: casos complejos, adapta, enseña; 5 experto.
+- Clase de cada habilidad derivada de un valor: "indispensable" si la situación es frecuente y fallar cuesta caro (nivel mínimo 2 o 3); "especializar" solo si la habilidad multiplica muchas otras o coincide con objetivos activos (nivel 4).
+- Español neutro, sin voseo. Tono directo.`;
+
+/* ---------- retos ---------- */
+function openReto(hid,ctx){
+ const h=S.habilidades[hid]; if(!h){toast("Habilidad no encontrada");return}
+ const n=h.nivel??0, meta=Math.min(n+1,5);
+ modal(`<span class="lvl">Reto · ${esc(h.nombre)}</span><h3>Ponerte a prueba para el nivel ${meta}</h3>
+  ${!sample?`<div class="notice">Los retos necesitan que la app pueda consultar a Claude. Ábrela desde claude.ai y permite el acceso cuando te lo pida.</div>`:
+  `<p class="muted" style="margin:0">Claude prepara un reto corto. Si lo apruebas, tu nivel sube como máximo un punto, y como máximo hasta 3. Los niveles 4 y 5 necesitan evidencia externa revisada en el chat.</p>
+   <div id="rbody"><button class="btn primary" id="gen">Preparar reto</button></div>`}`);
+ if(!sample)return;
+ $("#gen").onclick=async()=>{
+  $("#rbody").innerHTML=`<div class="think"><span class="dot3"><span></span><span></span><span></span></span>Claude está preparando tu reto…</div>`;
+  try{
+   const r=await sample.json(`${REGLAS}
+
+Prepara UN reto para evaluar si Omar alcanza el nivel ${meta} en la habilidad "${h.nombre}" (nivel actual registrado: ${h.nivel==null?"sin evaluar":h.nivel}).
+${h.rubrica?`Rúbrica específica por nivel: ${JSON.stringify(h.rubrica)}`:""}
+El reto debe poder resolverse en 15 minutos o menos y responderse por escrito en la app. Si la habilidad es oral o física y no se puede verificar por texto, pide una tarea práctica que Omar describa con detalle, y marca verificable_por_texto en false.
+Responde solo JSON: {"titulo": string, "instrucciones": string, "material": string (texto que Omar debe leer o usar, puede ir vacío), "criterios": [string, string, string], "verificable_por_texto": boolean}`,{cache:false});
+   if(!r||!r.instrucciones)throw {code:"invalid_json"};
+   $("#rbody").innerHTML=`<div class="card" style="padding:12px"><strong>${esc(r.titulo)}</strong><p style="margin:0;white-space:pre-wrap">${esc(r.instrucciones)}</p>${r.material?`<div class="ev" style="white-space:pre-wrap">${esc(r.material)}</div>`:""}<small class="muted">Se evaluará: ${esc((r.criterios||[]).join(" · "))}</small></div>
+    <div class="field"><label for="resp">Tu respuesta</label><textarea id="resp" rows="7"></textarea></div><button class="btn primary" id="env">Enviar para evaluar</button>`;
+   $("#env").onclick=()=>evaluar(hid,h,meta,r,ctx);
+  }catch(e){$("#rbody").innerHTML=`<div class="notice">${errTxt(e)}</div><button class="btn" id="gen2">Intentar de nuevo</button>`;$("#gen2").onclick=()=>openReto(hid,ctx)}
+ };
+}
+async function evaluar(hid,h,meta,reto,ctx){
+ const resp=$("#resp").value.trim(); if(resp.length<10){toast("Escribe tu respuesta primero");return}
+ const btn=$("#env"); btn.disabled=true; btn.textContent="Evaluando…";
+ try{
+  const ev=await sample.json(`${REGLAS}
+
+Evalúa con rigor la respuesta de Omar a este reto de la habilidad "${h.nombre}" (nivel objetivo ${meta}). No infles: si hay dudas, no apruebes.
+Reto: ${JSON.stringify(reto)}
+Respuesta de Omar: """${resp.slice(0,6000)}"""
+Responde solo JSON: {"aprobado": boolean, "puntaje": number (0-100), "nivel_demostrado": number (0-5), "fortalezas": string, "mejorar": string}`,{cache:false,modelTier:"default"});
+  const ver=reto.verificable_por_texto!==false;
+  let nuevo=h.nivel??0, subio=false;
+  if(ev.aprobado&&ver){const tope=Math.min(meta,3,+ev.nivel_demostrado||0); if(tope>nuevo){nuevo=tope;subio=true}}
+  const evid=[...(h.evidencias||[]),{fecha:hoy(),tipo:"evaluacion",externa:!!(ev.aprobado&&ver),contexto:"reto en Senda",descripcion:`Reto "${reto.titulo}": ${ev.aprobado?"aprobado":"no aprobado"} (${ev.puntaje}/100)`}].slice(-30);
+  const upd={evidencias:evid,ultimo_reto:{fecha:hoy(),aprobado:!!ev.aprobado,puntaje:ev.puntaje}};
+  if(subio){upd.nivel=nuevo; if((h.confianza||"baja")==="baja")upd.confianza="media";}
+  await patch("habilidades/"+hid,upd);
+  const xp=ev.aprobado?50:15; await sumarXP(xp,[hid]);
+  if(ctx){const r=JSON.parse(JSON.stringify(S.rutas[ctx.rid]));const n=r.unidades[ctx.ui].nodos[ctx.ni];n.estado="hecho";n.fecha=hoy();n.resultado=ev.aprobado?"aprobado":"no aprobado";await put("rutas/"+ctx.rid,r);}
+  $("#rbody").innerHTML=`<div class="${ev.aprobado?"ok":"notice"}"><strong>${ev.aprobado?"Aprobado":"Todavía no"}</strong> · ${esc(ev.puntaje)}/100 · +${xp} XP<br>${subio?`Tu nivel sube a <b>${nuevo}</b>.`:ev.aprobado&&!ver?"El reto no se puede verificar solo por texto: queda como evidencia, sin subir nivel.":ev.aprobado?"Tu nivel ya estaba en el máximo que un reto puede dar.":"Tu nivel se mantiene."}</div>
+   <p style="margin:0"><b>Lo que hiciste bien:</b> ${esc(ev.fortalezas)}</p><p style="margin:0"><b>Para mejorar:</b> ${esc(ev.mejorar)}</p><button class="btn" id="cerrar">Cerrar</button>`;
+  $("#cerrar").onclick=closeModal;
+ }catch(e){btn.disabled=false;btn.textContent="Enviar para evaluar";setStatus(errTxt(e),true)}
+}
+function errTxt(e){const c=e&&e.code;return c==="not_granted"?"No diste permiso para usar a Claude en esta app. Puedes darlo desde el menú de permisos del artifact.":c==="rate_limited"?"Demasiadas consultas seguidas. Espera un momento.":c==="invalid_json"?"La respuesta de Claude llegó incompleta. Intenta de nuevo.":"No se pudo completar la consulta a Claude. Intenta de nuevo."}
+
+function openLogro(oid){const o=S.objetivos[oid]; if(!o)return;
+ const act=Object.entries(S.habilidades).filter(([,h])=>h.estado!=="descartada"&&h.estado!=="pausada"&&(h.fuentes||[]).includes(oid));
+ const hs=act.map(([,h])=>`<li>${esc(h.nombre)}: ${h.nivel==null?"sin evaluar":"nivel "+h.nivel}${h.requerido?` / meta ${h.requerido}`:""}${h.requerido&&(h.nivel??-1)>=h.requerido?" ✓":""}</li>`).join("");
+ modal(`<span class="lvl">Objetivo · ${esc(o.titulo)}</span><h3>Evidencia del logro</h3>
+  <div class="ev"><b>Tu criterio:</b> ${esc(o.criterio||o.enunciado||"(sin criterio: Claude evaluará contra el enunciado)")}</div>
+  ${hs?`<details class="crit"><summary>Cómo van sus habilidades</summary><ul style="margin:4px 0 0 18px;padding:0">${hs}</ul></details>`:""}
+  <div class="field"><label for="lgd">¿Qué demuestra que cumpliste el criterio?</label><textarea id="lgd" rows="4" placeholder="Ej.: Hice el EF SET el 12/09/2027 y obtuve 64/100 (C1)."></textarea></div>
+  <div class="field"><label for="lgl">Enlace al resultado o certificado <small>(opcional)</small></label><input type="text" id="lgl" placeholder="https://…"></div>
+  <div class="field" id="lgif" hidden><label for="lgi">Imagen del resultado o certificado <small>(recomendado)</small></label><input type="file" id="lgi" accept="image/*"></div>
+  <button class="btn primary" id="lge">Enviar a evaluación</button>
+  <div id="lgr"></div>
+  <small class="muted">Claude compara tu evidencia con el criterio. Si el criterio depende de un resultado externo (examen, certificado), una afirmación sin respaldo no basta.</small>
+  ${(o.intentos_logro||[]).slice(-3).reverse().map(t=>`<div class="ev">${esc(t.fecha)} · no aprobado — ${esc(t.falta||"")}</div>`).join("")}`);
+ (async()=>{try{const L=sample&&sample.limits?await sample.limits():null;if(L&&L.images){const f=$("#lgi");if(f){f.accept=L.images.mediaTypes.join(",");$("#lgif").hidden=false}}}catch(e){}})();
+ $("#lge").onclick=async()=>{
+  const d=$("#lgd").value.trim(), en=$("#lgl").value.trim(), f=$("#lgi")&&$("#lgi").files[0];
+  if(d.length<15){toast("Describe la evidencia con más detalle");return}
+  if(!sample){setStatus("Abre la app desde claude.ai para evaluar con Claude.",true);return}
+  const btn=$("#lge"); btn.disabled=true; btn.textContent="Evaluando…";
+  try{
+   const ev=await sample.json(`${REGLAS}
+
+Omar quiere marcar como LOGRADO el objetivo "${o.titulo}". Evalúa con rigor si la evidencia demuestra que cumplió el criterio. No infles: ante la duda, no apruebes.
+Enunciado: ${o.enunciado||""}
+Criterio de logro: ${o.criterio||"(sin criterio explícito; usa el enunciado)"}
+Fecha límite: ${o.fecha_limite||"sin fecha"}
+Estado de sus habilidades (contexto, no decide por sí solo): ${JSON.stringify(act.map(([,h])=>({nombre:h.nombre,nivel:h.nivel,meta:h.requerido})))}
+Evidencia escrita por Omar: """${d.slice(0,4000)}"""
+Enlace: ${en||"ninguno"}
+Imagen adjunta: ${f?"sí (resultado o certificado que Omar adjuntó)":"no"}
+Reglas: aprueba solo si la evidencia cubre CADA parte del criterio. Si una parte depende de un resultado externo (examen, puntaje, certificado, tercero) y no hay imagen ni enlace que lo respalde, no apruebes y pide ese respaldo. Si hay imagen, verifica que el contenido coincida con lo que Omar afirma.
+Responde solo JSON: {"aprobado": boolean, "explicacion": string (2-3 frases), "falta": string (qué falta para aprobar; vacío si aprobado)}`,{cache:false,modelTier:"default",...(f?{images:[f]}:{})});
+   if(!ev||typeof ev.aprobado!=="boolean")throw {code:"invalid_json"};
+   if(!ev.aprobado){
+    await patch("objetivos/"+oid,{intentos_logro:[...(o.intentos_logro||[]),{fecha:hoy(),descripcion:d.slice(0,500),falta:ev.falta||ev.explicacion}].slice(-10)});
+    $("#lgr").innerHTML=`<div class="notice"><strong>Todavía no se puede marcar como logrado.</strong><br>${esc(ev.explicacion)}${ev.falta?`<br><b>Qué falta:</b> ${esc(ev.falta)}`:""}</div>`;
+    btn.disabled=false; btn.textContent="Enviar de nuevo"; return}
+   $("#lgr").innerHTML=`<div class="ok"><strong>Evidencia aprobada.</strong><br>${esc(ev.explicacion)}</div><button class="btn primary" id="lgok">Marcar como logrado (+100 XP)</button>`;
+   btn.hidden=true;
+   $("#lgok").onclick=async()=>{try{
+     await put("objetivos/"+oid,{...S.objetivos[oid],estado:"logrado",fecha_logro:hoy(),pendiente_ficha:true,evidencia_logro:{fecha:hoy(),descripcion:d.slice(0,1000),enlace:en||null,imagen:f?f.name:null,evaluacion:ev.explicacion}});
+     await sumarXP(100,[]);closeModal();toast("¡Objetivo logrado! +100 XP")}catch(e){setStatus("No se pudo guardar.",true)}};
+  }catch(e){btn.disabled=false;btn.textContent="Enviar a evaluación";$("#lgr").innerHTML=`<div class="notice">${e&&e.code==="images_unavailable"||e&&e.code==="image_rejected"?"No se pudo enviar la imagen. Prueba con un PNG o JPG más liviano, o usa un enlace.":errTxt(e)}</div>`}
+ };
+}
+
+function openEvidencia(hid){const h=S.habilidades[hid];
+ modal(`<span class="lvl">Evidencia · ${esc(h.nombre)}</span><h3>Registrar evidencia</h3>
+  <div class="field"><label for="ed">¿Qué hiciste y qué resultado tuvo?</label><textarea id="ed" rows="3"></textarea></div>
+  <div class="field"><label for="el">Enlace o nombre del archivo <small>(opcional)</small></label><input type="text" id="el"></div>
+  <label class="row" style="font-weight:500"><input type="checkbox" id="ex"> Es externa (un examen, un tercero, un resultado medible)</label>
+  <button class="btn primary" id="eg">Guardar evidencia (+20 XP)</button>
+  <small class="muted">La evidencia no cambia tu nivel automáticamente: se revisa con Claude en el chat, aplicando los topes del modelo.</small>
+  ${(h.evidencias||[]).slice(-5).reverse().map(e=>`<div class="ev">${esc(e.fecha)} · ${esc(e.tipo)}${e.externa?" · externa":""} — ${esc(e.descripcion)}</div>`).join("")}`);
+ $("#eg").onclick=async()=>{const d=$("#ed").value.trim();if(!d){toast("Describe la evidencia");return}
+  const evid=[...(h.evidencias||[]),{fecha:hoy(),tipo:$("#ex").checked?"resultado":"autoobservacion",externa:$("#ex").checked,contexto:"registrada en Senda",descripcion:d+($("#el").value.trim()?" · "+$("#el").value.trim():"")}].slice(-30);
+  try{await patch("habilidades/"+hid,{evidencias:evid,revision_pendiente:true});await sumarXP(20,[hid]);closeModal();toast("+20 XP · evidencia guardada");}catch(e){setStatus("No se pudo guardar la evidencia.",true)}};
+}
+
+/* ---------- valor nuevo ---------- */
+const AREAS=[
+ ["familia-origen","Familia de origen (padres, hermanos)","Tu relación con tus padres, hermanos y la familia con la que creciste. No incluye a tu pareja ni a tus hijos, que tienen área propia."],
+ ["pareja","Pareja","Tu relación de pareja: matrimonio, convivencia o relación íntima."],
+ ["crianza","Crianza de mis hijos","Cómo educas y acompañas a tus hijos o a los niños a tu cargo."],
+ ["amistades","Amistades","Tus amigos y tu vida social."],
+ ["trabajo","Trabajo","Tu empleo, tu carrera o tu actividad profesional."],
+ ["educacion","Educación y formación","Lo que estudias o aprendes: cursos, idiomas, certificaciones, lectura formativa."],
+ ["recreacion","Recreación y ocio","Descanso, juego, pasatiempos y diversión."],
+ ["espiritualidad","Espiritualidad","Lo que da sentido profundo a tu vida, sea religioso o no."],
+ ["ciudadania","Ciudadanía y comunidad","Tu aporte a tu comunidad, a la sociedad o al medio ambiente."],
+ ["cuidado-fisico","Cuidado físico (salud, sueño, ejercicio)","Tu salud, sueño, alimentación y ejercicio."],
+ ["transversal","En todas las áreas","Valores que aplicas en cualquier área de tu vida, no solo en una. Ejemplo: cumplir a tiempo lo que prometes vale igual en el trabajo, con tu pareja o con tus amigos."]];
+const areaLabel=v=>(AREAS.find(x=>x[0]===v.area)||[])[1]||v.area_nombre||v.area||"";
+const gruposArea=vals=>{const g=new Map();for(const e of vals){const k=AREAS.some(x=>x[0]===e[1].area)?e[1].area:"_otra";if(!g.has(k))g.set(k,[]);g.get(k).push(e)}
+ const orden=k=>{const i=AREAS.findIndex(x=>x[0]===k);return k==="transversal"?999:(i<0?998:i)};
+ return [...g.entries()].sort((a,b)=>orden(a[0])-orden(b[0])).map(([k,items])=>{const a=AREAS.find(x=>x[0]===k);return [k,a?a[1]:areaLabel(items[0][1])||"Sin área",a?a[2]:"",items]})};
+const selTipo=()=>wizard.vidExistente?"":`<div class="seg" role="tablist" aria-label="Qué quieres agregar"><button role="tab" data-wt="valor" aria-selected="${wizard.tipo!=="objetivo"}">Un valor</button><button role="tab" data-wt="objetivo" aria-selected="${wizard.tipo==="objetivo"}">Un objetivo</button></div>`;
+function bindTipo(){document.querySelectorAll("[data-wt]").forEach(b=>b.onclick=()=>{wizard={paso:1,tipo:b.dataset.wt};renderValor()})}
+function renderValor(){
+ const w=wizard;
+ if(w.tipo==="objetivo")return renderObjetivo();
+ if(!sample){$("#view").innerHTML=`<div class="card"><p class="h2">Valor nuevo</p><div class="notice">Esta función consulta a Claude desde la app. Ábrela en claude.ai y permite el acceso cuando te lo pida.</div></div>`;return}
+ if(w.paso===1){
+  $("#view").innerHTML=`${selTipo()}<div class="card" style="margin-top:10px"><p class="h2">${w.vidExistente?"Derivar habilidades de un valor":"Agregar un valor"}</p>${w.vidExistente?`<div class="ok">Vas a derivar habilidades para tu valor existente. Puedes ajustar la frase antes de analizar.</div>`:""}<p class="muted" style="margin:0">Escribe cómo quieres actuar, con tus palabras. Claude lo clasifica, encuentra las situaciones donde se pone a prueba y te propone las habilidades que necesitas.</p>
+   <div class="field"><label for="vt">¿Qué eliges vivir?</label><textarea id="vt" rows="3" placeholder="Ej.: la puntualidad. Quiero cumplir siempre a tiempo, sin importar lo que hagan los demás.">${esc(w.texto||"")}</textarea></div>
+   <div class="field"><label for="va">Área de vida</label><select id="va">${AREAS.map(([k,n])=>`<option value="${k}" ${w.area===k?"selected":""}>${n}</option>`).join("")}</select></div>
+   <div class="field"><label for="ve">Un ejemplo de tu día a día <small>(opcional)</small></label><input type="text" id="ve" value="${esc(w.ejemplo||"")}"></div>
+   <button class="btn primary" id="van">Analizar con Claude</button></div>`;
+  $("#van").onclick=analizar; bindTipo(); return;
+ }
+ if(w.paso===2){$("#view").innerHTML=`<div class="card"><div class="think"><span class="dot3"><span></span><span></span><span></span></span>Claude está analizando tu valor. Puede tardar hasta un minuto…</div></div>`;return}
+ if(w.paso===3){const a=w.analisis;
+  $("#view").innerHTML=`<div class="card"><p class="h2">Análisis</p>
+   <div class="class"><b>Clasificación: ${esc(a.clasificacion)}</b><br>${esc(a.explicacion)}</div>
+   <div class="field"><label for="ven">Formulación como valor <small>(edítala si quieres)</small></label><textarea id="ven" rows="2">${esc(w.vidExistente&&S.valores[w.vidExistente]?S.valores[w.vidExistente].enunciado:a.enunciado)}</textarea>${w.vidExistente&&S.valores[w.vidExistente]&&S.valores[w.vidExistente].enunciado!==a.enunciado?`<small class="muted">Claude sugiere: "${esc(a.enunciado)}". Se mantiene tu frase salvo que la cambies.</small>`:""}</div>
+   <p style="margin:0;font-weight:700">Situaciones donde se pone a prueba y habilidades que exige</p>
+   ${(a.contextos||[]).map((c,ci)=>`<div class="ctx"><h4>${esc(c.situacion)}</h4>${(c.habilidades||[]).map((h,hi)=>`<label class="pick"><input type="checkbox" checked data-c="${ci}" data-h="${hi}"><span><b>${esc(h.nombre)}</b> <span class="tag ${h.clase==="especializar"?"esp":"ind"}">${h.clase==="especializar"?"Especializar":"Indispensable"} · nivel ${esc(h.nivel_minimo)}</span><p>${esc(h.por_que)}</p></span></label>`).join("")}</div>`).join("")}
+   <div class="row"><button class="btn primary" id="vok">Aceptar y crear habilidades</button><button class="btn ghost" id="vback">Volver a escribir</button></div></div>`;
+  $("#vback").onclick=()=>{wizard.paso=1;renderValor()}; $("#vok").onclick=aceptar; return;
+ }
+ if(w.paso===4){$("#view").innerHTML=`<div class="card"><p class="h2">Valor registrado</p><div class="ok">${esc(w.enunciado)}</div>
+   <p class="muted" style="margin:0">${w.creadas} habilidades nuevas quedaron en tu ficha, por evaluar. El siguiente paso es generar una ruta de práctica de 2 semanas, con sesiones de hasta ${S.jugador.minutos_dia||60} minutos y recuperación el fin de semana.</p>
+   <div class="row"><button class="btn primary" id="vruta">Generar mi ruta</button><button class="btn ghost" id="vnuevo">Agregar otro valor</button></div><div id="vrst"></div></div>`;
+  $("#vnuevo").onclick=()=>{wizard={paso:1};renderValor()}; $("#vruta").onclick=generarRuta; return;
+ }
+}
+async function analizar(){
+ const texto=$("#vt").value.trim(); if(texto.length<5){toast("Escribe tu valor primero");return}
+ wizard={paso:2,texto,area:$("#va").value,ejemplo:$("#ve").value.trim(),vidExistente:wizard.vidExistente}; renderValor();
+ const existentes=Object.entries(S.habilidades).map(([id,h])=>`${id}: ${h.nombre}`).join("; ")||"ninguna";
+ try{
+  const a=await sample.json(`${REGLAS}
+
+Omar quiere registrar esto como algo que elige vivir:
+"""${wizard.texto}"""
+Área de vida: ${wizard.area}. Ejemplo que dio: ${wizard.ejemplo||"ninguno"}.
+Habilidades que ya tiene registradas (reutiliza su id si es la misma habilidad): ${existentes}.
+
+1) Clasifícalo (valor, principio, disposición, objetivo u otro) y explica en 1-2 frases por qué, aplicando las reglas.
+2) Si es una disposición u objetivo, propón igualmente la formulación como valor (cualidad de la acción).
+3) Identifica entre 3 y 5 situaciones típicas de su vida donde este valor se pone a prueba, y por situación 1 a 3 habilidades concretas que exige. Prefiere pocas habilidades bien elegidas; no repitas la misma habilidad en varias situaciones.
+Responde solo JSON: {"clasificacion": string, "explicacion": string, "enunciado": string, "corto": string (máx. 6 palabras), "contextos": [{"situacion": string, "habilidades": [{"id": "hab-verbo-objeto", "nombre": string, "tipo": "cognitiva"|"interpersonal"|"motora"|"metahabilidad", "clase": "indispensable"|"especializar", "nivel_minimo": number, "por_que": string}]}]}`,{cache:false});
+  if(!a||!Array.isArray(a.contextos))throw {code:"invalid_json"};
+  wizard.analisis=a; wizard.paso=3; renderValor();
+ }catch(e){wizard.paso=1;renderValor();setStatus(errTxt(e),true)}
+}
+async function aceptar(){
+ const a=wizard.analisis; const enunciado=$("#ven").value.trim()||a.enunciado;
+ const elegidas=[...document.querySelectorAll(".pick input:checked")].map(i=>a.contextos[+i.dataset.c].habilidades[+i.dataset.h]);
+ const btn=$("#vok"); btn.disabled=true; btn.textContent="Guardando…";
+ const vid=wizard.vidExistente||("val-"+slug(a.corto||enunciado)); const prevV=wizard.vidExistente?S.valores[vid]:null;
+ const areaNombre=(AREAS.find(x=>x[0]===wizard.area)||[])[1]||wizard.area;
+ try{
+  const ctxs=a.contextos.map(c=>({situacion:c.situacion,habilidades:(c.habilidades||[]).map(h=>h.nombre)}));
+  if(prevV){await put("valores/"+vid,{...prevV,enunciado,area:wizard.area,area_nombre:areaNombre,clasificacion:a.clasificacion,contextos:ctxs,pendiente_ficha:true,historial:[...(prevV.historial||[]),{fecha:hoy(),cambio:"habilidades derivadas con Claude"}].slice(-20)});}
+  else await put("valores/"+vid,{tipo:"valor",enunciado,corto:a.corto||"",area:wizard.area,area_nombre:areaNombre,origen:"senda",clasificacion:a.clasificacion,texto_original:wizard.texto,contextos:ctxs,fecha:hoy(),pendiente_ficha:true});
+  let creadas=0; const ids=[];
+  for(const h of elegidas){
+   const id=String(h.id||"hab-"+slug(h.nombre)).replace(/[^a-z0-9-]/g,"").slice(0,80)||"hab-"+slug(h.nombre); ids.push(id);
+   const prev=S.habilidades[id];
+   if(prev){await patch("habilidades/"+id,{fuentes:[...(prev.fuentes||[]),vid],requerido:Math.max(prev.requerido||0,+h.nivel_minimo||0)});}
+   else{await put("habilidades/"+id,{nombre:h.nombre,tipo:h.tipo,clase:h.clase,requerido:+h.nivel_minimo||2,nivel:null,sospechado:null,confianza:"baja",xp:0,grupo:"Valor: "+((prevV&&prevV.corto)||a.corto||enunciado),fuentes:[vid],estado:"activa",evidencias:[],pendiente_ficha:true});creadas++;}
+  }
+  wizard={paso:4,enunciado,vid,ids,creadas}; renderValor(); toast("Valor y habilidades guardados");
+ }catch(e){btn.disabled=false;btn.textContent="Aceptar y crear habilidades";setStatus("No se pudo guardar. Intenta de nuevo.",true)}
+}
+async function generarRuta(){
+ const w=wizard; const btn=$("#vruta"); btn.disabled=true;
+ $("#vrst").innerHTML=`<div class="think"><span class="dot3"><span></span><span></span><span></span></span>Claude está armando tu ruta de 2 semanas…</div>`;
+ const habs=w.ids.map(id=>`${id}: ${S.habilidades[id]?.nombre} (requerido ${S.habilidades[id]?.requerido}, actual ${S.habilidades[id]?.nivel??"por evaluar"})`).join("; ");
+ try{
+  const r=await sample.json(`${REGLAS}
+
+Diseña una ruta de práctica de 14 días para ${w.tipo==="objetivo"?"el objetivo":"el valor"} "${w.enunciado}"${w.criterio?` (criterio de logro: ${w.criterio})`:""} con estas habilidades: ${habs}.
+Reglas de la ruta: de lunes a viernes una sesión diaria de máximo ${S.jugador.minutos_dia||60} minutos (mejor 20-45) con 2-4 tareas concretas y observables (práctica deliberada: tarea al borde del nivel, retroalimentación, repetición); sábado = "recuperacion" (terminar lo que quedó pendiente); domingo = "repaso" semanal (revisar qué funcionó y qué barrera apareció) seguido de un nodo "reto" por la habilidad más importante de la semana. El primer día incluye una autoevaluación inicial de cada habilidad.
+Responde solo JSON: {"titulo": string, "descripcion": string, "unidades": [{"titulo": "Semana 1: ...", "nodos": [{"tipo": "sesion"|"recuperacion"|"repaso"|"reto", "titulo": string, "tareas": [{"texto": string, "min": number}], "habilidades": [ids]}]}]} — 2 unidades, 7 a 8 nodos cada una.`,{cache:false});
+  if(!r||!Array.isArray(r.unidades))throw {code:"invalid_json"};
+  r.unidades.forEach(u=>(u.nodos||[]).forEach(n=>{n.estado="pendiente";n.xp=(n.tareas||[]).reduce((a,t)=>a+(+t.min||0),0)||30;n.habilidades=(n.habilidades||[]).filter(id=>S.habilidades[id]||w.ids.includes(id))}));
+  const src=w.vid||w.oid; const rid="ruta-"+src.replace(/^(val|obj)-/,"");
+  await put("rutas/"+rid,{...r,origen:src,creada:hoy()});
+  $("#vrst").innerHTML=`<div class="ok">Ruta creada. Está en la pestaña Ruta.</div>`; toast("Ruta creada");
+ }catch(e){btn.disabled=false;$("#vrst").innerHTML=`<div class="notice">${errTxt(e)}</div>`}
+}
+
+/* ---------- objetivo nuevo ---------- */
+function renderObjetivo(){
+ const w=wizard;
+ if(w.paso===1){
+  const vals=Object.entries(S.valores).filter(([,v])=>v.tipo!=="principio"&&v.estado!=="archivado");
+  $("#view").innerHTML=`${selTipo()}<div class="card" style="margin-top:10px"><p class="h2">Agregar un objetivo</p><p class="muted" style="margin:0">Un objetivo es un resultado que se puede tachar como logrado y tiene fecha. Claude afina el criterio para que sea verificable y te propone las habilidades que exige, con el nivel necesario.</p>
+   <div class="field"><label for="ot">¿Qué quieres lograr?</label><textarea id="ot" rows="2" placeholder="Ej.: aprobar la certificación Security+">${esc(w.texto||"")}</textarea></div>
+   <div class="field"><label for="oc">¿Cómo sabrás que lo lograste?</label><textarea id="oc" rows="2" placeholder="Ej.: tener el certificado emitido">${esc(w.criterio_txt||"")}</textarea></div>
+   <div class="field"><label for="of">Fecha límite</label><input type="date" id="of" value="${esc(w.fecha||"")}"></div>
+   <div class="field"><label for="oa">Área de vida</label><select id="oa">${AREAS.map(([k,n])=>`<option value="${k}" ${w.area===k?"selected":""}>${n}</option>`).join("")}</select></div>
+   <div class="field"><label>¿A qué valor responde? <small>(al menos uno)</small></label><div class="fchips">${vals.map(([id,v])=>`<label class="fchip"><input type="checkbox" data-ov="${esc(id)}" ${(w.valores||[]).includes(id)?"checked":""}> ${esc(v.corto||v.enunciado)}</label>`).join("")}</div></div>
+   <button class="btn primary" id="oan">Analizar con Claude</button></div>`;
+  bindTipo(); $("#oan").onclick=analizarObjetivo; return;
+ }
+ if(w.paso===2){$("#view").innerHTML=`<div class="card"><div class="think"><span class="dot3"><span></span><span></span><span></span></span>Claude está analizando tu objetivo…</div></div>`;return}
+ if(w.paso===3){const a=w.analisis;
+  $("#view").innerHTML=`<div class="card"><p class="h2">Análisis del objetivo</p>
+   <div class="class">${a.es_objetivo?"<b>Es un objetivo.</b> ":"<b>Ojo:</b> "}${esc(a.observacion||"")}</div>
+   <div class="field"><label for="otit">Nombre corto</label><input type="text" id="otit" value="${esc(a.titulo||"")}"></div>
+   <div class="field"><label for="oen">Resultado</label><textarea id="oen" rows="2">${esc(a.enunciado||w.texto)}</textarea></div>
+   <div class="field"><label for="ocr">Criterio de logro <small>(verificable, sin ambigüedad)</small></label><textarea id="ocr" rows="3">${esc(a.criterio||w.criterio_txt)}</textarea></div>
+   <p style="margin:0;font-weight:700">Habilidades que exige</p>
+   ${(a.habilidades||[]).map((h,i)=>`<label class="pick"><input type="checkbox" checked data-oh="${i}"><span><b>${esc(h.nombre)}</b> <span class="tag obj">Meta: nivel ${esc(h.nivel_requerido)}</span>${S.habilidades[h.id]?' <span class="tag ind">Ya la tienes registrada</span>':""}<p>${esc(h.por_que)}</p></span></label>`).join("")}
+   <div class="row"><button class="btn primary" id="ook">Aceptar y crear objetivo</button><button class="btn ghost" id="oback">Volver a escribir</button></div></div>`;
+  $("#oback").onclick=()=>{wizard.paso=1;renderValor()}; $("#ook").onclick=aceptarObjetivo; return;
+ }
+ if(w.paso===4){$("#view").innerHTML=`<div class="card"><p class="h2">Objetivo registrado</p><div class="ok"><b>${esc(w.titulo)}</b><br>${esc(w.enunciado)}</div>
+   <p class="muted" style="margin:0">${w.ids.length} habilidades quedaron asociadas (${w.creadas} nuevas, por evaluar). Puedes generar una ruta de 2 semanas con sesiones de hasta ${S.jugador.minutos_dia||60} minutos.</p>
+   <div class="row"><button class="btn primary" id="vruta">Generar mi ruta</button><button class="btn ghost" id="onuevo">Agregar otro</button></div><div id="vrst"></div></div>`;
+  $("#onuevo").onclick=()=>{wizard={paso:1,tipo:"objetivo"};renderValor()}; $("#vruta").onclick=generarRuta; return;
+ }
+}
+async function analizarObjetivo(){
+ const texto=$("#ot").value.trim(), crit=$("#oc").value.trim(); if(texto.length<5){toast("Escribe tu objetivo primero");return}
+ const valores=[...document.querySelectorAll("[data-ov]:checked")].map(i=>i.dataset.ov);
+ if(!valores.length){toast("Elige al menos un valor al que responda este objetivo");return}
+ wizard={paso:2,tipo:"objetivo",texto,criterio_txt:crit,fecha:$("#of").value,area:$("#oa").value,valores}; renderValor();
+ const existentes=Object.entries(S.habilidades).map(([id,h])=>`${id}: ${h.nombre} (nivel ${h.nivel??"por evaluar"})`).join("; ")||"ninguna";
+ try{
+  const a=await sample.json(`${REGLAS}
+
+Omar quiere registrar este OBJETIVO: """${texto}"""
+Cómo sabrá que lo logró: """${crit||"no lo dijo"}""". Fecha límite: ${wizard.fecha||"sin fecha"}. Área: ${wizard.area}.
+Habilidades que ya tiene registradas (reutiliza su id si es la misma): ${existentes}.
+1) Verifica que sea un objetivo (resultado que se puede tachar). Si no lo es (es un valor, un deseo vago o un sentimiento), dilo en "observacion" y propón cómo convertirlo en objetivo.
+2) Reescribe el criterio de logro para que sea verificable sin ambigüedad, respetando lo que Omar dijo.
+3) Lista entre 2 y 6 habilidades concretas que ese criterio exige, con el nivel requerido (0-5). No listes conocimientos ni términos paraguas como habilidades. Si la fecha parece poco realista para la brecha, dilo en "observacion".
+Responde solo JSON: {"es_objetivo": boolean, "observacion": string, "titulo": string (máx. 4 palabras), "enunciado": string, "criterio": string, "habilidades": [{"id": "hab-verbo-objeto", "nombre": string, "tipo": "cognitiva"|"interpersonal"|"motora"|"metahabilidad", "nivel_requerido": number, "por_que": string}]}`,{cache:false});
+  if(!a||!Array.isArray(a.habilidades))throw {code:"invalid_json"};
+  wizard.analisis=a; wizard.paso=3; renderValor();
+ }catch(e){wizard.paso=1;renderValor();setStatus(errTxt(e),true)}
+}
+async function aceptarObjetivo(){
+ const a=wizard.analisis, w=wizard; const btn=$("#ook"); btn.disabled=true; btn.textContent="Guardando…";
+ const titulo=$("#otit").value.trim()||a.titulo||"Objetivo", enunciado=$("#oen").value.trim(), criterio=$("#ocr").value.trim();
+ const elegidas=[...document.querySelectorAll("[data-oh]:checked")].map(i=>a.habilidades[+i.dataset.oh]);
+ let oid="obj-"+slug(titulo); if(S.objetivos[oid])oid+="-"+Date.now().toString(36).slice(-4);
+ try{
+  await put("objetivos/"+oid,{titulo,enunciado,criterio,fecha_limite:w.fecha||null,area:w.area,valores:w.valores||[],estado:"activo",origen:"senda",texto_original:w.texto,fecha:hoy(),pendiente_ficha:true});
+  let creadas=0; const ids=[];
+  for(const h of elegidas){
+   const id=String(h.id||"hab-"+slug(h.nombre)).replace(/[^a-z0-9-]/g,"").slice(0,80)||"hab-"+slug(h.nombre); ids.push(id);
+   const prev=S.habilidades[id];
+   if(prev){await patch("habilidades/"+id,{fuentes:[...new Set([...(prev.fuentes||[]),oid])],requerido:Math.max(prev.requerido||0,+h.nivel_requerido||0),estado:prev.estado==="pausada"?"activa":prev.estado});}
+   else{await put("habilidades/"+id,{nombre:h.nombre,tipo:h.tipo,clase:"objetivo",requerido:+h.nivel_requerido||3,nivel:null,sospechado:null,confianza:"baja",xp:0,grupo:"Objetivo: "+titulo,fuentes:[oid],estado:"activa",evidencias:[],pendiente_ficha:true});creadas++;}
+  }
+  wizard={paso:4,tipo:"objetivo",oid,titulo,enunciado,criterio,ids,creadas}; renderValor(); toast("Objetivo guardado");
+ }catch(e){btn.disabled=false;btn.textContent="Aceptar y crear objetivo";setStatus("No se pudo guardar. Intenta de nuevo.",true)}
+}
+
+/* ---------- navegación y arranque ---------- */
+function render(){stats();document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.tab===tab)));
+ if(tab==="inicio")renderInicio();else if(tab==="ruta")renderRuta();else renderValor();}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{tab=t.dataset.tab;try{localStorage.setItem("senda-tab",tab)}catch(e){};render();window.scrollTo({top:0})});
+try{tab=localStorage.getItem("senda-tab")||"inicio"}catch(e){}
+render();
+(async()=>{
+ try{sample=await window.claude?.use?.("sample")}catch(e){sample=null}
+ try{db=await window.claude?.use?.("db")}catch(e){db=null}
+ if(!db){setStatus("Abre esta app desde claude.ai para cargar y guardar tus datos.",true);render();return}
+ setStatus("Datos sincronizados");
+ const busy=()=>{const a=document.activeElement;return a&&(a.tagName==="TEXTAREA"||a.tagName==="INPUT"||a.tagName==="SELECT")&&!a.closest("#modalRoot")};
+ const rerender=()=>{stats(); if(tab==="valor")return; if(!busy())render();};
+ const sub=(col)=>db.collection(col).onSnapshot(s=>{const o={};s.docs.forEach(d=>o[d.id]=d.data());S[col]=o;rerender();},e=>setStatus("Se perdió la conexión ("+e.code+"). Recarga la página.",true));
+ sub("valores");sub("habilidades");sub("rutas");sub("objetivos");
+ db.doc("jugador/estado").onSnapshot(s=>{if(s.exists)S.jugador={...S.jugador,...s.data()};rerender();});
+})();
+</script>

@@ -1,0 +1,14 @@
+.obsidian/
+**/.obsidian/
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.env
+.env.*
+node_modules/
+
+# Datos personales de Omar: viven en el repo privado Omar8485/senda-omar
+perfil/
+datos/
+notas/
