@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { describe, expect, it } from 'vitest'
-import { confianza, nivelTrasReto, registrarNivel, topeNivel } from './niveles'
+import { aNivel, confianza, nivelTrasReto, registrarNivel, topeNivel } from './niveles'
 import type { Evidencia } from './tipos'
 
 const propia = (contexto: string): Evidencia => ({ tipo: 'autoobservacion', externa: false, contexto })
@@ -59,7 +59,7 @@ describe('registrarNivel', () => {
   })
 
   it('respeta el propuesto si la evidencia alcanza', () => {
-    expect(registrarNivel(3, [externa('trabajo')])).toEqual({ nivel: 3, confianza: 'alta' })
+    expect(registrarNivel(3, [externa('trabajo')], { conRubrica: true })).toEqual({ nivel: 3, confianza: 'alta' })
   })
 
   it('no sube un nivel que nadie propuso', () => {
@@ -68,10 +68,14 @@ describe('registrarNivel', () => {
 })
 
 describe('confianza', () => {
-  it('baja con solo autoobservación, media con varios contextos, alta con externa', () => {
+  it('baja con solo autoobservación, media con varios contextos, alta con externa y rúbrica', () => {
     expect(confianza([propia('a')])).toBe('baja')
     expect(confianza([propia('a'), propia('b')])).toBe('media')
-    expect(confianza([propia('a'), externa('a')])).toBe('alta')
+    expect(confianza([propia('a'), externa('a')], { conRubrica: true })).toBe('alta')
+  })
+
+  it('sin rúbrica específica la confianza no pasa de media (regla 02 §6)', () => {
+    expect(confianza([externa('a')])).toBe('media')
   })
 
   it('la formación no aporta confianza', () => {
@@ -95,5 +99,14 @@ describe('nivelTrasReto (D-009)', () => {
 
   it('nunca baja el nivel actual', () => {
     expect(nivelTrasReto(4, 2)).toBe(4)
+  })
+})
+
+describe('aNivel', () => {
+  it('recorta y redondea a la escala 0-5', () => {
+    expect(aNivel(7)).toBe(5)
+    expect(aNivel(-1)).toBe(0)
+    expect(aNivel(2.6)).toBe(3)
+    expect(aNivel('3')).toBe(0)
   })
 })

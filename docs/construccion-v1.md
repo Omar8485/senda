@@ -23,7 +23,16 @@ Criterio de salida: Omar migra sus datos y usa la v1 una semana sin volver al pr
   - `respaldo.ts`: exportar, importar (reemplaza todo y valida antes de tocar la base) y borrar todo.
   - `prototipo.ts`: importador de la base del prototipo de claude.ai.
   - Núcleo ampliado: XP por acción, nivel de personaje, XP por habilidad y reglas de logro.
-- [ ] **B.1b Modelos** (`prompts/`, `app/src/modelos/`): prompts versionados fuera del código, adaptadores Anthropic y OpenAI-compatible, `generarJSON` con validación Zod, un reintento y firma.
+- [x] **B.1b Modelos y acciones**
+  - `prompts/`: seis tareas más `reglas.md` (mensaje de sistema), en Markdown con versión y esfuerzo. Son genéricos: usan el nombre del perfil en lugar de "Omar".
+  - `app/src/modelos/`:
+    - `adaptador.ts`: interfaz común y errores con código.
+    - `anthropic.ts`: SDK oficial `@anthropic-ai/sdk` en el navegador, con salida estructurada, `effort` según el prompt y respaldo del servidor (`fallbacks: "default"`) en Opus 5.5, Fable 5.1 y Sonnet 5.5.
+    - `openai.ts`: `/chat/completions` en modo JSON; sirve para OpenAI, Gemini, OpenRouter, Ollama y LM Studio.
+    - `cliente.ts`: `generarJSON` valida con Zod, reintenta una vez con el error y firma cada resultado.
+  - `app/src/servicios/acciones.ts`: cada acción de la app junta el modelo (propone), el núcleo (decide) y los datos: valores, objetivos, logro con evidencia, rutas, sesiones, retos, evidencia, autoevaluación y pausa.
+  - `app/src/servicios/config-modelo.ts`: proveedor y modelo en el perfil; la clave va aparte, en la tabla local `secretos`.
+  - Política de seguridad: `connect-src` admite HTTPS y `localhost`, porque cada persona elige su proveedor.
 - [ ] **B.1c Interfaz** (`app/src/ui/`): inicio (personaje, brújula, habilidades por objetivo, valor o todas), ruta, agregar valor u objetivo, retos, evidencia, logro, editar valor, configuración del modelo con avisos (P-003) y "Mis datos" (exportar, importar, importar del prototipo, borrar todo). Primera vez: nombre y confirmación de mayoría de edad (P-007).
 - [ ] **B.1d PWA**: manifest, service worker e iconos para instalar en el móvil y el escritorio.
 - [ ] **Migración real:** Omar exporta la base del prototipo y la importa en la v1 desde "Mis datos". Esto lo hace Omar en su dispositivo: sus datos nunca pasan por el repositorio.
@@ -38,6 +47,10 @@ Criterio de salida: Omar migra sus datos y usa la v1 una semana sin volver al pr
 | Objetivo "logrado" sin evidencia en el prototipo | Al migrar vuelve a "activo" | Regla: sin evidencia aprobada no hay logro |
 | Claves de API | Tabla local `secretos`, fuera del respaldo | docs/arquitectura.md §6.2 |
 | Sincronización | Fuera de B.1; llega en B.3 (Google Drive primero) | Respuesta de Omar a §12 |
+| Confianza sin rúbrica | Nunca "alta" si la habilidad no tiene rúbrica específica, aunque haya evidencia externa | Regla 02 §6 |
+| Evidencia propia | No cambia el nivel por sí sola; queda `revision_pendiente`. La persona puede autoevaluarse y el núcleo recorta al tope | Prototipo + regla 02 |
+| Modelo predeterminado | Claude Opus 5.5, con respaldo del servidor ante rechazos. La persona puede elegir otro o un proveedor OpenAI-compatible | P-003: el modelo lo elige el usuario |
+| Esfuerzo del modelo | `high` en las evaluaciones (reto y logro) y `medium` en el resto; se fija en cada prompt | Rigor donde se decide un nivel o un logro |
 
 ## Formato que espera el importador del prototipo
 
@@ -59,3 +72,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 
 - **2026-10-10:** B.0 completa (estructura, CI y Pages). Repositorio público: revisión de secretos con gitleaks sobre todo el historial (sin hallazgos), escaneo de secretos en la CI y `SECURITY.md`. PR #1 abierto hacia `main`.
 - **2026-10-10:** B.1a completa: capa de datos, importador del prototipo y 47 pruebas.
+- **2026-10-11:** B.1b completa: prompts versionados, adaptadores Anthropic y OpenAI-compatible, `generarJSON` y capa de acciones. 74 pruebas.

@@ -7,13 +7,14 @@ import { defineConfig, type Plugin } from 'vite'
 
 // Política de seguridad de contenido (docs/arquitectura.md §10): sin scripts ni recursos de terceros.
 // Solo en la compilación, porque el servidor de desarrollo de Vite inyecta scripts en línea.
-// Cuando lleguen los adaptadores de modelos (B.1), connect-src sumará los dominios de los proveedores.
+// connect-src admite HTTPS y el equipo local porque cada persona elige su proveedor de IA
+// (Anthropic, OpenAI-compatible o un modelo local como Ollama) y escribe su dirección.
 const CSP = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self'",
   "img-src 'self' data:",
-  "connect-src 'self'",
+  "connect-src 'self' https: http://localhost:* http://127.0.0.1:*",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

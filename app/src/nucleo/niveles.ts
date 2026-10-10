@@ -49,10 +49,13 @@ export interface NivelRegistrado {
   confianza: Confianza
 }
 
-/** Confianza del nivel según la evidencia (regla 02 §3). */
-export function confianza(evidencias: readonly Evidencia[]): Confianza {
+/**
+ * Confianza del nivel según la evidencia (regla 02 §3). Sin rúbrica específica de la habilidad,
+ * la confianza no puede ser alta (regla 02 §6).
+ */
+export function confianza(evidencias: readonly Evidencia[], opciones: { conRubrica?: boolean } = {}): Confianza {
   const ejecucion = deEjecucion(evidencias)
-  if (ejecucion.some((e) => e.externa)) return 'alta'
+  if (ejecucion.some((e) => e.externa)) return opciones.conRubrica ? 'alta' : 'media'
   if (contextosDistintos(ejecucion) >= 2) return 'media'
   return 'baja'
 }
@@ -61,11 +64,12 @@ export function confianza(evidencias: readonly Evidencia[]): Confianza {
 export function registrarNivel(
   propuesto: NivelHabilidad,
   evidencias: readonly Evidencia[],
+  opciones: { conRubrica?: boolean } = {},
 ): NivelRegistrado {
   const tope = topeNivel(evidencias)
   const resultado: NivelRegistrado = {
     nivel: Math.min(propuesto, tope) as NivelHabilidad,
-    confianza: confianza(evidencias),
+    confianza: confianza(evidencias, opciones),
   }
   if (propuesto > tope) resultado.sospechado = propuesto
   return resultado
@@ -81,4 +85,10 @@ export function nivelTrasReto(
 ): NivelHabilidad {
   const nuevo = Math.min(actual + 1, demostrado, TOPE_RETO)
   return Math.max(actual, nuevo) as NivelHabilidad
+}
+
+/** Recorta un número cualquiera (por ejemplo, el que propone un modelo) a la escala 0-5. */
+export function aNivel(x: unknown): NivelHabilidad {
+  const n = typeof x === 'number' && Number.isFinite(x) ? Math.round(x) : 0
+  return Math.max(0, Math.min(5, n)) as NivelHabilidad
 }
