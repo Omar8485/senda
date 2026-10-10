@@ -17,7 +17,7 @@
 | 5 — Orientación de Omar | en curso: 5 de 10 áreas registradas (detalle en `perfil/ESTADO.md`, privado) |
 | 6 — Inventario | pendiente (depende de 5) |
 | 7 — Estrategia | pendiente; la skill `habilidades-estrategia` se propondrá a la cuenta al llegar aquí |
-| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; Senda pasa a ser proyecto abierto |
+| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; v1 abierta en construcción (fase B.0 hecha) |
 
 ## Senda como proyecto abierto (2026-10-10)
 
@@ -42,7 +42,13 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 
 ## Siguiente acción
 
-0. **Senda v1:** Omar revisa `docs/arquitectura.md` (borrador 0.1) y responde sus 4 preguntas (§12). Después: fase B.0 (base del repo `app/`, CI y despliegue a GitHub Pages).
+0. **Senda v1:** B.0 hecha en la rama `claude/lucid-cori-csscqq` (ver `docs/arquitectura.md` §13). Pendiente de Omar:
+   - activar GitHub Pages (Settings → Pages → Source: "GitHub Actions"). Con el repositorio privado, Pages exige GitHub Pro; al hacerlo público es gratis;
+   - unir la rama a `main` para el primer despliegue;
+   - confirmar la respuesta a la pregunta 3 (la v1 es PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
+   - pregunta 4 (respuestas de referencia de los retos de inglés): pendiente por decisión de Omar, se necesita en B.2.
+   
+   Siguiente: **fase B.1** (Senda local: datos en IndexedDB, importador del prototipo, adaptadores de modelos, prompts versionados y pantallas).
 1. **Fase 5:** completar las áreas pendientes de Omar con la skill `habilidades-orientacion` (detalle en `perfil/ESTADO.md`).
 2. **Fase 2 (cuando Omar quiera):** contrastar `modelo/familias.md` con ESCO/O\*NET y reclasificar las 20 habilidades de la auditoría.
 
@@ -72,6 +78,7 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
   - `github.com/Omar8485/senda`: privado por ahora, se hará público. Contiene modelo, reglas, app y docs.
   - `github.com/Omar8485/senda-omar`: privado siempre. Contiene `perfil/`, `datos/`, `notas/` y la rama `respaldo-historial-senda`.
 - **Terminal remota (device_bash):** funciona desde el 2026-10-10, tras la actualización KB5129195.
+- **App v1 (`app/`):** Node 22.12+. `npm ci` y `npm run check` (lint, tipos y pruebas del núcleo); `npm run build` y `npm run test:e2e` (Playwright). La CI corre todo, más el validador, en cada push.
 - **Validador:** `python3 herramientas/validar.py` desde la raíz. Necesita `perfil/` para validar las fichas personales; sin esa carpeta valida solo el modelo.
 - **Skills en la cuenta:** `habilidades-clasificar`, `habilidades-orientacion` y `habilidades-evaluar-dominio`, aprobadas. Copias de referencia en `skills/`.
 - **Documentos del proyecto (claude.ai):** CLAUDE.md, PLAN.md y ESTADO.md están en `claude/`; el resto, con su ruta. Se actualizan junto con la carpeta.
@@ -105,3 +112,4 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
   - P-011 (propuesta): arquitectura de costo cero para el proyecto.
 - **2026-10-10:** Omar eligió AGPL-3.0 para el código. Se agregan `LICENSE`, `CONTRIBUTING.md` (DCO), `CODE_OF_CONDUCT.md` y encabezados SPDX. Con su autorización, se reescribió el historial de `senda` sin datos personales. `senda-omar` usa `main` como rama principal. El validador ignora los `ESTADO.md`.
 - **2026-10-10:** `docs/arquitectura.md` v0.1 (borrador): local primero, sin backend, React + TS + Vite como PWA, IndexedDB/Dexie, núcleo del método determinista, prompts versionados, adaptadores Anthropic y OpenAI-compatible con evaluaciones firmadas por modelo, banco de pruebas para certificar modelos, sincronización con la nube del usuario (Drive primero, cifrado opcional), social sobre AT Protocol (necesita dominio propio) y fases B.0 a E. Correo de contacto del código de conducta: infostark.computer@gmail.com.
+- **2026-10-10:** Omar responde §12 de la arquitectura: React + TypeScript, Google Drive primero, pregunta si la v1 es app de móvil (Claude: sí, como PWA; falta su confirmación) y deja pendientes las respuestas de referencia. **Fase B.0 hecha** desde la nube: `app/` (Vite 8, React 19, TypeScript 6, oxlint), núcleo con topes de nivel (regla 02), retos (D-009), XP y racha, 26 pruebas de Vitest y 4 de Playwright (escritorio y móvil), política de seguridad de contenido, CI en GitHub Actions, despliegue a Pages desde `main` y Dependabot. Arquitectura v0.2.

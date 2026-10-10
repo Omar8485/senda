@@ -15,6 +15,7 @@ Su diferencia con otras apps de superación personal es el rigor:
 
 - **Prototipo funcional en claude.ai.** El código fuente es `sistema/senda.html`. Usa la base de datos y el acceso a Claude que ofrecen los artifacts de claude.ai, así que fuera de claude.ai no guarda datos ni llama al modelo.
 - **Modelo conceptual.** La Fase 1 está cerrada y la Fase 5 está en curso. El detalle está en `ESTADO.md` y `PLAN.md`.
+- **Senda v1 en construcción** en `app/` (fase B.0 lista: estructura, pruebas automáticas y despliegue). Arquitectura en `docs/arquitectura.md`.
 - **Viabilidad como producto:** `docs/viabilidad.md`.
 
 ## Estructura
@@ -30,6 +31,8 @@ Su diferencia con otras apps de superación personal es el rigor:
 | `plantillas/` | Plantillas de fichas. |
 | `skills/` | Copias de referencia de las skills de Claude. |
 | `herramientas/validar.py` | Validador de esquema y reglas (`python herramientas/validar.py`). |
+| `app/` | La v1 en construcción: React + TypeScript + Vite, con el núcleo del método y sus pruebas. Ver `app/README.md`. |
+| `.github/workflows/` | CI (pruebas en cada push) y despliegue a GitHub Pages. |
 | `sistema/` | Diseño (`DISENO.md`) y código del prototipo (`senda.html`). |
 | `docs/` | Visión de producto (`vision.md`), arquitectura de la v1 (`arquitectura.md`) y viabilidad (`viabilidad.md`). |
 

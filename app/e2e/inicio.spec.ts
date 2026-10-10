@@ -1,0 +1,23 @@
+// Senda · Copyright (C) 2026 Omar (github.com/Omar8485) y colaboradores
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+import { expect, test } from '@playwright/test'
+
+test('la página de inicio carga sin errores ni violaciones de la política de seguridad', async ({ page }) => {
+  const errores: string[] = []
+  page.on('console', (m) => { if (m.type() === 'error') errores.push(m.text()) })
+  page.on('pageerror', (e) => errores.push(e.message))
+
+  await page.goto('./')
+
+  await expect(page).toHaveTitle('Senda')
+  await expect(page.getByRole('heading', { level: 1, name: 'Senda' })).toBeVisible()
+  await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveCount(1)
+  expect(errores).toEqual([])
+})
+
+test('no hay desplazamiento horizontal en pantallas angostas', async ({ page }) => {
+  await page.goto('./')
+  const desborde = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+  expect(desborde).toBeLessThanOrEqual(0)
+})

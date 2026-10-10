@@ -1,6 +1,6 @@
 # Senda: arquitectura de la v1
 
-> Versión 0.1 (borrador) · 2026-10-10 · Propuesta de Claude para revisión de Omar.
+> Versión 0.2 · 2026-10-10 · Propuesta de Claude revisada por Omar (respuestas en §12).
 > Se apoya en `docs/vision.md` (P-001 a P-011) y en el prototipo `sistema/senda.html`, que funciona como especificación funcional.
 
 ## 1. Principios de diseño
@@ -61,7 +61,7 @@ Hosting: archivos estáticos en **GitHub Pages** (gratis). No hay backend del pr
 | Escritorio (más adelante) | **Tauri** | App liviana; permite hablar con modelos locales sin las trabas de CORS del navegador |
 | Idiomas | Archivos JSON de traducción desde el día uno | Español primero y otros idiomas sin tocar el código |
 
-> Alternativa considerada: Svelte (más simple y liviano). Se descartó por tener una comunidad de colaboradores más pequeña. Es fácil de revisar si Omar lo prefiere.
+> Alternativa considerada: Svelte (más simple y liviano). Se descartó por tener una comunidad de colaboradores más pequeña. Omar eligió React + TypeScript (§12).
 
 ## 4. Estructura del repositorio
 
@@ -212,9 +212,21 @@ Los resultados se publican en el repositorio (`banco/resultados/`) y cualquiera 
 | **D — Social** | AT Protocol: publicar, seguir, reacciones, copiar senda | Dos usuarios de prueba se siguen, reaccionan y copian una senda |
 | **E — Lanzamiento** | Repo público, dominio, página de presentación | Checklist de privacidad y aspectos legales revisada |
 
-## 12. Preguntas abiertas para Omar
+## 12. Preguntas para Omar y respuestas
 
-1. ¿Te parece bien React + TypeScript, o prefieres otra herramienta (por ejemplo, Svelte, o algo más cercano a tu experiencia en .NET o Kotlin)?
-2. ¿Qué proveedor de nube va primero para sincronizar: Google Drive, como propongo, u otro?
-3. ¿Quieres que la v1 sea solo web (PWA) o también app de escritorio desde el inicio?
-4. Para el banco de pruebas: ¿escribimos juntos las respuestas de referencia (buenas, flojas, tramposas) de los primeros retos de inglés?
+| # | Pregunta | Respuesta (2026-10-10) |
+|---|---|---|
+| 1 | ¿React + TypeScript u otra herramienta? | **React + TypeScript**, decidido por Omar. |
+| 2 | ¿Qué nube va primero para sincronizar? | **Google Drive**, decidido por Omar (fase B.3). |
+| 3 | ¿Solo web (PWA) o también app de escritorio desde el inicio? | Omar preguntó si la v1 es también **app de móvil** desde el inicio. Respuesta de Claude: **sí**. La PWA se instala en Android y en iPhone desde el navegador, sin tiendas, y las pruebas de interfaz corren desde B.0 en tamaño de escritorio y de móvil. La instalación (manifest y service worker) llega en B.1. Las apps nativas de tienda y la de escritorio (Tauri) quedan para después. *Pendiente: que Omar lo confirme.* |
+| 4 | ¿Escribimos juntos las respuestas de referencia de los primeros retos de inglés? | **Pendiente.** Omar la deja para más adelante; no bloquea B.0 ni B.1 (se necesita en B.2). |
+
+## 13. Avance
+
+- **B.0 (2026-10-10):** estructura de `app/`, núcleo con pruebas, CI y despliegue a GitHub Pages. Detalle en `app/README.md`.
+  - Núcleo (`app/src/nucleo/`): topes de nivel por evidencia (regla 02 §3), confianza, nivel sospechado, subida por retos (D-009, tope 3 aún en propuesta), XP y racha calculados desde eventos.
+  - Interpretación a confirmar: sin evidencia de ejecución el tope es 0 (la formación sola no prueba ejecución), y el nivel 5 nunca se registra de forma automática.
+  - Pruebas: Vitest (núcleo) y Playwright (interfaz, escritorio y móvil, sin errores ni violaciones de la política de seguridad).
+  - CI (`.github/workflows/ci.yml`): lint, tipos, pruebas, compilación, pruebas de interfaz y validador de fichas, en cada push y pull request.
+  - Despliegue (`.github/workflows/pages.yml`): en cada push a `main`. Requiere activar Pages con origen "GitHub Actions". Mientras el repositorio sea privado, GitHub Pages exige un plan de pago (GitHub Pro); al hacerlo público es gratis.
+  - Herramientas que difieren de §3: Vite 8 y TypeScript 6 (las versiones actuales) y **oxlint** como linter, el que trae la plantilla de Vite.

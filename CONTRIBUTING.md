@@ -22,6 +22,7 @@ Gracias por querer sumarte. Senda es una iniciativa abierta de Omar ([@Omar8485]
 - **Nada de datos personales reales** en el repositorio: ni tuyos ni de otras personas. Los ejemplos se inventan.
 - **Cita las fuentes** cuando algo venga de un marco establecido (Dreyfus, ACT, ESCO, O\*NET…). Distingue lo establecido de lo que es propuesta.
 - Ejecuta el validador antes de enviar: `python herramientas/validar.py` debe terminar con 0 errores.
+- Si tocas la app, ejecuta `npm run check` dentro de `app/` (lint, tipos y pruebas). Toda regla del método en el núcleo (`app/src/nucleo/`) lleva su prueba.
 
 ## Licencias y firma (DCO)
 
