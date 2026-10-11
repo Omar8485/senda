@@ -5,9 +5,17 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { abrirDB } from './datos/db'
+import { ProveedorDB } from './ui/contexto'
+
+const db = abrirDB()
+// Pide al navegador que no borre los datos por falta de espacio (si lo permite).
+navigator.storage?.persist?.().catch(() => {})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ProveedorDB db={db}>
+      <App />
+    </ProveedorDB>
   </StrictMode>,
 )

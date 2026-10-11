@@ -17,8 +17,9 @@ export default defineConfig({
     launchOptions: executablePath ? { executablePath } : {},
   },
   projects: [
-    { name: 'escritorio', use: { ...devices['Desktop Chrome'] } },
-    { name: 'movil', use: { ...devices['Pixel 7'] } },
+    // Movimiento reducido: la animación de pulso del nodo actual impide que Playwright lo vea estable.
+    { name: 'escritorio', use: { ...devices['Desktop Chrome'], contextOptions: { reducedMotion: 'reduce' } } },
+    { name: 'movil', use: { ...devices['Pixel 7'], contextOptions: { reducedMotion: 'reduce' } } },
   ],
   webServer: {
     command: 'npm run preview -- --port 4173 --strictPort',

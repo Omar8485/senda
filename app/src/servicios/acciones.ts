@@ -276,7 +276,7 @@ export async function completarNodo(db: SendaDB, rutaId: string, u: number, n: n
   const nodo = r?.unidades[u]?.nodos[n]
   if (!r || !nodo) throw new Error('La sesión no existe.')
   if (nodo.estado === 'hecho') return r
-  if (!hechas.length) throw new Error('Marca al menos una tarea hecha.')
+  if (nodo.tareas.length && !hechas.length) throw new Error('Marca al menos una tarea hecha.')
   const minutos = hechas.reduce((s, i) => s + (nodo.tareas[i]?.min ?? 0), 0)
   const copia = structuredClone(r)
   Object.assign(copia.unidades[u].nodos[n], { estado: 'hecho', fecha: hoy(), tareas_hechas: hechas, minutos_reales: minutos })

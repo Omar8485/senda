@@ -3,7 +3,7 @@
 
 import { expect, test } from '@playwright/test'
 
-test('la página de inicio carga sin errores ni violaciones de la política de seguridad', async ({ page }) => {
+test('la página carga sin errores ni violaciones de la política de seguridad', async ({ page }) => {
   const errores: string[] = []
   page.on('console', (m) => { if (m.type() === 'error') errores.push(m.text()) })
   page.on('pageerror', (e) => errores.push(e.message))
@@ -20,4 +20,11 @@ test('no hay desplazamiento horizontal en pantallas angostas', async ({ page }) 
   await page.goto('./')
   const desborde = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
   expect(desborde).toBeLessThanOrEqual(0)
+})
+
+test('sin confirmar la mayoría de edad no se puede empezar (P-007)', async ({ page }) => {
+  await page.goto('./')
+  await page.getByLabel('¿Cómo te llamas?').fill('Ana')
+  await page.getByRole('button', { name: 'Empezar' }).click()
+  await expect(page.getByRole('alert')).toContainText('mayores de 18')
 })

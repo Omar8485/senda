@@ -33,9 +33,27 @@ Criterio de salida: Omar migra sus datos y usa la v1 una semana sin volver al pr
   - `app/src/servicios/acciones.ts`: cada acción de la app junta el modelo (propone), el núcleo (decide) y los datos: valores, objetivos, logro con evidencia, rutas, sesiones, retos, evidencia, autoevaluación y pausa.
   - `app/src/servicios/config-modelo.ts`: proveedor y modelo en el perfil; la clave va aparte, en la tabla local `secretos`.
   - Política de seguridad: `connect-src` admite HTTPS y `localhost`, porque cada persona elige su proveedor.
-- [ ] **B.1c Interfaz** (`app/src/ui/`): inicio (personaje, brújula, habilidades por objetivo, valor o todas), ruta, agregar valor u objetivo, retos, evidencia, logro, editar valor, configuración del modelo con avisos (P-003) y "Mis datos" (exportar, importar, importar del prototipo, borrar todo). Primera vez: nombre y confirmación de mayoría de edad (P-007).
+- [x] **B.1c Interfaz** (`app/src/ui/`, `app/src/App.tsx`)
+  - Pestañas: Inicio, Ruta, Agregar y Ajustes.
+  - `Bienvenida.tsx`: nombre y confirmación de mayoría de edad (P-007), además de importar datos.
+  - `Inicio.tsx`: personaje y XP, brújula por área, límites, y habilidades por objetivo, valor o todas, con niveles, sospechado y requerido.
+  - `Ruta.tsx`: camino por unidades; solo el nodo siguiente está disponible.
+  - `Agregar.tsx`: asistentes para un valor (o para derivar habilidades de un valor existente) y para un objetivo, y al final "Generar mi ruta".
+  - `modales/`: reto, evidencia, autoevaluación, logro con imagen, editar o archivar un valor, valores de un objetivo, avatar y sesión.
+  - `Ajustes.tsx`: modelo de IA con avisos (P-003), perfil, "Mis datos" (exportar, importar respaldo o prototipo, borrar todo) y acerca de.
+  - Pruebas de interfaz (`app/e2e/flujo.spec.ts`), con el modelo simulado y sin salir a internet:
+    - recorrido completo: configurar el modelo, agregar un valor, generar la ruta, completar una sesión y aprobar un reto, que sube el nivel a 1 y no más (D-009);
+    - importar el prototipo y exportar un respaldo;
+    - sin errores de consola, y la clave no viaja en el cuerpo de la petición.
 - [ ] **B.1d PWA**: manifest, service worker e iconos para instalar en el móvil y el escritorio.
 - [ ] **Migración real:** Omar exporta la base del prototipo y la importa en la v1 desde "Mis datos". Esto lo hace Omar en su dispositivo: sus datos nunca pasan por el repositorio.
+
+## Pendientes técnicos conocidos
+
+- **Textos en los componentes:** por ahora están escritos en español dentro de `app/src/ui/`. Hay que extraerlos a archivos de traducción (`app/src/i18n/`) antes de agregar otro idioma. La arquitectura pedía JSON desde el día uno; se pospuso para avanzar con las pantallas.
+- **Tamaño del paquete:** unos 600 kB sin comprimir (React, Zod, Dexie y el SDK de Anthropic). Se puede dividir con `import()` dinámico de los adaptadores.
+- **Verificación con un modelo real:** las pruebas usan un modelo simulado. Falta una prueba manual con una clave real (la hace Omar: la clave nunca pasa por el repositorio ni por la sesión).
+- **Áreas sensibles:** el esquema marca la visibilidad como privada por defecto, y la constante `AREAS_SENSIBLES` está lista para la fase social (D). Todavía no hay nada que publicar.
 
 ## Decisiones de implementación (para revisar)
 
@@ -73,3 +91,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 - **2026-10-10:** B.0 completa (estructura, CI y Pages). Repositorio público: revisión de secretos con gitleaks sobre todo el historial (sin hallazgos), escaneo de secretos en la CI y `SECURITY.md`. PR #1 abierto hacia `main`.
 - **2026-10-10:** B.1a completa: capa de datos, importador del prototipo y 47 pruebas.
 - **2026-10-11:** B.1b completa: prompts versionados, adaptadores Anthropic y OpenAI-compatible, `generarJSON` y capa de acciones. 74 pruebas.
+- **2026-10-11:** B.1c completa: interfaz completa sobre la capa de acciones, 74 pruebas unitarias y 10 de interfaz (escritorio y móvil).
