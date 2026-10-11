@@ -44,6 +44,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: python3 herramientas/validar.py
+      - name: Nada privado en el repositorio público
+        run: python3 herramientas/revisar_publico.py
 
   secretos:
     name: Secretos (gitleaks sobre todo el historial)

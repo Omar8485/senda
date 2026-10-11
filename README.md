@@ -22,9 +22,9 @@ Su diferencia con otras apps de superación personal es el rigor:
 
 | Ruta | Qué es |
 |---|---|
-| `CLAUDE.md` | Instrucciones para trabajar el proyecto con Claude. **Empieza aquí.** |
-| `ESTADO.md` | Estado vivo: fases, progreso, pendientes y bitácora. |
+| `ESTADO.md` | Estado vivo: fases, progreso, pendientes y bitácora. **Empieza aquí.** |
 | `PLAN.md` | Fases y criterios de salida. |
+| `CONTRIBUTING.md` | Cómo aportar: reglas del método, convenciones, licencias y DCO. |
 | `reglas/` | Ontología (01), niveles de dominio (02), priorización (03) y rigor (04). |
 | `decisiones/registro.md` | Decisiones conceptuales D-001 en adelante. |
 | `modelo/` | La parte genérica, que vale para cualquier persona: familias de funciones, casos de prueba y catálogo. |
@@ -36,8 +36,8 @@ Su diferencia con otras apps de superación personal es el rigor:
 | `sistema/` | Diseño (`DISENO.md`) y código del prototipo (`senda.html`). |
 | `docs/` | Visión de producto (`vision.md`), arquitectura de la v1 (`arquitectura.md`) y viabilidad (`viabilidad.md`). |
 
-Los datos personales del autor como usuario de Senda (`perfil/`, `datos/`) viven en un repositorio privado y están excluidos con `.gitignore`.
+Los datos personales del autor como usuario de Senda (`perfil/`, `datos/`, `notas/`) y sus instrucciones privadas de trabajo con Claude viven en un repositorio privado y están excluidos con `.gitignore`.
 
 ## Trabajar desde la nube
 
-Abre una sesión de Claude Code con este repositorio, pídele que lea `CLAUDE.md` y `ESTADO.md` y continúa desde la "siguiente acción". Al terminar, haz commit y push. La próxima sesión con acceso a la PC de Omar baja los cambios a la carpeta local.
+Abre una sesión de Claude Code con este repositorio, pídele que lea `ESTADO.md`, `CONTRIBUTING.md` y, si vas a tocar la app, `docs/construccion-v1.md`, y continúa desde la "siguiente acción". Al terminar, haz commit y push. La próxima sesión con acceso a la PC de Omar baja los cambios a la carpeta local.

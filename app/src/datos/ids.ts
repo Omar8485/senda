@@ -1,7 +1,7 @@
 // Senda · Copyright (C) 2026 Omar (github.com/Omar8485) y colaboradores
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-/** Kebab-case sin tildes ni eñes, como los identificadores del modelo (CLAUDE.md, convenciones). */
+/** Kebab-case sin tildes ni eñes, como los identificadores del modelo (CONTRIBUTING.md, convenciones). */
 export function slug(texto: string, max = 60): string {
   const s = texto
     .toLowerCase()

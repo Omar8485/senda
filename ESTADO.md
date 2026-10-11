@@ -1,6 +1,6 @@
 # Estado del proyecto
 
-> **Léeme primero.** Este archivo permite retomar el trabajo desde cualquier chat o sesión. Se actualiza al final de **cada avance** (obligatorio, ver CLAUDE.md).
+> **Léeme primero.** Este archivo permite retomar el trabajo desde cualquier chat o sesión. Se actualiza al final de **cada avance** (obligatorio).
 > Aquí está el estado del **proyecto** (modelo y app). El progreso personal de Omar como usuario (valores, inventario, plan) vive en el repositorio privado `Omar8485/senda-omar`, en `perfil/ESTADO.md`. En la carpeta de Omar está en `perfil/ESTADO.md`.
 
 **Última actualización:** 2026-10-10
@@ -36,7 +36,7 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 
 ## Senda: prototipo en claude.ai
 
-- App: https://claude.ai/artifact/JS7eTwNbd4sACDn6qd5KvZ. Su base guarda los datos reales de Omar.
+- App: un artifact privado de Omar en claude.ai. Su base guarda los datos reales de Omar, así que el enlace no se publica aquí.
 - Diseño: `sistema/DISENO.md`. Código: `sistema/senda.html`. Por ahora está personalizado para Omar (nombre fijo y prompts que dicen "Omar"); la v1 será genérica.
 - Funciona: brújula de valores, objetivos con valores, derivar habilidades desde valores y objetivos (Claude), ruta tipo Duolingo, retos evaluados, evidencia, logro solo con evidencia aprobada, avatar, XP separado del nivel.
 
@@ -72,17 +72,16 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 
 ## Entorno técnico
 
-- **Carpeta de Omar:** `C:\Users\omar_\Documents\MODELO HABILIDADES`. Es la copia de trabajo de los dos repositorios:
-  - la raíz corresponde a `Omar8485/senda`;
-  - `perfil/` y `datos/` corresponden a `Omar8485/senda-omar`.
+- **Carpeta de Omar** (`MODELO HABILIDADES`, en su PC): la copia de trabajo de los dos repositorios. No es un repositorio git:
+  - la raíz corresponde a `Omar8485/senda`, salvo `CLAUDE.md`;
+  - `CLAUDE.md`, `perfil/`, `datos/` y `notas/` corresponden a `Omar8485/senda-omar`.
 - **Repositorios:**
   - `github.com/Omar8485/senda`: **público** desde el 2026-10-10. Contiene modelo, reglas, app y docs.
-  - `github.com/Omar8485/senda-omar`: privado siempre. Contiene `perfil/`, `datos/`, `notas/` y la rama `respaldo-historial-senda`.
-- **Terminal remota (device_bash):** funciona desde el 2026-10-10, tras la actualización KB5129195.
+  - `github.com/Omar8485/senda-omar`: privado siempre. Contiene `CLAUDE.md` (instrucciones de trabajo con Claude), `perfil/`, `datos/`, `notas/` y la rama `respaldo-historial-senda`. Una sesión en la nube debe clonar los dos repositorios.
 - **App v1 (`app/`):** Node 22.12+. `npm ci` y `npm run check` (lint, tipos y pruebas del núcleo); `npm run build` y `npm run test:e2e` (Playwright). La CI corre todo, más el validador, en cada push.
 - **Validador:** `python3 herramientas/validar.py` desde la raíz. Necesita `perfil/` para validar las fichas personales; sin esa carpeta valida solo el modelo.
 - **Skills en la cuenta:** `habilidades-clasificar`, `habilidades-orientacion` y `habilidades-evaluar-dominio`, aprobadas. Copias de referencia en `skills/`.
-- **Documentos del proyecto (claude.ai):** CLAUDE.md, PLAN.md y ESTADO.md están en `claude/`; el resto, con su ruta. Se actualizan junto con la carpeta.
+- **Documentos del proyecto (claude.ai):** CLAUDE.md (privado), PLAN.md y ESTADO.md están en `claude/`; el resto, con su ruta. Se actualizan junto con la carpeta.
 
 ## Bitácora
 

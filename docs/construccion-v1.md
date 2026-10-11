@@ -6,9 +6,10 @@
 
 ## Cómo retomar
 
+0. **Instrucciones privadas:** `CLAUDE.md` ya no está en este repositorio público (2026-10-11). Vive en el repositorio privado `Omar8485/senda-omar`: una sesión en la nube debe clonar los dos. Las reglas del método y las convenciones para cualquier colaborador están en `CONTRIBUTING.md`.
 1. Trae la rama de trabajo: `git fetch origin && git checkout claude/lucid-cori-csscqq && git pull`. Si el PR [#1](https://github.com/Omar8485/senda/pull/1) ya se unió, trabaja desde `main` actualizado.
 2. Entra a `app/` y ejecuta `npm ci`. Requiere Node 22.12 o superior.
-3. Verifica que todo esté en verde con `npm run check`, `npm run build` y `npm run test:e2e`. Antes de la primera prueba de interfaz, instala Chromium con `npx playwright install chromium`.
+3. Verifica que todo esté en verde con `npm run check`, `npm run build` y `npm run test:e2e`. Desde la raíz, `python3 herramientas/revisar_publico.py` confirma que no viaja nada privado (también lo corre la CI). Antes de la primera prueba de interfaz, instala Chromium con `npx playwright install chromium`.
    Antes de hacer push, conviene repetirlo en un clon limpio (`git clone . /tmp/x && cd /tmp/x/app && npm ci && npm run check`): así se detectan archivos que no llegaron al repositorio. El 2026-10-11, una regla del `.gitignore` dejó fuera `app/src/datos/` y solo la CI lo detectó.
 4. Busca la primera casilla sin marcar en "Avance" y continúa desde ahí.
 5. Al terminar un paso: corre las verificaciones, marca la casilla, agrega una línea a la bitácora de abajo y haz commit con `git commit -s` (DCO) y push.
@@ -111,3 +112,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 - **2026-10-11:** B.1c completa: interfaz completa sobre la capa de acciones, 74 pruebas unitarias y 10 de interfaz (escritorio y móvil).
 - **2026-10-11:** La CI de B.1b falló porque `.gitignore` ignoraba `app/src/datos/`: la regla `datos/` (datos personales) no estaba anclada a la raíz. Se corrigió (`/perfil/`, `/datos/`, `/notas/`) y se validó en un clon limpio. B.1d completa: PWA instalable y sin conexión.
 - **2026-10-11:** B.2a: arnés del banco de pruebas y prueba de clasificación (`npm run banco`). Hasta que estén las respuestas de referencia, todo modelo queda "Sin certificar".
+- **2026-10-11:** `CLAUDE.md` sale del repositorio público y pasa a `senda-omar` (pedido de Omar): tenía su ruta local, el enlace de su prototipo y su flujo de trabajo personal. Las reglas del método pasan a `CONTRIBUTING.md`. Se quitan la ruta y el enlace de `ESTADO.md` y `sistema/DISENO.md`. Nuevo control en la CI: `herramientas/revisar_publico.py`.
