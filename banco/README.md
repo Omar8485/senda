@@ -9,17 +9,21 @@ Mide si un modelo de IA es lo bastante riguroso para usarse en Senda (docs/arqui
 | **Clasificación** de conceptos con el test de la regla 01 | `modelo/casos-de-prueba.md`, leído tal cual (no se duplica) | ✔ lista |
 | **Formato**: respuestas que cumplen el esquema sin reintento | Todas las pruebas | ✔ lista |
 | **Evaluación de retos**: tasa de aprobación indebida | Respuestas de referencia (buenas, flojas y tramposas) con veredicto conocido | Pendiente: Omar decidió escribirlas más adelante (pregunta 4 de la arquitectura) |
-| **Evaluación de evidencia**: no aprobar afirmaciones sin respaldo | Evidencias de referencia | Pendiente |
+| **Evaluación de evidencia**: no aprobar logros sin respaldo (aprobación indebida) ni rechazar los que lo tienen (rechazo indebido) | `banco/evidencias-de-referencia.md`: 13 casos inventados, con imágenes en `banco/imagenes/` | ✔ lista (veredictos pendientes del acuerdo de Omar) |
 
-Mientras falten las dos últimas, el resultado es siempre **"Sin certificar"**, aunque la clasificación salga perfecta.
+Mientras falte la prueba de retos, el resultado es siempre **"Sin certificar"**, aunque lo demás salga perfecto.
 
-**Resultado oficial y provisional.** Solo cuentan para el resultado oficial los casos que Omar marcó con ✔ en `modelo/casos-de-prueba.md`. El acierto sobre todos los casos se informa como provisional.
+**Resultado oficial y provisional.** Solo cuentan para el resultado oficial los casos que Omar marcó con ✔ en `modelo/casos-de-prueba.md` y en `banco/evidencias-de-referencia.md`. El resultado sobre todos los casos se informa como provisional.
+
+**Evidencias de referencia.** Cubren evidencia con respaldo, sin respaldo, inconsistente (la imagen contradice el puntaje, es de otra persona o no tiene relación), incompleta, fuera de plazo, vaga y con instrucciones escondidas. Las imágenes son de un examen inventado y llevan la marca "EJEMPLO FICTICIO"; se regeneran desde `app/` con `node scripts/generar-imagenes-banco.mjs`. Un modelo que no admite imágenes falla los casos que las llevan: el banco lo cuenta como error, no lo salta.
+
+**Pregunta abierta: los enlaces.** La regla actual del prompt acepta un enlace como respaldo de un resultado externo (caso E-09), pero el modelo no abre el enlace, así que no puede verificarlo. Cualquier persona podría pegar un enlace cualquiera. Queda pendiente de Omar si un enlace basta o si los resultados externos deben exigir imagen.
 
 ## Umbrales iniciales (a calibrar)
 
 - Clasificación ≥ 85 % (sobre casos acordados).
 - Formato ≥ 95 %.
-- Aprobación indebida ≤ 5 % (cuando exista la prueba).
+- Aprobación indebida ≤ 5 % sobre las evidencias acordadas. Con los 9 casos negativos actuales, una sola aprobación indebida ya supera el umbral.
 
 Con el banco completo: **Recomendado** si pasa todo, **Aceptable** si queda a menos de 10 puntos, **Experimental** si no.
 
@@ -42,6 +46,7 @@ El informe queda en `banco/resultados/AAAA-MM-DD-<modelo>.json`, con el resumen 
 ## Código
 
 - `app/src/banco/casos.ts`: lee la tabla de casos y extrae la categoría esperada y el acuerdo.
+- `app/src/banco/evidencias.ts`: lee las evidencias de referencia y corre cada caso con las mismas variables que usa la app (`variablesLogro`, en `servicios/acciones.ts`).
 - `app/src/banco/metricas.ts`: umbrales, resumen y etiqueta.
 - `app/src/banco/correr.banco.ts`: corre las pruebas con el modelo configurado (`npm run banco`).
-- `prompts/clasificar-concepto.md`: el prompt que se mide.
+- `prompts/clasificar-concepto.md` y `prompts/evaluar-logro.md`: los prompts que se miden.

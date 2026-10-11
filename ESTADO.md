@@ -3,7 +3,7 @@
 > **Léeme primero.** Este archivo permite retomar el trabajo desde cualquier chat o sesión. Se actualiza al final de **cada avance** (obligatorio).
 > Aquí está el estado del **proyecto** (modelo y app). El progreso personal de Omar como usuario (valores, inventario, plan) vive en el repositorio privado `Omar8485/senda-omar`, en `perfil/ESTADO.md`. En la carpeta de Omar está en `perfil/ESTADO.md`.
 
-**Última actualización:** 2026-10-10
+**Última actualización:** 2026-10-11
 
 ## Dónde estamos
 
@@ -17,7 +17,7 @@
 | 5 — Orientación de Omar | en curso: 5 de 10 áreas registradas (detalle en `perfil/ESTADO.md`, privado) |
 | 6 — Inventario | pendiente (depende de 5) |
 | 7 — Estrategia | pendiente; la skill `habilidades-estrategia` se propondrá a la cuenta al llegar aquí |
-| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; v1 abierta: B.0 y B.1 (código) hechas, falta la migración real de Omar |
+| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; v1 abierta: B.0 y B.1 (código) hechas, falta la migración real de Omar; B.2a y B.2c hechas |
 
 ## Senda como proyecto abierto (2026-10-10)
 
@@ -47,7 +47,9 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
    - probar la v1 con una clave propia de Anthropic (Ajustes → Modelo de IA). La clave queda solo en su dispositivo;
    - migrar sus datos: exportar la base del prototipo y cargarla en Ajustes → Mis datos → Importar. Sus datos no pasan por el repositorio;
    - confirmar la respuesta a la pregunta 3 (la v1 es PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
-   - pregunta 4 (respuestas de referencia de los retos de inglés): pendiente por decisión de Omar, se necesita en B.2.
+   - pregunta 4 (respuestas de referencia de los retos de inglés): pendiente por decisión de Omar, se necesita en B.2b;
+   - marcar ✔ o ✘ en `banco/evidencias-de-referencia.md` (13 casos) y decidir si un enlace basta como respaldo de un resultado externo (caso E-09);
+   - decidir si `skills/` (copias de sus skills de cuenta, con la ruta de su carpeta) también pasa al repositorio privado.
    
    **Fase B.1: el código está completo** (datos locales, prompts versionados, adaptadores de IA, interfaz y PWA). Falta el criterio de salida: Omar migra sus datos y usa la v1 una semana. Detalle, cómo retomar y pendientes en **`docs/construccion-v1.md`**. PR abierto: https://github.com/Omar8485/senda/pull/1.
 1. **Fase 5:** completar las áreas pendientes de Omar con la skill `habilidades-orientacion` (detalle en `perfil/ESTADO.md`).
@@ -116,3 +118,5 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 - **2026-10-10:** El repositorio pasa a ser público y Pages queda activado (Omar). Revisión de secretos con gitleaks sobre todo el historial: sin hallazgos. La CI escanea secretos en cada push; se agrega `SECURITY.md`. PR #1 abierto. B.1a (datos) completa. La bitácora de construcción de la v1 pasa a `docs/construccion-v1.md`.
 - **2026-10-11:** Fase B.1 (código) completa en la nube: capa de datos con importador del prototipo, prompts versionados en `prompts/`, adaptadores Anthropic (SDK oficial) y OpenAI-compatible, capa de acciones, interfaz completa y PWA sin conexión. 74 pruebas unitarias y 12 de interfaz. Se corrigió un `.gitignore` que ocultaba `app/src/datos/`. Pendiente de Omar: unir el PR, probar con su clave y migrar sus datos.
 - **2026-10-11:** B.2a: arnés del banco de pruebas de modelos y prueba de clasificación sobre `modelo/casos-de-prueba.md`. Recordatorio para Omar: marcar ✔ o ✘ en esos casos convierte el resultado provisional en oficial.
+- **2026-10-11:** Privacidad: `CLAUDE.md` sale del repositorio público y pasa a `senda-omar` (pedido de Omar). Las reglas del método pasan a `CONTRIBUTING.md`. Sin ruta local ni enlace del prototipo en `ESTADO.md` y `sistema/DISENO.md`. Nuevo control en la CI: `herramientas/revisar_publico.py`.
+- **2026-10-11:** B.2c: evidencias de referencia para medir la aprobación indebida de logros (13 casos e imágenes ficticias). Detalle en `docs/construccion-v1.md`.

@@ -13,7 +13,8 @@ Aplicación web de Senda: React + TypeScript + Vite, local primero y sin backend
 | `src/ui/` | Pantallas y modales de React. Solo llaman a `servicios/`. |
 | `public/` | Manifiesto, iconos y service worker de la app instalable. |
 | `e2e/` | Pruebas de interfaz con Playwright (escritorio y móvil), con el modelo simulado. |
-| `scripts/` | `generar-iconos.mjs`: crea los PNG desde `public/icono.svg`. |
+| `src/banco/` | Banco de pruebas de modelos (`npm run banco`): clasificación y evidencias de referencia. Ver `banco/README.md`. |
+| `scripts/` | `generar-iconos.mjs`: crea los PNG desde `public/icono.svg`. `generar-imagenes-banco.mjs`: crea las imágenes ficticias de `banco/imagenes/`. |
 
 La bitácora de construcción, las decisiones y los pendientes están en [`docs/construccion-v1.md`](../docs/construccion-v1.md).
 

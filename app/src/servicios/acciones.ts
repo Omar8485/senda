@@ -174,6 +174,32 @@ export async function asignarValoresObjetivo(db: SendaDB, id: string, ids: strin
   return guardar(db, 'objetivos', { ...o, valores: ids, pendiente_ficha: true })
 }
 
+/**
+ * Variables del prompt evaluar-logro. Función pura y compartida con el banco de pruebas
+ * (app/src/banco/evidencias.ts), para que el banco mida exactamente lo que envía la app.
+ */
+export function variablesLogro(d: {
+  nombre: string
+  objetivo: Pick<Objetivo, 'titulo' | 'enunciado' | 'criterio' | 'fecha_limite'>
+  habilidades: { nombre: string; nivel: number | null | undefined; meta: number | null | undefined }[]
+  descripcion: string
+  enlace?: string | null
+  conImagen: boolean
+}): Record<string, string> {
+  const o = d.objetivo
+  return {
+    nombre: d.nombre,
+    titulo: o.titulo,
+    enunciado: o.enunciado || '(sin enunciado)',
+    criterio: o.criterio || '(sin criterio explícito; usa el enunciado)',
+    fecha: o.fecha_limite ?? 'sin fecha',
+    habilidades: JSON.stringify(d.habilidades),
+    evidencia: d.descripcion.slice(0, 4000),
+    enlace: d.enlace?.trim() || 'ninguno',
+    imagen: d.conImagen ? 'sí (resultado o certificado adjunto)' : 'no',
+  }
+}
+
 /** Pide al modelo que evalúe la evidencia. Si aprueba, guarda la evidencia firmada y devuelve su id. */
 export async function evaluarLogro(
   adaptador: Adaptador,
@@ -183,17 +209,14 @@ export async function evaluarLogro(
   const o = await db.objetivos.get(e.objetivo)
   if (!o) throw new Error('El objetivo no existe.')
   const hs = await db.habilidades.where('fuentes').equals(o.id).toArray()
-  const r = await generarJSON(adaptador, 'evaluar-logro', {
+  const r = await generarJSON(adaptador, 'evaluar-logro', variablesLogro({
     nombre: await nombrePersona(db),
-    titulo: o.titulo,
-    enunciado: o.enunciado || '(sin enunciado)',
-    criterio: o.criterio || '(sin criterio explícito; usa el enunciado)',
-    fecha: o.fecha_limite ?? 'sin fecha',
-    habilidades: JSON.stringify(hs.filter((h) => h.estado === 'activa').map((h) => ({ nombre: h.nombre, nivel: h.nivel, meta: h.requerido }))),
-    evidencia: e.descripcion.slice(0, 4000),
-    enlace: e.enlace?.trim() || 'ninguno',
-    imagen: e.imagen ? 'sí (resultado o certificado adjunto)' : 'no',
-  }, { imagenes: e.imagen ? [e.imagen] : undefined })
+    objetivo: o,
+    habilidades: hs.filter((h) => h.estado === 'activa').map((h) => ({ nombre: h.nombre, nivel: h.nivel, meta: h.requerido })),
+    descripcion: e.descripcion,
+    enlace: e.enlace,
+    conImagen: Boolean(e.imagen),
+  }), { imagenes: e.imagen ? [e.imagen] : undefined })
 
   if (!puedeMarcarLogrado(r.resultado)) {
     await guardar(db, 'objetivos', {

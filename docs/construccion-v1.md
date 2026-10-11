@@ -1,6 +1,6 @@
 # Senda v1: bitácora de construcción
 
-> **Estado (2026-10-11):** el código de B.1 está completo y probado. Falta la migración real de Omar (criterio de salida) y los pendientes técnicos de abajo. Lo siguiente es B.2 (banco de pruebas de modelos) o B.3 (sincronización con Google Drive), según decida Omar.
+> **Estado (2026-10-11):** el código de B.1 está completo y probado; de B.2 están hechas B.2a (arnés y clasificación) y B.2c (evidencias de referencia). Falta la migración real de Omar (criterio de salida de B.1), sus respuestas para B.2b y los pendientes técnicos de abajo.
 >
 > Guía para continuar el trabajo de la v1 desde cualquier sesión (en la nube o en la PC de Omar). Se actualiza en cada avance. La arquitectura está en `docs/arquitectura.md`; el estado general del proyecto, en `ESTADO.md`.
 
@@ -61,7 +61,7 @@ Criterio de salida: etiquetas Recomendado / Aceptable / Experimental visibles en
 
 - [x] **B.2a Arnés y clasificación:** `banco/README.md`, `prompts/clasificar-concepto.md`, `app/src/banco/` y el comando `npm run banco`. Lee `modelo/casos-de-prueba.md` sin duplicarlo y separa el resultado oficial (casos con ✔ de Omar) del provisional. Se probó con un servidor local falso.
 - [ ] **B.2b Respuestas de referencia de retos** (buenas, flojas y tramposas) y medición de la aprobación indebida. **Pendiente de Omar** (pregunta 4).
-- [ ] **B.2c Evidencias de referencia** (con respaldo, sin respaldo, inconsistentes) para la evaluación de logros.
+- [x] **B.2c Evidencias de referencia:** `banco/evidencias-de-referencia.md` con 13 casos inventados (4 para aprobar y 9 para rechazar) e imágenes ficticias en `banco/imagenes/`. Métricas de aprobación y rechazo indebidos en `app/src/banco/metricas.ts`. El banco usa `variablesLogro`, la misma función de la app, para medir exactamente lo que se envía al modelo. Se probó de punta a punta con un servidor local falso: un modelo que aprueba todo lo que trae imagen saca 44 % de aprobación indebida. **Pendiente de Omar:** marcar ✔ o ✘ en cada caso y decidir si un enlace basta como respaldo (caso E-09).
 - [ ] **B.2d Resultados de 3 a 5 modelos** en `banco/resultados/`. Los corre quien tenga la clave (Omar u otras personas), nunca la CI.
 - [ ] **B.2e Etiqueta visible en Ajustes** al elegir un modelo, leída de `banco/resultados/`.
 
@@ -102,7 +102,9 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 2. Confirmar las dos interpretaciones del núcleo de la tabla de arriba.
 3. Pregunta 4 de la arquitectura (respuestas de referencia de los retos de inglés): pendiente; hace falta en B.2.
 4. Topes de los retos en D-009 (tope 3 y un nivel por reto): siguen en propuesta.
-5. ¿Qué va después de B.1: B.2 (banco de pruebas de modelos) o B.3 (sincronización con Google Drive)? Mientras no responda, Claude avanza con la parte de B.2 que no depende de la pregunta 4: el arnés del banco y la prueba de clasificación con los casos acordados de `modelo/casos-de-prueba.md`.
+5. ¿Qué va después de B.1: B.2 (banco de pruebas de modelos) o B.3 (sincronización con Google Drive)? Mientras no responda, Claude avanza con la parte de B.2 que no depende de la pregunta 4: el arnés, la prueba de clasificación (B.2a) y las evidencias de referencia (B.2c).
+6. Evidencias de referencia (`banco/evidencias-de-referencia.md`): marcar ✔ o ✘ en los 13 casos. El más discutible es E-10 (leer libros sin respaldo externo).
+7. ¿Basta un enlace como respaldo de un resultado externo? El modelo no lo abre (caso E-09 y `banco/README.md`). Si la respuesta es no, cambia `prompts/evaluar-logro.md` (versión 2) y el veredicto de E-09.
 
 ## Bitácora
 
@@ -113,3 +115,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 - **2026-10-11:** La CI de B.1b falló porque `.gitignore` ignoraba `app/src/datos/`: la regla `datos/` (datos personales) no estaba anclada a la raíz. Se corrigió (`/perfil/`, `/datos/`, `/notas/`) y se validó en un clon limpio. B.1d completa: PWA instalable y sin conexión.
 - **2026-10-11:** B.2a: arnés del banco de pruebas y prueba de clasificación (`npm run banco`). Hasta que estén las respuestas de referencia, todo modelo queda "Sin certificar".
 - **2026-10-11:** `CLAUDE.md` sale del repositorio público y pasa a `senda-omar` (pedido de Omar): tenía su ruta local, el enlace de su prototipo y su flujo de trabajo personal. Las reglas del método pasan a `CONTRIBUTING.md`. Se quitan la ruta y el enlace de `ESTADO.md` y `sistema/DISENO.md`. Nuevo control en la CI: `herramientas/revisar_publico.py`.
+- **2026-10-11:** B.2c: 13 evidencias de referencia con imágenes ficticias, métricas de aprobación y rechazo indebidos, y `variablesLogro` compartida entre la app y el banco. 88 pruebas unitarias y 12 de interfaz.
