@@ -69,7 +69,7 @@ Criterio de salida: etiquetas Recomendado / Aceptable / Experimental visibles en
 
 - **Textos en los componentes:** por ahora están escritos en español dentro de `app/src/ui/`. Hay que extraerlos a archivos de traducción (`app/src/i18n/`) antes de agregar otro idioma. La arquitectura pedía JSON desde el día uno; se pospuso para avanzar con las pantallas.
 - **Tamaño del paquete:** unos 600 kB sin comprimir (React, Zod, Dexie y el SDK de Anthropic). Se puede dividir con `import()` dinámico de los adaptadores.
-- **Verificación con un modelo real:** las pruebas usan un modelo simulado. Falta una prueba manual con una clave real (la hace Omar: la clave nunca pasa por el repositorio ni por la sesión).
+- **Verificación con un modelo real:** hecha el 2026-10-11 con la clave de Omar (crear un reto funciona). Faltan, con uso real, analizar un valor u objetivo, generar una ruta y evaluar un reto y un logro (D-011). Recomendación de seguridad para cada persona: una clave exclusiva para Senda, en un espacio de trabajo de la consola de Anthropic con límite de gasto mensual.
 - **Áreas sensibles:** el esquema marca la visibilidad como privada por defecto, y la constante `AREAS_SENSIBLES` está lista para la fase social (D). Todavía no hay nada que publicar.
 
 ## Decisiones de implementación (para revisar)
@@ -117,3 +117,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 - **2026-10-11:** B.2c: 13 evidencias de referencia con imágenes ficticias, métricas de aprobación y rechazo indebidos, y `variablesLogro` compartida entre la app y el banco. 88 pruebas unitarias y 12 de interfaz.
 - **2026-10-11:** Omar revisa las evidencias de referencia y fija D-011 (imagen obligatoria, retraso que no invalida, preguntas de verificación). Prompt `evaluar-logro` v2, pantalla de logro con preguntas, `logrado_con_retraso` y casos E-14 y E-15. `skills/` pasa a `senda-omar`. 90 pruebas unitarias.
 - **2026-10-11:** PR #1 unido; app publicada en GitHub Pages; datos de Omar migrados en su Chrome.
+- **2026-10-11:** primera prueba con un modelo real (Claude Opus 5.5): crear un reto funciona en la app publicada.

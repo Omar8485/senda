@@ -43,7 +43,6 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 ## Siguiente acción
 
 0. **Senda v1:** PR #1 unido a `main` (2026-10-11). La app está publicada en https://omar8485.github.io/senda/ y los datos del prototipo de Omar ya están importados en su Chrome de la PC. Pendiente de Omar:
-   - poner su clave de Anthropic en Ajustes → Modelo de IA (la clave queda solo en su navegador) y probar una acción real;
    - usar la v1 una semana sin volver al prototipo (criterio de salida de B.1);
    - confirmar la pregunta 3 de la arquitectura (PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
    - pregunta 4 (respuestas de referencia de los retos de inglés), que bloquea B.2b;
@@ -121,3 +120,4 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 - **2026-10-11:** B.2c: evidencias de referencia para medir la aprobación indebida de logros (13 casos e imágenes ficticias). Detalle en `docs/construccion-v1.md`.
 - **2026-10-11:** Omar decide: el historial público no se reescribe; `skills/` pasa a `senda-omar`; D-011 (reglas de evidencia de logro) aceptada al revisar las evidencias de referencia.
 - **2026-10-11:** PR #1 unido a `main`. Omar activa Pages con GitHub Actions y la app queda publicada. Claude importa los datos del prototipo en el Chrome de Omar desde "Mis datos": 9 valores y principios, 12 habilidades, 1 objetivo, 2 rutas, sin errores ni errores de consola.
+- **2026-10-11:** Omar crea una clave de Anthropic exclusiva para Senda, en un espacio de trabajo con límite de gasto mensual, y la pone en la app. Primera prueba con un modelo real: "Ponerme a prueba" genera un reto válido, sin errores de consola. Queda la semana de uso.
