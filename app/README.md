@@ -6,12 +6,16 @@ Aplicación web de Senda: React + TypeScript + Vite, local primero y sin backend
 
 | Ruta | Qué es |
 |---|---|
-| `src/nucleo/` | El método en TypeScript puro, sin React: topes de nivel por evidencia (regla 02), retos (D-009), XP y racha. Aquí vive el rigor; cada regla tiene pruebas. |
-| `src/i18n/` | Textos de la interfaz por idioma (`es.json` primero). |
-| `src/App.tsx` | Interfaz (por ahora, una página de inicio). |
-| `e2e/` | Pruebas de interfaz con Playwright (escritorio y móvil). |
+| `src/nucleo/` | El método en TypeScript puro, sin React: topes de nivel por evidencia (regla 02), confianza, retos (D-009), XP, racha y reglas de logro. Aquí vive el rigor, y cada regla tiene pruebas. |
+| `src/datos/` | Modelo de datos (Zod), base local IndexedDB (Dexie), repositorio con escritura validada, respaldo JSON e importador del prototipo. |
+| `src/modelos/` | Capa de IA: carga los prompts de `/prompts`, adaptadores Anthropic y OpenAI-compatible, y `generarJSON` (valida, reintenta y firma). |
+| `src/servicios/` | Acciones de la app: juntan modelo (propone), núcleo (decide) y datos. Configuración del modelo y la clave local. |
+| `src/ui/` | Pantallas y modales de React. Solo llaman a `servicios/`. |
+| `public/` | Manifiesto, iconos y service worker de la app instalable. |
+| `e2e/` | Pruebas de interfaz con Playwright (escritorio y móvil), con el modelo simulado. |
+| `scripts/` | `generar-iconos.mjs`: crea los PNG desde `public/icono.svg`. |
 
-Llegarán en la fase B.1: `src/datos/` (IndexedDB), `src/modelos/` (adaptadores de IA), `src/ui/` y la app instalable (PWA).
+La bitácora de construcción, las decisiones y los pendientes están en [`docs/construccion-v1.md`](../docs/construccion-v1.md).
 
 ## Comandos
 
@@ -29,9 +33,15 @@ Las pruebas de interfaz descargan Chromium con `npx playwright install chromium`
 
 ## Reglas del núcleo
 
-- El modelo de IA **propone**; el núcleo **decide** qué nivel se registra.
+- El modelo de IA **propone**; el núcleo **decide** qué nivel se registra. La interfaz nunca escribe un nivel directamente: pasa por `servicios/acciones.ts`.
 - El XP no toca el nivel de ninguna habilidad (D-009): `xp.ts` no importa nada de `niveles.ts`.
 - Un cambio en una regla del método empieza como decisión en `decisiones/registro.md`, no en el código.
+
+## Seguridad
+
+- Las claves de API se guardan en la tabla local `secretos`. Nunca van al respaldo ni a ningún servidor del proyecto (no hay ninguno).
+- La compilación lleva una política de seguridad de contenido sin scripts de terceros. `connect-src` admite HTTPS y `localhost`, porque cada persona elige su proveedor de IA.
+- Datos de prueba siempre inventados (`src/datos/ejemplos/`).
 
 ## Despliegue
 

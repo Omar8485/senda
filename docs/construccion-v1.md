@@ -1,5 +1,7 @@
 # Senda v1: bitácora de construcción
 
+> **Estado (2026-10-11):** el código de B.1 está completo y probado. Falta la migración real de Omar (criterio de salida) y los pendientes técnicos de abajo. Lo siguiente es B.2 (banco de pruebas de modelos) o B.3 (sincronización con Google Drive), según decida Omar.
+>
 > Guía para continuar el trabajo de la v1 desde cualquier sesión (en la nube o en la PC de Omar). Se actualiza en cada avance. La arquitectura está en `docs/arquitectura.md`; el estado general del proyecto, en `ESTADO.md`.
 
 ## Cómo retomar
@@ -89,6 +91,7 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 2. Confirmar las dos interpretaciones del núcleo de la tabla de arriba.
 3. Pregunta 4 de la arquitectura (respuestas de referencia de los retos de inglés): pendiente; hace falta en B.2.
 4. Topes de los retos en D-009 (tope 3 y un nivel por reto): siguen en propuesta.
+5. ¿Qué va después de B.1: B.2 (banco de pruebas de modelos) o B.3 (sincronización con Google Drive)? Mientras no responda, Claude avanza con la parte de B.2 que no depende de la pregunta 4: el arnés del banco y la prueba de clasificación con los casos acordados de `modelo/casos-de-prueba.md`.
 
 ## Bitácora
 

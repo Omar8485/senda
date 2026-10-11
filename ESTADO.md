@@ -17,7 +17,7 @@
 | 5 — Orientación de Omar | en curso: 5 de 10 áreas registradas (detalle en `perfil/ESTADO.md`, privado) |
 | 6 — Inventario | pendiente (depende de 5) |
 | 7 — Estrategia | pendiente; la skill `habilidades-estrategia` se propondrá a la cuenta al llegar aquí |
-| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; v1 abierta en construcción (fase B.0 hecha) |
+| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; v1 abierta: B.0 y B.1 (código) hechas, falta la migración real de Omar |
 
 ## Senda como proyecto abierto (2026-10-10)
 
@@ -44,10 +44,12 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 
 0. **Senda v1:** B.0 hecha en la rama `claude/lucid-cori-csscqq` (ver `docs/arquitectura.md` §13). Pendiente de Omar:
    - unir el PR #1 a `main` para el primer despliegue (Pages ya está activado y el repositorio es público);
+   - probar la v1 con una clave propia de Anthropic (Ajustes → Modelo de IA). La clave queda solo en su dispositivo;
+   - migrar sus datos: exportar la base del prototipo y cargarla en Ajustes → Mis datos → Importar. Sus datos no pasan por el repositorio;
    - confirmar la respuesta a la pregunta 3 (la v1 es PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
    - pregunta 4 (respuestas de referencia de los retos de inglés): pendiente por decisión de Omar, se necesita en B.2.
    
-   **Fase B.1 en curso.** El avance paso a paso, cómo retomar y las preguntas pendientes están en **`docs/construccion-v1.md`**. PR abierto: https://github.com/Omar8485/senda/pull/1.
+   **Fase B.1: el código está completo** (datos locales, prompts versionados, adaptadores de IA, interfaz y PWA). Falta el criterio de salida: Omar migra sus datos y usa la v1 una semana. Detalle, cómo retomar y pendientes en **`docs/construccion-v1.md`**. PR abierto: https://github.com/Omar8485/senda/pull/1.
 1. **Fase 5:** completar las áreas pendientes de Omar con la skill `habilidades-orientacion` (detalle en `perfil/ESTADO.md`).
 2. **Fase 2 (cuando Omar quiera):** contrastar `modelo/familias.md` con ESCO/O\*NET y reclasificar las 20 habilidades de la auditoría.
 
@@ -113,3 +115,4 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 - **2026-10-10:** `docs/arquitectura.md` v0.1 (borrador): local primero, sin backend, React + TS + Vite como PWA, IndexedDB/Dexie, núcleo del método determinista, prompts versionados, adaptadores Anthropic y OpenAI-compatible con evaluaciones firmadas por modelo, banco de pruebas para certificar modelos, sincronización con la nube del usuario (Drive primero, cifrado opcional), social sobre AT Protocol (necesita dominio propio) y fases B.0 a E. Correo de contacto del código de conducta: infostark.computer@gmail.com.
 - **2026-10-10:** Omar responde §12 de la arquitectura: React + TypeScript, Google Drive primero, pregunta si la v1 es app de móvil (Claude: sí, como PWA; falta su confirmación) y deja pendientes las respuestas de referencia. **Fase B.0 hecha** desde la nube: `app/` (Vite 8, React 19, TypeScript 6, oxlint), núcleo con topes de nivel (regla 02), retos (D-009), XP y racha, 26 pruebas de Vitest y 4 de Playwright (escritorio y móvil), política de seguridad de contenido, CI en GitHub Actions, despliegue a Pages desde `main` y Dependabot. Arquitectura v0.2.
 - **2026-10-10:** El repositorio pasa a ser público y Pages queda activado (Omar). Revisión de secretos con gitleaks sobre todo el historial: sin hallazgos. La CI escanea secretos en cada push; se agrega `SECURITY.md`. PR #1 abierto. B.1a (datos) completa. La bitácora de construcción de la v1 pasa a `docs/construccion-v1.md`.
+- **2026-10-11:** Fase B.1 (código) completa en la nube: capa de datos con importador del prototipo, prompts versionados en `prompts/`, adaptadores Anthropic (SDK oficial) y OpenAI-compatible, capa de acciones, interfaz completa y PWA sin conexión. 74 pruebas unitarias y 12 de interfaz. Se corrigió un `.gitignore` que ocultaba `app/src/datos/`. Pendiente de Omar: unir el PR, probar con su clave y migrar sus datos.
