@@ -59,6 +59,15 @@ Formato: **Contexto** · **Opciones** · **Decisión** · **Consecuencias** · *
 - **Decisión:** prototipo "Senda" como artifact con base de datos y consultas a Claude. La app es la fuente operativa de lo diario (XP, rutas, retos, evidencias); la carpeta guarda reglas, catálogo y fichas revisadas; Claude sincroniza a pedido.
 - **Estado:** **aceptada** (2026-10-10).
 
+## D-011 — Reglas de evidencia para marcar un objetivo como logrado
+- **Contexto:** al revisar las evidencias de referencia del banco de pruebas (`banco/evidencias-de-referencia.md`, 2026-10-11), Omar fijó cómo se evalúa un logro.
+- **Decisión:**
+  1. Un **resultado externo** (examen, puntaje, certificado, carrera oficial, publicación, decisión de un tercero) exige una **imagen** que lo respalde. Un enlace solo no basta, porque el modelo no puede abrirlo.
+  2. La **fecha límite no invalida** el logro: se aprueba igual y queda anotado "con retraso". El objetivo es desarrollar la habilidad, no cumplir plazos.
+  3. Un logro **sin resultado externo** (por ejemplo, leer libros) no se aprueba con la sola afirmación: el modelo hace 2 o 3 **preguntas sencillas** de verificación y decide con las respuestas. La app se basa en la confianza: las preguntas no son un examen.
+- **Consecuencias:** prompt `evaluar-logro` versión 2; la app muestra las preguntas y guarda `logrado_con_retraso`; cambian los veredictos esperados de E-08, E-09, E-10 y E-13 en el banco.
+- **Estado:** **aceptada** (2026-10-11, Omar).
+
 ## D-005 — Escala 0–5 anclada en Dreyfus, con topes por evidencia
 - **Contexto:** la escala 1–5 de la conversación original no tenía nivel 0 ni regla de evidencia, lo que favorece autoevaluaciones infladas.
 - **Decisión:** escala 0–5 con descriptores de Dreyfus, cinco dimensiones y topes por evidencia (regla 02). Conocimientos con escala aparte 0–3.

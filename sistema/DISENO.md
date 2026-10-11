@@ -1,6 +1,6 @@
 # Senda — diseño del sistema (v0.1)
 
-> Estado: **prototipo v0.1** publicado el 2026-10-10. App: https://claude.ai/artifact/JS7eTwNbd4sACDn6qd5KvZ
+> Estado: **prototipo v0.1** publicado el 2026-10-10. App: artifact privado de Omar en claude.ai
 > Decisiones que lo sustentan: D-008, D-009 y D-010 (`decisiones/registro.md`).
 
 ## Qué es

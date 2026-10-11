@@ -1,9 +1,9 @@
 # Estado del proyecto
 
-> **Léeme primero.** Este archivo permite retomar el trabajo desde cualquier chat o sesión. Se actualiza al final de **cada avance** (obligatorio, ver CLAUDE.md).
+> **Léeme primero.** Este archivo permite retomar el trabajo desde cualquier chat o sesión. Se actualiza al final de **cada avance** (obligatorio).
 > Aquí está el estado del **proyecto** (modelo y app). El progreso personal de Omar como usuario (valores, inventario, plan) vive en el repositorio privado `Omar8485/senda-omar`, en `perfil/ESTADO.md`. En la carpeta de Omar está en `perfil/ESTADO.md`.
 
-**Última actualización:** 2026-10-10
+**Última actualización:** 2026-10-11
 
 ## Dónde estamos
 
@@ -17,7 +17,7 @@
 | 5 — Orientación de Omar | en curso: 5 de 10 áreas registradas (detalle en `perfil/ESTADO.md`, privado) |
 | 6 — Inventario | pendiente (depende de 5) |
 | 7 — Estrategia | pendiente; la skill `habilidades-estrategia` se propondrá a la cuenta al llegar aquí |
-| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; Senda pasa a ser proyecto abierto |
+| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; v1 abierta: B.0 y B.1 (código) hechas, falta la migración real de Omar; B.2a y B.2c hechas |
 
 ## Senda como proyecto abierto (2026-10-10)
 
@@ -36,13 +36,21 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 
 ## Senda: prototipo en claude.ai
 
-- App: https://claude.ai/artifact/JS7eTwNbd4sACDn6qd5KvZ. Su base guarda los datos reales de Omar.
+- App: un artifact privado de Omar en claude.ai. Su base guarda los datos reales de Omar, así que el enlace no se publica aquí.
 - Diseño: `sistema/DISENO.md`. Código: `sistema/senda.html`. Por ahora está personalizado para Omar (nombre fijo y prompts que dicen "Omar"); la v1 será genérica.
 - Funciona: brújula de valores, objetivos con valores, derivar habilidades desde valores y objetivos (Claude), ruta tipo Duolingo, retos evaluados, evidencia, logro solo con evidencia aprobada, avatar, XP separado del nivel.
 
 ## Siguiente acción
 
-0. **Senda v1:** Omar revisa `docs/arquitectura.md` (borrador 0.1) y responde sus 4 preguntas (§12). Después: fase B.0 (base del repo `app/`, CI y despliegue a GitHub Pages).
+0. **Senda v1:** B.0 hecha en la rama `claude/lucid-cori-csscqq` (ver `docs/arquitectura.md` §13). Pendiente de Omar:
+   - unir el PR #1 a `main` para el primer despliegue (Pages ya está activado y el repositorio es público);
+   - probar la v1 con una clave propia de Anthropic (Ajustes → Modelo de IA). La clave queda solo en su dispositivo;
+   - migrar sus datos: exportar la base del prototipo y cargarla en Ajustes → Mis datos → Importar. Sus datos no pasan por el repositorio;
+   - confirmar la respuesta a la pregunta 3 (la v1 es PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
+   - pregunta 4 (respuestas de referencia de los retos de inglés): pendiente por decisión de Omar, se necesita en B.2b;
+   - marcar ✔ o ✘ en los casos nuevos E-14 y E-15 y en E-08 (cambió su razón) de `banco/evidencias-de-referencia.md`;
+   
+   **Fase B.1: el código está completo** (datos locales, prompts versionados, adaptadores de IA, interfaz y PWA). Falta el criterio de salida: Omar migra sus datos y usa la v1 una semana. Detalle, cómo retomar y pendientes en **`docs/construccion-v1.md`**. PR abierto: https://github.com/Omar8485/senda/pull/1.
 1. **Fase 5:** completar las áreas pendientes de Omar con la skill `habilidades-orientacion` (detalle en `perfil/ESTADO.md`).
 2. **Fase 2 (cuando Omar quiera):** contrastar `modelo/familias.md` con ESCO/O\*NET y reclasificar las 20 habilidades de la auditoría.
 
@@ -57,6 +65,7 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
   - D-008: valores → situaciones → habilidades.
   - D-009: separación entre XP y nivel.
   - D-010: plataforma inicial en claude.ai.
+  - D-011: reglas de evidencia para marcar un logro (imagen obligatoria, retraso que no invalida, preguntas de verificación).
 - **Pendientes de Omar:**
   - D-005 (escala 0–5) y D-006 (límite de 3): se deciden en las Fases 3 y 7.
   - Topes de los retos en D-009.
@@ -65,16 +74,16 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 
 ## Entorno técnico
 
-- **Carpeta de Omar:** `C:\Users\omar_\Documents\MODELO HABILIDADES`. Es la copia de trabajo de los dos repositorios:
-  - la raíz corresponde a `Omar8485/senda`;
-  - `perfil/` y `datos/` corresponden a `Omar8485/senda-omar`.
+- **Carpeta de Omar** (`MODELO HABILIDADES`, en su PC): la copia de trabajo de los dos repositorios. No es un repositorio git:
+  - la raíz corresponde a `Omar8485/senda`, salvo `CLAUDE.md` y `skills/`;
+  - `CLAUDE.md`, `skills/`, `perfil/`, `datos/` y `notas/` corresponden a `Omar8485/senda-omar`.
 - **Repositorios:**
-  - `github.com/Omar8485/senda`: privado por ahora, se hará público. Contiene modelo, reglas, app y docs.
-  - `github.com/Omar8485/senda-omar`: privado siempre. Contiene `perfil/`, `datos/`, `notas/` y la rama `respaldo-historial-senda`.
-- **Terminal remota (device_bash):** funciona desde el 2026-10-10, tras la actualización KB5129195.
+  - `github.com/Omar8485/senda`: **público** desde el 2026-10-10. Contiene modelo, reglas, app y docs.
+  - `github.com/Omar8485/senda-omar`: privado siempre. Contiene `CLAUDE.md` (instrucciones de trabajo con Claude), `skills/`, `perfil/`, `datos/`, `notas/` y la rama `respaldo-historial-senda`. Una sesión en la nube debe clonar los dos repositorios.
+- **App v1 (`app/`):** Node 22.12+. `npm ci` y `npm run check` (lint, tipos y pruebas del núcleo); `npm run build` y `npm run test:e2e` (Playwright). La CI corre todo, más el validador, en cada push.
 - **Validador:** `python3 herramientas/validar.py` desde la raíz. Necesita `perfil/` para validar las fichas personales; sin esa carpeta valida solo el modelo.
-- **Skills en la cuenta:** `habilidades-clasificar`, `habilidades-orientacion` y `habilidades-evaluar-dominio`, aprobadas. Copias de referencia en `skills/`.
-- **Documentos del proyecto (claude.ai):** CLAUDE.md, PLAN.md y ESTADO.md están en `claude/`; el resto, con su ruta. Se actualizan junto con la carpeta.
+- **Skills en la cuenta:** `habilidades-clasificar`, `habilidades-orientacion` y `habilidades-evaluar-dominio`, aprobadas. Copias de referencia en `skills/` del repositorio privado `senda-omar` (desde el 2026-10-11).
+- **Documentos del proyecto (claude.ai):** CLAUDE.md (privado), PLAN.md y ESTADO.md están en `claude/`; el resto, con su ruta. Se actualizan junto con la carpeta.
 
 ## Bitácora
 
@@ -105,3 +114,10 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
   - P-011 (propuesta): arquitectura de costo cero para el proyecto.
 - **2026-10-10:** Omar eligió AGPL-3.0 para el código. Se agregan `LICENSE`, `CONTRIBUTING.md` (DCO), `CODE_OF_CONDUCT.md` y encabezados SPDX. Con su autorización, se reescribió el historial de `senda` sin datos personales. `senda-omar` usa `main` como rama principal. El validador ignora los `ESTADO.md`.
 - **2026-10-10:** `docs/arquitectura.md` v0.1 (borrador): local primero, sin backend, React + TS + Vite como PWA, IndexedDB/Dexie, núcleo del método determinista, prompts versionados, adaptadores Anthropic y OpenAI-compatible con evaluaciones firmadas por modelo, banco de pruebas para certificar modelos, sincronización con la nube del usuario (Drive primero, cifrado opcional), social sobre AT Protocol (necesita dominio propio) y fases B.0 a E. Correo de contacto del código de conducta: infostark.computer@gmail.com.
+- **2026-10-10:** Omar responde §12 de la arquitectura: React + TypeScript, Google Drive primero, pregunta si la v1 es app de móvil (Claude: sí, como PWA; falta su confirmación) y deja pendientes las respuestas de referencia. **Fase B.0 hecha** desde la nube: `app/` (Vite 8, React 19, TypeScript 6, oxlint), núcleo con topes de nivel (regla 02), retos (D-009), XP y racha, 26 pruebas de Vitest y 4 de Playwright (escritorio y móvil), política de seguridad de contenido, CI en GitHub Actions, despliegue a Pages desde `main` y Dependabot. Arquitectura v0.2.
+- **2026-10-10:** El repositorio pasa a ser público y Pages queda activado (Omar). Revisión de secretos con gitleaks sobre todo el historial: sin hallazgos. La CI escanea secretos en cada push; se agrega `SECURITY.md`. PR #1 abierto. B.1a (datos) completa. La bitácora de construcción de la v1 pasa a `docs/construccion-v1.md`.
+- **2026-10-11:** Fase B.1 (código) completa en la nube: capa de datos con importador del prototipo, prompts versionados en `prompts/`, adaptadores Anthropic (SDK oficial) y OpenAI-compatible, capa de acciones, interfaz completa y PWA sin conexión. 74 pruebas unitarias y 12 de interfaz. Se corrigió un `.gitignore` que ocultaba `app/src/datos/`. Pendiente de Omar: unir el PR, probar con su clave y migrar sus datos.
+- **2026-10-11:** B.2a: arnés del banco de pruebas de modelos y prueba de clasificación sobre `modelo/casos-de-prueba.md`. Recordatorio para Omar: marcar ✔ o ✘ en esos casos convierte el resultado provisional en oficial.
+- **2026-10-11:** Privacidad: `CLAUDE.md` sale del repositorio público y pasa a `senda-omar` (pedido de Omar). Las reglas del método pasan a `CONTRIBUTING.md`. Sin ruta local ni enlace del prototipo en `ESTADO.md` y `sistema/DISENO.md`. Nuevo control en la CI: `herramientas/revisar_publico.py`.
+- **2026-10-11:** B.2c: evidencias de referencia para medir la aprobación indebida de logros (13 casos e imágenes ficticias). Detalle en `docs/construccion-v1.md`.
+- **2026-10-11:** Omar decide: el historial público no se reescribe; `skills/` pasa a `senda-omar`; D-011 (reglas de evidencia de logro) aceptada al revisar las evidencias de referencia.
