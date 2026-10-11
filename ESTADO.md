@@ -17,7 +17,7 @@
 | 5 — Orientación de Omar | en curso: 5 de 10 áreas registradas (detalle en `perfil/ESTADO.md`, privado) |
 | 6 — Inventario | pendiente (depende de 5) |
 | 7 — Estrategia | pendiente; la skill `habilidades-estrategia` se propondrá a la cuenta al llegar aquí |
-| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; v1 abierta: B.0 y B.1 (código) hechas, falta la migración real de Omar; B.2a y B.2c hechas |
+| 8 — Operación / Senda | en curso: prototipo v0.1.11 en claude.ai; v1 publicada en GitHub Pages; B.0 y B.1 hechas y datos de Omar migrados (falta la semana de uso); B.2a y B.2c hechas |
 
 ## Senda como proyecto abierto (2026-10-10)
 
@@ -42,15 +42,14 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 
 ## Siguiente acción
 
-0. **Senda v1:** B.0 hecha en la rama `claude/lucid-cori-csscqq` (ver `docs/arquitectura.md` §13). Pendiente de Omar:
-   - unir el PR #1 a `main` para el primer despliegue (Pages ya está activado y el repositorio es público);
-   - probar la v1 con una clave propia de Anthropic (Ajustes → Modelo de IA). La clave queda solo en su dispositivo;
-   - migrar sus datos: exportar la base del prototipo y cargarla en Ajustes → Mis datos → Importar. Sus datos no pasan por el repositorio;
-   - confirmar la respuesta a la pregunta 3 (la v1 es PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
-   - pregunta 4 (respuestas de referencia de los retos de inglés): pendiente por decisión de Omar, se necesita en B.2b;
-   - marcar ✔ o ✘ en los casos nuevos E-14 y E-15 y en E-08 (cambió su razón) de `banco/evidencias-de-referencia.md`;
-   
-   **Fase B.1: el código está completo** (datos locales, prompts versionados, adaptadores de IA, interfaz y PWA). Falta el criterio de salida: Omar migra sus datos y usa la v1 una semana. Detalle, cómo retomar y pendientes en **`docs/construccion-v1.md`**. PR abierto: https://github.com/Omar8485/senda/pull/1.
+0. **Senda v1:** PR #1 unido a `main` (2026-10-11). La app está publicada en https://omar8485.github.io/senda/ y los datos del prototipo de Omar ya están importados en su Chrome de la PC. Pendiente de Omar:
+   - poner su clave de Anthropic en Ajustes → Modelo de IA (la clave queda solo en su navegador) y probar una acción real;
+   - usar la v1 una semana sin volver al prototipo (criterio de salida de B.1);
+   - confirmar la pregunta 3 de la arquitectura (PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
+   - pregunta 4 (respuestas de referencia de los retos de inglés), que bloquea B.2b;
+   - marcar ✔ o ✘ en E-08, E-14 y E-15 de `banco/evidencias-de-referencia.md`.
+
+   Detalle, cómo retomar y pendientes técnicos: **`docs/construccion-v1.md`**.
 1. **Fase 5:** completar las áreas pendientes de Omar con la skill `habilidades-orientacion` (detalle en `perfil/ESTADO.md`).
 2. **Fase 2 (cuando Omar quiera):** contrastar `modelo/familias.md` con ESCO/O\*NET y reclasificar las 20 habilidades de la auditoría.
 
@@ -121,3 +120,4 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 - **2026-10-11:** Privacidad: `CLAUDE.md` sale del repositorio público y pasa a `senda-omar` (pedido de Omar). Las reglas del método pasan a `CONTRIBUTING.md`. Sin ruta local ni enlace del prototipo en `ESTADO.md` y `sistema/DISENO.md`. Nuevo control en la CI: `herramientas/revisar_publico.py`.
 - **2026-10-11:** B.2c: evidencias de referencia para medir la aprobación indebida de logros (13 casos e imágenes ficticias). Detalle en `docs/construccion-v1.md`.
 - **2026-10-11:** Omar decide: el historial público no se reescribe; `skills/` pasa a `senda-omar`; D-011 (reglas de evidencia de logro) aceptada al revisar las evidencias de referencia.
+- **2026-10-11:** PR #1 unido a `main`. Omar activa Pages con GitHub Actions y la app queda publicada. Claude importa los datos del prototipo en el Chrome de Omar desde "Mis datos": 9 valores y principios, 12 habilidades, 1 objetivo, 2 rutas, sin errores ni errores de consola.

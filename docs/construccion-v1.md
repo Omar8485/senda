@@ -7,7 +7,7 @@
 ## Cómo retomar
 
 0. **Instrucciones privadas:** `CLAUDE.md` y `skills/` ya no están en este repositorio público (2026-10-11). Vive en el repositorio privado `Omar8485/senda-omar`: una sesión en la nube debe clonar los dos. Las reglas del método y las convenciones para cualquier colaborador están en `CONTRIBUTING.md`.
-1. Trae la rama de trabajo: `git fetch origin && git checkout claude/lucid-cori-csscqq && git pull`. Si el PR [#1](https://github.com/Omar8485/senda/pull/1) ya se unió, trabaja desde `main` actualizado.
+1. El PR [#1](https://github.com/Omar8485/senda/pull/1) ya se unió (2026-10-11): trabaja desde `main` actualizado, en una rama nueva por cada avance, y abre un PR. Cada push a `main` publica la app en https://omar8485.github.io/senda/.
 2. Entra a `app/` y ejecuta `npm ci`. Requiere Node 22.12 o superior.
 3. Verifica que todo esté en verde con `npm run check`, `npm run build` y `npm run test:e2e`. Desde la raíz, `python3 herramientas/revisar_publico.py` confirma que no viaja nada privado (también lo corre la CI). Antes de la primera prueba de interfaz, instala Chromium con `npx playwright install chromium`.
    Antes de hacer push, conviene repetirlo en un clon limpio (`git clone . /tmp/x && cd /tmp/x/app && npm ci && npm run check`): así se detectan archivos que no llegaron al repositorio. El 2026-10-11, una regla del `.gitignore` dejó fuera `app/src/datos/` y solo la CI lo detectó.
@@ -53,7 +53,7 @@ Criterio de salida: Omar migra sus datos y usa la v1 una semana sin volver al pr
   - `public/manifest.webmanifest` y los iconos, generados desde `public/icono.svg` con `node scripts/generar-iconos.mjs`.
   - `public/sw.js`: service worker propio y mínimo, sin workbox. Las páginas van primero a la red y caen a la copia guardada; los archivos con hash se sirven de la copia; las llamadas a proveedores de IA nunca se interceptan.
   - Prueba de interfaz: el manifiesto existe y la app abre sin conexión.
-- [ ] **Migración real:** Omar exporta la base del prototipo y la importa en la v1 desde "Mis datos". Esto lo hace Omar en su dispositivo: sus datos nunca pasan por el repositorio.
+- [x] **Migración real** (2026-10-11): la base del prototipo se importó en el Chrome de la PC de Omar desde la pantalla de bienvenida. Sus datos no pasaron por este repositorio (el archivo está en el repositorio privado). Falta el criterio de salida: una semana de uso sin volver al prototipo.
 
 ## Avance de la fase B.2 (banco de pruebas)
 
@@ -116,3 +116,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 - **2026-10-11:** `CLAUDE.md` sale del repositorio público y pasa a `senda-omar` (pedido de Omar): tenía su ruta local, el enlace de su prototipo y su flujo de trabajo personal. Las reglas del método pasan a `CONTRIBUTING.md`. Se quitan la ruta y el enlace de `ESTADO.md` y `sistema/DISENO.md`. Nuevo control en la CI: `herramientas/revisar_publico.py`.
 - **2026-10-11:** B.2c: 13 evidencias de referencia con imágenes ficticias, métricas de aprobación y rechazo indebidos, y `variablesLogro` compartida entre la app y el banco. 88 pruebas unitarias y 12 de interfaz.
 - **2026-10-11:** Omar revisa las evidencias de referencia y fija D-011 (imagen obligatoria, retraso que no invalida, preguntas de verificación). Prompt `evaluar-logro` v2, pantalla de logro con preguntas, `logrado_con_retraso` y casos E-14 y E-15. `skills/` pasa a `senda-omar`. 90 pruebas unitarias.
+- **2026-10-11:** PR #1 unido; app publicada en GitHub Pages; datos de Omar migrados en su Chrome.
