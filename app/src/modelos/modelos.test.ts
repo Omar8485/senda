@@ -26,7 +26,7 @@ function mensajeAnthropic(texto: string, stop_reason = 'end_turn') {
 
 describe('prompts', () => {
   it('todos los prompts del repositorio se leen y tienen versión', () => {
-    for (const t of ['reglas', 'analizar-valor', 'analizar-objetivo', 'generar-ruta', 'crear-reto', 'evaluar-reto', 'evaluar-logro'] as const) {
+    for (const t of ['reglas', 'analizar-valor', 'analizar-objetivo', 'generar-ruta', 'crear-reto', 'evaluar-reto', 'evaluar-logro', 'clasificar-concepto'] as const) {
       expect(prompt(t).version).toBeGreaterThanOrEqual(1)
     }
     expect(prompt('evaluar-reto').esfuerzo).toBe('high')
@@ -77,6 +77,7 @@ describe('generarJSON', () => {
     const a: Adaptador = { proveedor: 'openai-compatible', modelo: 'x', generar }
     expect((await generarJSON(a, 'evaluar-reto', varsReto)).resultado.aprobado).toBe(true)
     expect(generar.mock.calls[1][0].usuario).toMatch(/no cumplía el formato/)
+    expect((await generarJSON({ ...a, generar: vi.fn().mockResolvedValue(evaluacion) }, 'evaluar-reto', varsReto)).intentos).toBe(1)
 
     const siempreMal = vi.fn().mockResolvedValue({})
     await expect(generarJSON({ ...a, generar: siempreMal }, 'evaluar-reto', varsReto)).rejects.toMatchObject({ codigo: 'formato' })

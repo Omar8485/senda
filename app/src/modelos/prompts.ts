@@ -39,7 +39,7 @@ const PROMPTS = new Map(
     }),
 )
 
-export type Tarea = 'analizar-valor' | 'analizar-objetivo' | 'generar-ruta' | 'crear-reto' | 'evaluar-reto' | 'evaluar-logro'
+export type Tarea = 'analizar-valor' | 'analizar-objetivo' | 'generar-ruta' | 'crear-reto' | 'evaluar-reto' | 'evaluar-logro' | 'clasificar-concepto'
 
 export function prompt(tarea: Tarea | 'reglas'): Prompt {
   const p = PROMPTS.get(tarea)

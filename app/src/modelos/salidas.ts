@@ -8,6 +8,13 @@
 import { z } from 'zod'
 import type { Tarea } from './prompts'
 
+/** Categorías del test de clasificación (regla 01 §5), más "otro" para lo que no se debe forzar. */
+export const CATEGORIAS = [
+  'paraguas', 'principio', 'objetivo', 'direccion', 'valor', 'accion', 'conocimiento',
+  'campo', 'aptitud', 'disposicion', 'habilidad', 'competencia', 'otro',
+] as const
+export type Categoria = (typeof CATEGORIAS)[number]
+
 const tipoHabilidad = z.enum(['cognitiva', 'interpersonal', 'motora', 'metahabilidad'])
 
 export const SALIDAS = {
@@ -73,6 +80,11 @@ export const SALIDAS = {
     aprobado: z.boolean(),
     explicacion: z.string(),
     falta: z.string(),
+  }),
+  'clasificar-concepto': z.object({
+    categoria: z.enum(CATEGORIAS),
+    explicacion: z.string(),
+    sentidos: z.array(z.string()),
   }),
 } satisfies Record<Tarea, z.ZodType>
 

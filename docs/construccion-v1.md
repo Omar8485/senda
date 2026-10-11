@@ -54,6 +54,16 @@ Criterio de salida: Omar migra sus datos y usa la v1 una semana sin volver al pr
   - Prueba de interfaz: el manifiesto existe y la app abre sin conexión.
 - [ ] **Migración real:** Omar exporta la base del prototipo y la importa en la v1 desde "Mis datos". Esto lo hace Omar en su dispositivo: sus datos nunca pasan por el repositorio.
 
+## Avance de la fase B.2 (banco de pruebas)
+
+Criterio de salida: etiquetas Recomendado / Aceptable / Experimental visibles en la app.
+
+- [x] **B.2a Arnés y clasificación:** `banco/README.md`, `prompts/clasificar-concepto.md`, `app/src/banco/` y el comando `npm run banco`. Lee `modelo/casos-de-prueba.md` sin duplicarlo y separa el resultado oficial (casos con ✔ de Omar) del provisional. Se probó con un servidor local falso.
+- [ ] **B.2b Respuestas de referencia de retos** (buenas, flojas y tramposas) y medición de la aprobación indebida. **Pendiente de Omar** (pregunta 4).
+- [ ] **B.2c Evidencias de referencia** (con respaldo, sin respaldo, inconsistentes) para la evaluación de logros.
+- [ ] **B.2d Resultados de 3 a 5 modelos** en `banco/resultados/`. Los corre quien tenga la clave (Omar u otras personas), nunca la CI.
+- [ ] **B.2e Etiqueta visible en Ajustes** al elegir un modelo, leída de `banco/resultados/`.
+
 ## Pendientes técnicos conocidos
 
 - **Textos en los componentes:** por ahora están escritos en español dentro de `app/src/ui/`. Hay que extraerlos a archivos de traducción (`app/src/i18n/`) antes de agregar otro idioma. La arquitectura pedía JSON desde el día uno; se pospuso para avanzar con las pantallas.
@@ -100,3 +110,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 - **2026-10-11:** B.1b completa: prompts versionados, adaptadores Anthropic y OpenAI-compatible, `generarJSON` y capa de acciones. 74 pruebas.
 - **2026-10-11:** B.1c completa: interfaz completa sobre la capa de acciones, 74 pruebas unitarias y 10 de interfaz (escritorio y móvil).
 - **2026-10-11:** La CI de B.1b falló porque `.gitignore` ignoraba `app/src/datos/`: la regla `datos/` (datos personales) no estaba anclada a la raíz. Se corrigió (`/perfil/`, `/datos/`, `/notas/`) y se validó en un clon limpio. B.1d completa: PWA instalable y sin conexión.
+- **2026-10-11:** B.2a: arnés del banco de pruebas y prueba de clasificación (`npm run banco`). Hasta que estén las respuestas de referencia, todo modelo queda "Sin certificar".

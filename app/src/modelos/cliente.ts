@@ -13,6 +13,8 @@ import { SALIDAS, type Salida } from './salidas'
 export interface Firmado<T> {
   resultado: T
   firma: FirmaModelo
+  /** 1 si la primera respuesta cumplió el formato; 2 si hizo falta el reintento (lo mide el banco). */
+  intentos?: number
 }
 
 export async function generarJSON<T extends Tarea>(
@@ -45,6 +47,7 @@ export async function generarJSON<T extends Tarea>(
     if (r.success) {
       return {
         resultado: r.data as Salida<T>,
+        intentos: intento + 1,
         firma: { proveedor: adaptador.proveedor, modelo: adaptador.modelo, version_prompt: versionPrompt(tarea), fecha: new Date().toISOString() },
       }
     }

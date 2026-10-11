@@ -32,3 +32,4 @@ Texto del prompt con {{variables}}.
 | `crear-reto.md` | Prepara un reto corto para el siguiente nivel de una habilidad |
 | `evaluar-reto.md` | Evalúa la respuesta a un reto (el núcleo aplica después los topes de D-009) |
 | `evaluar-logro.md` | Evalúa si la evidencia demuestra el criterio de un objetivo |
+| `clasificar-concepto.md` | Clasifica un concepto con el test de la regla 01 (lo usa el banco de pruebas) |
