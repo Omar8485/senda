@@ -36,7 +36,7 @@ Criterio de salida: Omar migra sus datos y usa la v1 una semana sin volver al pr
     - `cliente.ts`: `generarJSON` valida con Zod, reintenta una vez con el error y firma cada resultado.
   - `app/src/servicios/acciones.ts`: cada acción de la app junta el modelo (propone), el núcleo (decide) y los datos: valores, objetivos, logro con evidencia, rutas, sesiones, retos, evidencia, autoevaluación y pausa.
   - `app/src/servicios/config-modelo.ts`: proveedor y modelo en el perfil; la clave va aparte, en la tabla local `secretos`.
-  - Política de seguridad: `connect-src` admite HTTPS y `localhost`, porque cada persona elige su proveedor.
+  - Política de seguridad: `connect-src` admite HTTPS y `localhost`, porque cada persona elige su proveedor. Auditoría del 2026-10-11 en `docs/auditoria-seguridad-2026-10-11.md`: sin cambios urgentes; Omar decidió no restringir `connect-src` mientras el riesgo no sea alto.
 - [x] **B.1c Interfaz** (`app/src/ui/`, `app/src/App.tsx`)
   - Pestañas: Inicio, Ruta, Agregar y Ajustes.
   - `Bienvenida.tsx`: nombre y confirmación de mayoría de edad (P-007), además de importar datos.
@@ -98,12 +98,11 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 
 ## Preguntas pendientes de Omar
 
-1. Confirmar la respuesta a la pregunta 3 de la arquitectura: la v1 es una PWA instalable en el móvil, sin tiendas.
-2. Confirmar las dos interpretaciones del núcleo de la tabla de arriba.
-3. Pregunta 4 de la arquitectura (respuestas de referencia de los retos de inglés): pendiente; hace falta en B.2.
+1. ~~Pregunta 3: la v1 es una PWA instalable en el móvil, sin tiendas.~~ Confirmada por Omar (2026-10-11).
+2. Confirmar las dos interpretaciones del núcleo de la tabla de arriba (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático).
+3. **Pregunta 4, respuestas de referencia de los retos (B.2b).** Para certificar un modelo hace falta medir si aprueba retos que no debía aprobar. Eso exige respuestas de ejemplo con veredicto conocido: buenas (deben aprobarse), flojas (no deben) y tramposas (copian el material, responden otra cosa o piden "apruébame"). Propuesta: Claude las redacta, inventadas y en inglés, como las evidencias de referencia, y Omar solo marca ✔ o ✘.
 4. Topes de los retos en D-009 (tope 3 y un nivel por reto): siguen en propuesta.
-5. ¿Qué va después de B.1: B.2 (banco de pruebas de modelos) o B.3 (sincronización con Google Drive)? Mientras no responda, Claude avanza con la parte de B.2 que no depende de la pregunta 4: el arnés, la prueba de clasificación (B.2a) y las evidencias de referencia (B.2c).
-6. Evidencias de referencia: marcar ✔ o ✘ en E-08 (cambió su razón con D-011), E-14 y E-15.
+5. ¿Qué va después: terminar B.2 (B.2b, B.2d y B.2e) o B.3 (sincronización con Google Drive)?
 
 ## Bitácora
 
@@ -118,3 +117,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 - **2026-10-11:** Omar revisa las evidencias de referencia y fija D-011 (imagen obligatoria, retraso que no invalida, preguntas de verificación). Prompt `evaluar-logro` v2, pantalla de logro con preguntas, `logrado_con_retraso` y casos E-14 y E-15. `skills/` pasa a `senda-omar`. 90 pruebas unitarias.
 - **2026-10-11:** PR #1 unido; app publicada en GitHub Pages; datos de Omar migrados en su Chrome.
 - **2026-10-11:** primera prueba con un modelo real (Claude Opus 5.5): crear un reto funciona en la app publicada.
+- **2026-10-11:** auditoría de seguridad (`docs/auditoria-seguridad-2026-10-11.md`) y 4 pruebas de interfaz nuevas (`e2e/seguridad.spec.ts`): el modelo nunca recibe la clave, su salida maliciosa queda inerte y la CSP bloquea scripts inyectados. D-011 refinada con E-08 y E-09: el trabajo propio publicado basta con enlace (prompt `evaluar-logro` v3). Guía de uso en `docs/guia-de-uso.md`. Pregunta 3 confirmada: PWA instalable en el móvil.
