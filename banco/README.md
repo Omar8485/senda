@@ -9,7 +9,7 @@ Mide si un modelo de IA es lo bastante riguroso para usarse en Senda (docs/arqui
 | **Clasificación** de conceptos con el test de la regla 01 | `modelo/casos-de-prueba.md`, leído tal cual (no se duplica) | ✔ lista |
 | **Formato**: respuestas que cumplen el esquema sin reintento | Todas las pruebas | ✔ lista |
 | **Evaluación de retos**: tasa de aprobación indebida | Respuestas de referencia (buenas, flojas y tramposas) con veredicto conocido | Pendiente: Omar decidió escribirlas más adelante (pregunta 4 de la arquitectura) |
-| **Evaluación de evidencia**: no aprobar logros sin respaldo (aprobación indebida) ni rechazar los que lo tienen (rechazo indebido) | `banco/evidencias-de-referencia.md`: 15 casos inventados, con imágenes en `banco/imagenes/` | ✔ lista: 12 casos acordados por Omar (D-011) |
+| **Evaluación de evidencia**: no aprobar logros sin respaldo (aprobación indebida) ni rechazar los que lo tienen (rechazo indebido) | `banco/evidencias-de-referencia.md`: 15 casos inventados, con imágenes en `banco/imagenes/` | ✔ lista: los 15 casos acordados por Omar (D-011) |
 
 Mientras falte la prueba de retos, el resultado es siempre **"Sin certificar"**, aunque lo demás salga perfecto.
 
@@ -17,7 +17,7 @@ Mientras falte la prueba de retos, el resultado es siempre **"Sin certificar"**,
 
 **Evidencias de referencia.** Cubren evidencia con respaldo, sin respaldo, inconsistente (la imagen contradice el puntaje, es de otra persona o no tiene relación), incompleta, fuera de plazo, vaga y con instrucciones escondidas. Las imágenes son de un examen inventado y llevan la marca "EJEMPLO FICTICIO"; se regeneran desde `app/` con `node scripts/generar-imagenes-banco.mjs`. Un modelo que no admite imágenes falla los casos que las llevan: el banco lo cuenta como error, no lo salta.
 
-**Reglas de evidencia (D-011).** Un resultado externo exige imagen: un enlace solo no basta, porque el modelo no lo abre. La fecha límite no invalida un logro: se aprueba y se marca el retraso. Un logro autodeclarado pasa primero por preguntas de verificación (casos E-10, E-14 y E-15). En esos casos el acierto exige, además del veredicto, que el modelo pregunte o marque el retraso cuando corresponde.
+**Reglas de evidencia (D-011).** Un resultado emitido por un tercero exige imagen: un enlace solo no basta, porque el modelo no lo abre. El trabajo propio publicado basta con su enlace. La fecha límite no invalida un logro: se aprueba y se marca el retraso. Un logro autodeclarado pasa primero por preguntas de verificación (casos E-10, E-14 y E-15). En esos casos el acierto exige, además del veredicto, que el modelo pregunte o marque el retraso cuando corresponde.
 
 ## Umbrales iniciales (a calibrar)
 

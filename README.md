@@ -15,7 +15,8 @@ Su diferencia con otras apps de superación personal es el rigor:
 
 - **Prototipo funcional en claude.ai.** El código fuente es `sistema/senda.html`. Usa la base de datos y el acceso a Claude que ofrecen los artifacts de claude.ai, así que fuera de claude.ai no guarda datos ni llama al modelo.
 - **Modelo conceptual.** La Fase 1 está cerrada y la Fase 5 está en curso. El detalle está en `ESTADO.md` y `PLAN.md`.
-- **Senda v1 en construcción** en `app/` (fase B.0 lista: estructura, pruebas automáticas y despliegue). Arquitectura en `docs/arquitectura.md`.
+- **Senda v1 publicada** en https://omar8485.github.io/senda/ (código en `app/`). Arquitectura en `docs/arquitectura.md`; avance en `docs/construccion-v1.md`.
+- **Cómo usarla:** `docs/guia-de-uso.md`. Seguridad: `SECURITY.md` y `docs/auditoria-seguridad-2026-10-11.md`.
 - **Viabilidad como producto:** `docs/viabilidad.md`.
 
 ## Estructura

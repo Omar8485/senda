@@ -62,10 +62,12 @@ Formato: **Contexto** · **Opciones** · **Decisión** · **Consecuencias** · *
 ## D-011 — Reglas de evidencia para marcar un objetivo como logrado
 - **Contexto:** al revisar las evidencias de referencia del banco de pruebas (`banco/evidencias-de-referencia.md`, 2026-10-11), Omar fijó cómo se evalúa un logro.
 - **Decisión:**
-  1. Un **resultado externo** (examen, puntaje, certificado, carrera oficial, publicación, decisión de un tercero) exige una **imagen** que lo respalde. Un enlace solo no basta, porque el modelo no puede abrirlo.
+  1. Un **resultado emitido por un tercero** (examen, puntaje, certificado, carrera oficial, decisión de otra persona o institución) exige una **imagen** que lo respalde. Un enlace solo no basta, porque el modelo no puede abrirlo. Un **trabajo propio publicado** (artículos, código, portafolio) se acepta con su enlace: Senda confía en la persona.
   2. La **fecha límite no invalida** el logro: se aprueba igual y queda anotado "con retraso". El objetivo es desarrollar la habilidad, no cumplir plazos.
-  3. Un logro **sin resultado externo** (por ejemplo, leer libros) no se aprueba con la sola afirmación: el modelo hace 2 o 3 **preguntas sencillas** de verificación y decide con las respuestas. La app se basa en la confianza: las preguntas no son un examen.
-- **Consecuencias:** prompt `evaluar-logro` versión 2; la app muestra las preguntas y guarda `logrado_con_retraso`; cambian los veredictos esperados de E-08, E-09, E-10 y E-13 en el banco.
+  3. Un logro **sin resultado de un tercero y sin nada publicado** (por ejemplo, leer libros) no se aprueba con la sola afirmación: el modelo hace 2 o 3 **preguntas sencillas** de verificación y decide con las respuestas. La app se basa en la confianza: las preguntas no son un examen.
+- **Principio de fondo (Omar):** Senda es una app de desarrollo de habilidades, no de consecución de objetivos. Los objetivos son parte del modelo, pero no son su núcleo; por eso se confía en la persona y la evidencia se exige donde depende de un tercero.
+- **Refinamiento (2026-10-11, al marcar E-08 y E-09):** la imagen se exige solo para resultados emitidos por terceros; el trabajo propio publicado basta con enlace.
+- **Consecuencias:** prompt `evaluar-logro` versión 3; la app muestra las preguntas y guarda `logrado_con_retraso`; cambian los veredictos esperados de E-08, E-09, E-10 y E-13 en el banco.
 - **Estado:** **aceptada** (2026-10-11, Omar).
 
 ## D-005 — Escala 0–5 anclada en Dreyfus, con topes por evidencia

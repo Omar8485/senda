@@ -44,8 +44,8 @@ export function ModalLogro({ o, habilidades, onCerrar }: { o: Objetivo; habilida
       {!r?.aprobado && (
         <>
           <div className="campo"><label htmlFor="lgd">¿Qué demuestra que cumpliste el criterio?</label><textarea id="lgd" rows={4} value={descripcion} onChange={(e) => setDescripcion(e.target.value)} placeholder="Ej.: hice el examen el 12/09 y obtuve 64/100." /></div>
-          <div className="campo"><label htmlFor="lgi">Imagen del resultado o certificado <small>(obligatoria si el logro depende de un examen, un certificado, una publicación o un tercero)</small></label><input id="lgi" type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(e) => setImagen(e.target.files?.[0] ?? null)} /></div>
-          <div className="campo"><label htmlFor="lgl">Enlace <small>(opcional; no reemplaza la imagen, porque el modelo no puede abrirlo)</small></label><input id="lgl" value={enlace} onChange={(e) => setEnlace(e.target.value)} placeholder="https://…" /></div>
+          <div className="campo"><label htmlFor="lgi">Imagen del resultado o certificado <small>(obligatoria si el resultado lo emite un tercero: examen, certificado, carrera oficial)</small></label><input id="lgi" type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(e) => setImagen(e.target.files?.[0] ?? null)} /></div>
+          <div className="campo"><label htmlFor="lgl">Enlace <small>(basta para trabajo propio publicado, como artículos o código; no reemplaza la imagen de un resultado emitido por un tercero)</small></label><input id="lgl" value={enlace} onChange={(e) => setEnlace(e.target.value)} placeholder="https://…" /></div>
           {preguntas.length > 0 && (
             <fieldset className="preguntas">
               <legend>Preguntas de verificación</legend>
@@ -60,7 +60,7 @@ export function ModalLogro({ o, habilidades, onCerrar }: { o: Objetivo; habilida
           )}
           {evaluar.cargando ? <Pensando texto="Evaluando tu evidencia…" /> : <button type="button" className="btn primario" onClick={() => evaluar.ejecutar()}>{preguntas.length ? 'Enviar respuestas' : r ? 'Enviar de nuevo' : 'Enviar a evaluación'}</button>}
           {evaluar.error && <Aviso tipo="error">{evaluar.error}</Aviso>}
-          <small className="tenue">El modelo compara tu evidencia con el criterio. Si depende de un resultado externo (examen, certificado), hace falta una imagen que lo muestre. Si no, el modelo te hará unas preguntas sencillas. Llegar después de la fecha límite no invalida el logro. La imagen solo viaja al modelo en este momento.</small>
+          <small className="tenue">El modelo compara tu evidencia con el criterio. Si el resultado lo emite un tercero (examen, certificado), hace falta una imagen que lo muestre; si es trabajo tuyo publicado, basta el enlace. Si no, el modelo te hará unas preguntas sencillas. Llegar después de la fecha límite no invalida el logro. La imagen solo viaja al modelo en este momento.</small>
         </>
       )}
       {r && !r.aprobado && preguntas.length > 0 && <Aviso><strong>Antes de aprobar, unas preguntas.</strong><br />{r.explicacion}</Aviso>}

@@ -42,13 +42,12 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 
 ## Siguiente acción
 
-0. **Senda v1:** PR #1 unido a `main` (2026-10-11). La app está publicada en https://omar8485.github.io/senda/ y los datos del prototipo de Omar ya están importados en su Chrome de la PC. Pendiente de Omar:
-   - usar la v1 una semana sin volver al prototipo (criterio de salida de B.1);
-   - confirmar la pregunta 3 de la arquitectura (PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
-   - pregunta 4 (respuestas de referencia de los retos de inglés), que bloquea B.2b;
-   - marcar ✔ o ✘ en E-08, E-14 y E-15 de `banco/evidencias-de-referencia.md`.
+0. **Senda v1:** publicada en https://omar8485.github.io/senda/, con los datos de Omar migrados a su Chrome y probada con un modelo real. Cómo usarla: `docs/guia-de-uso.md`. Pendiente de Omar:
+   - usar solo la v1 una semana, sin volver al prototipo (criterio de salida de B.1), y exportar un respaldo a su carpeta cada semana;
+   - confirmar la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
+   - aprobar la propuesta para B.2b: Claude redacta las respuestas de referencia de los retos y Omar las marca.
 
-   Detalle, cómo retomar y pendientes técnicos: **`docs/construccion-v1.md`**.
+   Detalle y pendientes técnicos: **`docs/construccion-v1.md`**. Seguridad: `docs/auditoria-seguridad-2026-10-11.md`.
 1. **Fase 5:** completar las áreas pendientes de Omar con la skill `habilidades-orientacion` (detalle en `perfil/ESTADO.md`).
 2. **Fase 2 (cuando Omar quiera):** contrastar `modelo/familias.md` con ESCO/O\*NET y reclasificar las 20 habilidades de la auditoría.
 
@@ -63,7 +62,7 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
   - D-008: valores → situaciones → habilidades.
   - D-009: separación entre XP y nivel.
   - D-010: plataforma inicial en claude.ai.
-  - D-011: reglas de evidencia para marcar un logro (imagen obligatoria, retraso que no invalida, preguntas de verificación).
+  - D-011: reglas de evidencia para marcar un logro (imagen para resultados de terceros, enlace para trabajo propio publicado, retraso que no invalida, preguntas de verificación para lo autodeclarado).
 - **Pendientes de Omar:**
   - D-005 (escala 0–5) y D-006 (límite de 3): se deciden en las Fases 3 y 7.
   - Topes de los retos en D-009.
@@ -121,3 +120,4 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 - **2026-10-11:** Omar decide: el historial público no se reescribe; `skills/` pasa a `senda-omar`; D-011 (reglas de evidencia de logro) aceptada al revisar las evidencias de referencia.
 - **2026-10-11:** PR #1 unido a `main`. Omar activa Pages con GitHub Actions y la app queda publicada. Claude importa los datos del prototipo en el Chrome de Omar desde "Mis datos": 9 valores y principios, 12 habilidades, 1 objetivo, 2 rutas, sin errores ni errores de consola.
 - **2026-10-11:** Omar crea una clave de Anthropic exclusiva para Senda, en un espacio de trabajo con límite de gasto mensual, y la pone en la app. Primera prueba con un modelo real: "Ponerme a prueba" genera un reto válido, sin errores de consola. Queda la semana de uso.
+- **2026-10-11:** auditoría de seguridad sin hallazgos urgentes; pruebas de seguridad en la CI; D-011 refinada por Omar (el trabajo propio publicado basta con enlace); los 15 casos de evidencia acordados; guía de uso diario. Pregunta 3 confirmada.
