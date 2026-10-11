@@ -7,6 +7,7 @@
 1. Trae la rama de trabajo: `git fetch origin && git checkout claude/lucid-cori-csscqq && git pull`. Si el PR [#1](https://github.com/Omar8485/senda/pull/1) ya se unió, trabaja desde `main` actualizado.
 2. Entra a `app/` y ejecuta `npm ci`. Requiere Node 22.12 o superior.
 3. Verifica que todo esté en verde con `npm run check`, `npm run build` y `npm run test:e2e`. Antes de la primera prueba de interfaz, instala Chromium con `npx playwright install chromium`.
+   Antes de hacer push, conviene repetirlo en un clon limpio (`git clone . /tmp/x && cd /tmp/x/app && npm ci && npm run check`): así se detectan archivos que no llegaron al repositorio. El 2026-10-11, una regla del `.gitignore` dejó fuera `app/src/datos/` y solo la CI lo detectó.
 4. Busca la primera casilla sin marcar en "Avance" y continúa desde ahí.
 5. Al terminar un paso: corre las verificaciones, marca la casilla, agrega una línea a la bitácora de abajo y haz commit con `git commit -s` (DCO) y push.
 
@@ -45,7 +46,10 @@ Criterio de salida: Omar migra sus datos y usa la v1 una semana sin volver al pr
     - recorrido completo: configurar el modelo, agregar un valor, generar la ruta, completar una sesión y aprobar un reto, que sube el nivel a 1 y no más (D-009);
     - importar el prototipo y exportar un respaldo;
     - sin errores de consola, y la clave no viaja en el cuerpo de la petición.
-- [ ] **B.1d PWA**: manifest, service worker e iconos para instalar en el móvil y el escritorio.
+- [x] **B.1d PWA**
+  - `public/manifest.webmanifest` y los iconos, generados desde `public/icono.svg` con `node scripts/generar-iconos.mjs`.
+  - `public/sw.js`: service worker propio y mínimo, sin workbox. Las páginas van primero a la red y caen a la copia guardada; los archivos con hash se sirven de la copia; las llamadas a proveedores de IA nunca se interceptan.
+  - Prueba de interfaz: el manifiesto existe y la app abre sin conexión.
 - [ ] **Migración real:** Omar exporta la base del prototipo y la importa en la v1 desde "Mis datos". Esto lo hace Omar en su dispositivo: sus datos nunca pasan por el repositorio.
 
 ## Pendientes técnicos conocidos
@@ -92,3 +96,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 - **2026-10-10:** B.1a completa: capa de datos, importador del prototipo y 47 pruebas.
 - **2026-10-11:** B.1b completa: prompts versionados, adaptadores Anthropic y OpenAI-compatible, `generarJSON` y capa de acciones. 74 pruebas.
 - **2026-10-11:** B.1c completa: interfaz completa sobre la capa de acciones, 74 pruebas unitarias y 10 de interfaz (escritorio y móvil).
+- **2026-10-11:** La CI de B.1b falló porque `.gitignore` ignoraba `app/src/datos/`: la regla `datos/` (datos personales) no estaba anclada a la raíz. Se corrigió (`/perfil/`, `/datos/`, `/notas/`) y se validó en un clon limpio. B.1d completa: PWA instalable y sin conexión.

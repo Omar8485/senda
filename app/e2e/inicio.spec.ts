@@ -28,3 +28,19 @@ test('sin confirmar la mayoría de edad no se puede empezar (P-007)', async ({ p
   await page.getByRole('button', { name: 'Empezar' }).click()
   await expect(page.getByRole('alert')).toContainText('mayores de 18')
 })
+
+test('es instalable y abre sin conexión', async ({ page, context }) => {
+  await page.goto('./')
+  const manifiesto = await page.locator('link[rel="manifest"]').getAttribute('href')
+  const r = await page.request.get(new URL(manifiesto!, page.url()).href)
+  expect(await r.json()).toMatchObject({ name: 'Senda', display: 'standalone' })
+
+  await page.evaluate(() => navigator.serviceWorker.ready.then(() => true))
+  await page.reload()
+  await expect(page.getByRole('heading', { level: 1, name: 'Senda' })).toBeVisible()
+
+  await context.setOffline(true)
+  await page.reload()
+  await expect(page.getByRole('heading', { level: 1, name: 'Senda' })).toBeVisible()
+  await context.setOffline(false)
+})
