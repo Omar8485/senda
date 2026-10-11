@@ -29,14 +29,13 @@ Su diferencia con otras apps de superación personal es el rigor:
 | `decisiones/registro.md` | Decisiones conceptuales D-001 en adelante. |
 | `modelo/` | La parte genérica, que vale para cualquier persona: familias de funciones, casos de prueba y catálogo. |
 | `plantillas/` | Plantillas de fichas. |
-| `skills/` | Copias de referencia de las skills de Claude. |
 | `herramientas/validar.py` | Validador de esquema y reglas (`python herramientas/validar.py`). |
 | `app/` | La v1 en construcción: React + TypeScript + Vite, con el núcleo del método y sus pruebas. Ver `app/README.md`. |
 | `.github/workflows/` | CI (pruebas en cada push) y despliegue a GitHub Pages. |
 | `sistema/` | Diseño (`DISENO.md`) y código del prototipo (`senda.html`). |
 | `docs/` | Visión de producto (`vision.md`), arquitectura de la v1 (`arquitectura.md`) y viabilidad (`viabilidad.md`). |
 
-Los datos personales del autor como usuario de Senda (`perfil/`, `datos/`, `notas/`) y sus instrucciones privadas de trabajo con Claude viven en un repositorio privado y están excluidos con `.gitignore`.
+Los datos personales del autor como usuario de Senda (`perfil/`, `datos/`, `notas/`), sus instrucciones privadas de trabajo con Claude y las skills de su cuenta viven en un repositorio privado y están excluidos con `.gitignore`.
 
 ## Trabajar desde la nube
 

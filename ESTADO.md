@@ -48,8 +48,7 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
    - migrar sus datos: exportar la base del prototipo y cargarla en Ajustes → Mis datos → Importar. Sus datos no pasan por el repositorio;
    - confirmar la respuesta a la pregunta 3 (la v1 es PWA instalable en el móvil) y la interpretación del núcleo (sin evidencia de ejecución, tope 0; el nivel 5 nunca es automático);
    - pregunta 4 (respuestas de referencia de los retos de inglés): pendiente por decisión de Omar, se necesita en B.2b;
-   - marcar ✔ o ✘ en `banco/evidencias-de-referencia.md` (13 casos) y decidir si un enlace basta como respaldo de un resultado externo (caso E-09);
-   - decidir si `skills/` (copias de sus skills de cuenta, con la ruta de su carpeta) también pasa al repositorio privado.
+   - marcar ✔ o ✘ en los casos nuevos E-14 y E-15 y en E-08 (cambió su razón) de `banco/evidencias-de-referencia.md`;
    
    **Fase B.1: el código está completo** (datos locales, prompts versionados, adaptadores de IA, interfaz y PWA). Falta el criterio de salida: Omar migra sus datos y usa la v1 una semana. Detalle, cómo retomar y pendientes en **`docs/construccion-v1.md`**. PR abierto: https://github.com/Omar8485/senda/pull/1.
 1. **Fase 5:** completar las áreas pendientes de Omar con la skill `habilidades-orientacion` (detalle en `perfil/ESTADO.md`).
@@ -66,6 +65,7 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
   - D-008: valores → situaciones → habilidades.
   - D-009: separación entre XP y nivel.
   - D-010: plataforma inicial en claude.ai.
+  - D-011: reglas de evidencia para marcar un logro (imagen obligatoria, retraso que no invalida, preguntas de verificación).
 - **Pendientes de Omar:**
   - D-005 (escala 0–5) y D-006 (límite de 3): se deciden en las Fases 3 y 7.
   - Topes de los retos en D-009.
@@ -75,14 +75,14 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 ## Entorno técnico
 
 - **Carpeta de Omar** (`MODELO HABILIDADES`, en su PC): la copia de trabajo de los dos repositorios. No es un repositorio git:
-  - la raíz corresponde a `Omar8485/senda`, salvo `CLAUDE.md`;
-  - `CLAUDE.md`, `perfil/`, `datos/` y `notas/` corresponden a `Omar8485/senda-omar`.
+  - la raíz corresponde a `Omar8485/senda`, salvo `CLAUDE.md` y `skills/`;
+  - `CLAUDE.md`, `skills/`, `perfil/`, `datos/` y `notas/` corresponden a `Omar8485/senda-omar`.
 - **Repositorios:**
   - `github.com/Omar8485/senda`: **público** desde el 2026-10-10. Contiene modelo, reglas, app y docs.
-  - `github.com/Omar8485/senda-omar`: privado siempre. Contiene `CLAUDE.md` (instrucciones de trabajo con Claude), `perfil/`, `datos/`, `notas/` y la rama `respaldo-historial-senda`. Una sesión en la nube debe clonar los dos repositorios.
+  - `github.com/Omar8485/senda-omar`: privado siempre. Contiene `CLAUDE.md` (instrucciones de trabajo con Claude), `skills/`, `perfil/`, `datos/`, `notas/` y la rama `respaldo-historial-senda`. Una sesión en la nube debe clonar los dos repositorios.
 - **App v1 (`app/`):** Node 22.12+. `npm ci` y `npm run check` (lint, tipos y pruebas del núcleo); `npm run build` y `npm run test:e2e` (Playwright). La CI corre todo, más el validador, en cada push.
 - **Validador:** `python3 herramientas/validar.py` desde la raíz. Necesita `perfil/` para validar las fichas personales; sin esa carpeta valida solo el modelo.
-- **Skills en la cuenta:** `habilidades-clasificar`, `habilidades-orientacion` y `habilidades-evaluar-dominio`, aprobadas. Copias de referencia en `skills/`.
+- **Skills en la cuenta:** `habilidades-clasificar`, `habilidades-orientacion` y `habilidades-evaluar-dominio`, aprobadas. Copias de referencia en `skills/` del repositorio privado `senda-omar` (desde el 2026-10-11).
 - **Documentos del proyecto (claude.ai):** CLAUDE.md (privado), PLAN.md y ESTADO.md están en `claude/`; el resto, con su ruta. Se actualizan junto con la carpeta.
 
 ## Bitácora
@@ -120,3 +120,4 @@ Omar decidió que Senda sea **código abierto, gratuito y abierto a colaboradore
 - **2026-10-11:** B.2a: arnés del banco de pruebas de modelos y prueba de clasificación sobre `modelo/casos-de-prueba.md`. Recordatorio para Omar: marcar ✔ o ✘ en esos casos convierte el resultado provisional en oficial.
 - **2026-10-11:** Privacidad: `CLAUDE.md` sale del repositorio público y pasa a `senda-omar` (pedido de Omar). Las reglas del método pasan a `CONTRIBUTING.md`. Sin ruta local ni enlace del prototipo en `ESTADO.md` y `sistema/DISENO.md`. Nuevo control en la CI: `herramientas/revisar_publico.py`.
 - **2026-10-11:** B.2c: evidencias de referencia para medir la aprobación indebida de logros (13 casos e imágenes ficticias). Detalle en `docs/construccion-v1.md`.
+- **2026-10-11:** Omar decide: el historial público no se reescribe; `skills/` pasa a `senda-omar`; D-011 (reglas de evidencia de logro) aceptada al revisar las evidencias de referencia.

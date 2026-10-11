@@ -84,7 +84,7 @@ export function Inicio({ todo, irAgregar }: { todo: Todo; irAgregar: (destino: {
       <section className="grupo foco">
         <span className="gk o">{o.estado === 'logrado' ? 'Objetivo logrado ✓' : 'Objetivo en curso'}</span>
         <h3>{o.titulo}</h3>
-        {o.estado === 'logrado' && <div className="aviso ok">Logrado el {o.fecha_logro}. Las habilidades que desarrollaste siguen en tu ficha.</div>}
+        {o.estado === 'logrado' && <div className="aviso ok">Logrado el {o.fecha_logro}{o.logrado_con_retraso ? ', después de la fecha límite' : ''}. Las habilidades que desarrollaste siguen en tu ficha.</div>}
         {vs.length ? (
           <div className="responde"><span>Responde a:</span>{vs.map((v) => <button type="button" key={v.id} className="chip valor" onClick={() => setFoco({ modo: 'valores', id: v.id })}>{v.corto || v.enunciado}</button>)}<button type="button" className="enlace" onClick={() => setModal({ tipo: 'valores-objetivo', o })}>Cambiar</button></div>
         ) : (

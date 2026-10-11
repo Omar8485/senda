@@ -80,6 +80,8 @@ export const SALIDAS = {
     aprobado: z.boolean(),
     explicacion: z.string(),
     falta: z.string(),
+    con_retraso: z.boolean(),
+    preguntas: z.array(z.string()),
   }),
   'clasificar-concepto': z.object({
     categoria: z.enum(CATEGORIAS),

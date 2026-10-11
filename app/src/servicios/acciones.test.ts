@@ -90,20 +90,40 @@ describe('objetivos y logro', () => {
     const { id: vid } = await crearValor()
     const { id } = await aceptarObjetivo(db, { ...analisisObj, fecha: null, area: 'educacion', valores: [vid], texto: 't', elegidas: [] })
 
-    const rechazo = modeloFalso({ LOGRADO: { aprobado: false, explicacion: 'No hay respaldo.', falta: 'el certificado' } })
+    const rechazo = modeloFalso({ LOGRADO: { aprobado: false, explicacion: 'No hay respaldo.', falta: 'el certificado', con_retraso: false, preguntas: [] } })
     const r1 = await evaluarLogro(rechazo, db, { objetivo: id, descripcion: 'Ya terminé el curso, lo juro' })
     expect(r1.evidencia).toBeUndefined()
     expect((await db.objetivos.get(id))?.intentos_logro).toHaveLength(1)
     await expect(marcarLogrado(db, id, 'ev-inventada')).rejects.toThrow(/evidencia aprobada/)
 
-    const aprueba = modeloFalso({ LOGRADO: { aprobado: true, explicacion: 'El enlace lo respalda.', falta: '' } })
-    const r2 = await evaluarLogro(aprueba, db, { objetivo: id, descripcion: 'Certificado recibido', enlace: 'https://ejemplo.org/c' })
+    const aprueba = modeloFalso({ LOGRADO: { aprobado: true, explicacion: 'La imagen lo respalda.', falta: '', con_retraso: false, preguntas: [] } })
+    const r2 = await evaluarLogro(aprueba, db, { objetivo: id, descripcion: 'Certificado recibido', imagen: { tipo: 'image/png', base64: 'x', nombre: 'cert.png' } })
     const ev = await db.evidencias.get(r2.evidencia!)
     expect(ev).toMatchObject({ fuente: 'logro', externa: true })
     expect(ev?.evaluacion?.firma.modelo).toBe('modelo-falso')
     await marcarLogrado(db, id, r2.evidencia!)
     expect((await db.objetivos.get(id))?.estado).toBe('logrado')
     expect(xpTotal(await db.eventos_xp.toArray())).toBe(100)
+    expect((await db.objetivos.get(id))?.logrado_con_retraso).toBe(false)
+  })
+
+  it('D-011: un logro autodeclarado pasa por preguntas de verificación y las respuestas viajan al modelo', async () => {
+    const { id: vid } = await crearValor()
+    const { id } = await aceptarObjetivo(db, { ...analisisObj, criterio: 'Leer 6 libros', fecha: null, area: 'educacion', valores: [vid], texto: 't', elegidas: [] })
+    const preguntas = ['¿De qué trata Dracula?', '¿Cuál te costó más?']
+    const pregunta = modeloFalso({ LOGRADO: { aprobado: false, explicacion: 'Falta verificar.', falta: '', con_retraso: false, preguntas } })
+    const r1 = await evaluarLogro(pregunta, db, { objetivo: id, descripcion: 'Leí seis libros en inglés este año.' })
+    expect(r1.evaluacion.preguntas).toEqual(preguntas)
+    expect(pregunta.pedidos[0].usuario).toContain('ninguna todavía')
+    expect((await db.objetivos.get(id))?.intentos_logro.at(-1)?.falta).toMatch(/preguntas de verificación/)
+
+    const aprueba = modeloFalso({ LOGRADO: { aprobado: true, explicacion: 'Las respuestas muestran lectura real.', falta: '', con_retraso: true, preguntas: [] } })
+    const respuestas = [{ pregunta: preguntas[0], respuesta: 'Un conde vampiro que viaja a Inglaterra.' }, { pregunta: preguntas[1], respuesta: 'Dracula, por las cartas.' }]
+    const r2 = await evaluarLogro(aprueba, db, { objetivo: id, descripcion: 'Leí seis libros en inglés este año.', respuestas })
+    expect(aprueba.pedidos[0].usuario).toContain('Respuesta: Un conde vampiro')
+    expect((await db.evidencias.get(r2.evidencia!))?.descripcion).toMatch(/Verificación: .*Dracula/)
+    await marcarLogrado(db, id, r2.evidencia!)
+    expect(await db.objetivos.get(id)).toMatchObject({ estado: 'logrado', logrado_con_retraso: true })
   })
 })
 

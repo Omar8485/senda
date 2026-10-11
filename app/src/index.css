@@ -196,3 +196,7 @@ img.avatar.foto { border-radius: 50%; aspect-ratio: 1; object-fit: cover; border
 svg.mini { width: 100%; max-width: 90px; height: auto; }
 .importar summary { cursor: pointer; font-weight: 700; color: var(--accent); }
 .importar { display: flex; flex-direction: column; gap: 10px; }
+
+/* Preguntas de verificación de un logro (D-011) */
+fieldset.preguntas { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 8px 0; }
+fieldset.preguntas legend { font-weight: 600; padding: 0 4px; }

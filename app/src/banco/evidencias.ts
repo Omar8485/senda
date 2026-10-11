@@ -25,6 +25,12 @@ export interface CasoEvidencia {
   imagen: string | null
   /** true si el veredicto esperado es APROBAR. */
   esperado: boolean
+  /** D-011: además de no aprobar, el modelo debe hacer preguntas de verificación. */
+  debePreguntar: boolean
+  /** D-011: el modelo debe aprobar y marcar el retraso. */
+  conRetraso: boolean
+  /** Segunda vuelta: preguntas de verificación ya respondidas. */
+  respuestas: { pregunta: string; respuesta: string }[]
   /** true si la línea Acuerdo empieza con ✔. Solo estos cuentan para el resultado oficial. */
   acordado: boolean
 }
@@ -38,6 +44,8 @@ export interface ResultadoEvidencia {
   acordado: boolean
   intentos: number | null
   falta?: string
+  preguntas?: string[]
+  con_retraso?: boolean
   error?: string
 }
 
@@ -56,6 +64,18 @@ export function leerHabilidades(texto: string, id: string): CasoEvidencia['habil
     const m = /^(.+?):\s*nivel\s*(\d)\s*,\s*meta\s*(\d)\s*$/i.exec(parte.trim())
     if (!m) throw new Error(`${id}: no se entiende la habilidad "${parte.trim()}" (formato: nombre: nivel N, meta M).`)
     return { nombre: m[1].trim(), nivel: Number(m[2]), meta: Number(m[3]) }
+  })
+}
+
+const SI = /^s[ií]$/i
+
+/** "pregunta → respuesta || pregunta → respuesta" */
+export function leerRespuestas(texto: string | undefined, id: string): CasoEvidencia['respuestas'] {
+  if (!texto || NADA.test(texto)) return []
+  return texto.split('||').map((par) => {
+    const [pregunta, respuesta] = par.split('→').map((x) => x.trim())
+    if (!pregunta || !respuesta) throw new Error(`${id}: cada respuesta va como "pregunta → respuesta".`)
+    return { pregunta, respuesta }
   })
 }
 
@@ -89,6 +109,9 @@ export function leerEvidencias(markdown: string): CasoEvidencia[] {
       enlace: NADA.test(enlace) ? null : enlace,
       imagen: NADA.test(imagen) ? null : imagen,
       esperado: veredicto === 'APROBAR',
+      debePreguntar: SI.test(bloque.get('debe preguntar') ?? ''),
+      conRetraso: SI.test(bloque.get('con retraso') ?? ''),
+      respuestas: leerRespuestas(bloque.get('respuestas'), id),
       acordado: campo(bloque, 'acuerdo', id).startsWith('✔'),
     })
   }
@@ -104,7 +127,16 @@ export function variablesCaso(c: CasoEvidencia): Record<string, string> {
     descripcion: c.evidencia,
     enlace: c.enlace,
     conImagen: c.imagen !== null,
+    respuestas: c.respuestas,
   })
+}
+
+/** Acierto según D-011: el veredicto, y además las preguntas o el retraso cuando el caso los exige. */
+export function esAcierto(c: CasoEvidencia, r: { aprobado: boolean; preguntas: string[]; con_retraso: boolean }): boolean {
+  if (r.aprobado !== c.esperado) return false
+  if (c.debePreguntar && r.preguntas.length === 0) return false
+  if (c.conRetraso && !r.con_retraso) return false
+  return true
 }
 
 /** Corre un caso contra el modelo. Nunca lanza: un error queda registrado en el resultado. */
@@ -117,7 +149,8 @@ export async function evaluarCaso(
   try {
     const imagenes = c.imagen ? [await cargarImagen(c.imagen)] : undefined
     const r = await generarJSON(adaptador, 'evaluar-logro', variablesCaso(c), { imagenes })
-    return { ...base, obtenido: r.resultado.aprobado, acierto: r.resultado.aprobado === c.esperado, intentos: r.intentos ?? null, falta: r.resultado.falta }
+    const x = r.resultado
+    return { ...base, obtenido: x.aprobado, acierto: esAcierto(c, x), intentos: r.intentos ?? null, falta: x.falta, preguntas: x.preguntas, con_retraso: x.con_retraso }
   } catch (e) {
     return { ...base, obtenido: null, acierto: false, intentos: null, error: e instanceof Error ? e.message : String(e) }
   }

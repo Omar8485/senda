@@ -90,6 +90,8 @@ export const objetivo = base.extend({
   fecha_logro: fechaIso.nullable().optional(),
   /** id de la evidencia aprobada que habilitó el logro. */
   evidencia_logro: z.string().nullable().optional(),
+  /** D-011: se logró después de la fecha límite (el logro cuenta igual). */
+  logrado_con_retraso: z.boolean().optional(),
   intentos_logro: z.array(z.object({ fecha: fechaIso, descripcion: z.string(), falta: z.string() })).default([]),
   texto_original: z.string().optional(),
   visibilidad: z.enum(['privado', 'publico']).default('privado'),

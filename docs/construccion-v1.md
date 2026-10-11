@@ -6,7 +6,7 @@
 
 ## Cómo retomar
 
-0. **Instrucciones privadas:** `CLAUDE.md` ya no está en este repositorio público (2026-10-11). Vive en el repositorio privado `Omar8485/senda-omar`: una sesión en la nube debe clonar los dos. Las reglas del método y las convenciones para cualquier colaborador están en `CONTRIBUTING.md`.
+0. **Instrucciones privadas:** `CLAUDE.md` y `skills/` ya no están en este repositorio público (2026-10-11). Vive en el repositorio privado `Omar8485/senda-omar`: una sesión en la nube debe clonar los dos. Las reglas del método y las convenciones para cualquier colaborador están en `CONTRIBUTING.md`.
 1. Trae la rama de trabajo: `git fetch origin && git checkout claude/lucid-cori-csscqq && git pull`. Si el PR [#1](https://github.com/Omar8485/senda/pull/1) ya se unió, trabaja desde `main` actualizado.
 2. Entra a `app/` y ejecuta `npm ci`. Requiere Node 22.12 o superior.
 3. Verifica que todo esté en verde con `npm run check`, `npm run build` y `npm run test:e2e`. Desde la raíz, `python3 herramientas/revisar_publico.py` confirma que no viaja nada privado (también lo corre la CI). Antes de la primera prueba de interfaz, instala Chromium con `npx playwright install chromium`.
@@ -61,7 +61,7 @@ Criterio de salida: etiquetas Recomendado / Aceptable / Experimental visibles en
 
 - [x] **B.2a Arnés y clasificación:** `banco/README.md`, `prompts/clasificar-concepto.md`, `app/src/banco/` y el comando `npm run banco`. Lee `modelo/casos-de-prueba.md` sin duplicarlo y separa el resultado oficial (casos con ✔ de Omar) del provisional. Se probó con un servidor local falso.
 - [ ] **B.2b Respuestas de referencia de retos** (buenas, flojas y tramposas) y medición de la aprobación indebida. **Pendiente de Omar** (pregunta 4).
-- [x] **B.2c Evidencias de referencia:** `banco/evidencias-de-referencia.md` con 13 casos inventados (4 para aprobar y 9 para rechazar) e imágenes ficticias en `banco/imagenes/`. Métricas de aprobación y rechazo indebidos en `app/src/banco/metricas.ts`. El banco usa `variablesLogro`, la misma función de la app, para medir exactamente lo que se envía al modelo. Se probó de punta a punta con un servidor local falso: un modelo que aprueba todo lo que trae imagen saca 44 % de aprobación indebida. **Pendiente de Omar:** marcar ✔ o ✘ en cada caso y decidir si un enlace basta como respaldo (caso E-09).
+- [x] **B.2c Evidencias de referencia:** `banco/evidencias-de-referencia.md` con 13 casos inventados (4 para aprobar y 9 para rechazar) e imágenes ficticias en `banco/imagenes/`. Métricas de aprobación y rechazo indebidos en `app/src/banco/metricas.ts`. El banco usa `variablesLogro`, la misma función de la app, para medir exactamente lo que se envía al modelo. Se probó de punta a punta con un servidor local falso: un modelo que aprueba todo lo que trae imagen saca 44 % de aprobación indebida. Omar revisó los casos el 2026-10-11 y fijó **D-011**: imagen obligatoria para resultados externos, la fecha límite no invalida el logro (se marca el retraso) y preguntas de verificación para lo autodeclarado. Prompt `evaluar-logro` versión 2, preguntas en la pantalla de logro y casos E-14 y E-15 (pendientes de su ✔).
 - [ ] **B.2d Resultados de 3 a 5 modelos** en `banco/resultados/`. Los corre quien tenga la clave (Omar u otras personas), nunca la CI.
 - [ ] **B.2e Etiqueta visible en Ajustes** al elegir un modelo, leída de `banco/resultados/`.
 
@@ -103,8 +103,7 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 3. Pregunta 4 de la arquitectura (respuestas de referencia de los retos de inglés): pendiente; hace falta en B.2.
 4. Topes de los retos en D-009 (tope 3 y un nivel por reto): siguen en propuesta.
 5. ¿Qué va después de B.1: B.2 (banco de pruebas de modelos) o B.3 (sincronización con Google Drive)? Mientras no responda, Claude avanza con la parte de B.2 que no depende de la pregunta 4: el arnés, la prueba de clasificación (B.2a) y las evidencias de referencia (B.2c).
-6. Evidencias de referencia (`banco/evidencias-de-referencia.md`): marcar ✔ o ✘ en los 13 casos. El más discutible es E-10 (leer libros sin respaldo externo).
-7. ¿Basta un enlace como respaldo de un resultado externo? El modelo no lo abre (caso E-09 y `banco/README.md`). Si la respuesta es no, cambia `prompts/evaluar-logro.md` (versión 2) y el veredicto de E-09.
+6. Evidencias de referencia: marcar ✔ o ✘ en E-08 (cambió su razón con D-011), E-14 y E-15.
 
 ## Bitácora
 
@@ -116,3 +115,4 @@ Un JSON con las colecciones del artifact: `valores`, `habilidades`, `objetivos` 
 - **2026-10-11:** B.2a: arnés del banco de pruebas y prueba de clasificación (`npm run banco`). Hasta que estén las respuestas de referencia, todo modelo queda "Sin certificar".
 - **2026-10-11:** `CLAUDE.md` sale del repositorio público y pasa a `senda-omar` (pedido de Omar): tenía su ruta local, el enlace de su prototipo y su flujo de trabajo personal. Las reglas del método pasan a `CONTRIBUTING.md`. Se quitan la ruta y el enlace de `ESTADO.md` y `sistema/DISENO.md`. Nuevo control en la CI: `herramientas/revisar_publico.py`.
 - **2026-10-11:** B.2c: 13 evidencias de referencia con imágenes ficticias, métricas de aprobación y rechazo indebidos, y `variablesLogro` compartida entre la app y el banco. 88 pruebas unitarias y 12 de interfaz.
+- **2026-10-11:** Omar revisa las evidencias de referencia y fija D-011 (imagen obligatoria, retraso que no invalida, preguntas de verificación). Prompt `evaluar-logro` v2, pantalla de logro con preguntas, `logrado_con_retraso` y casos E-14 y E-15. `skills/` pasa a `senda-omar`. 90 pruebas unitarias.

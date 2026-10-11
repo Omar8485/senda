@@ -6,7 +6,7 @@ Uso (desde la raíz): python3 herramientas/revisar_publico.py
 Termina con código 1 si encuentra algo. Lo corre la CI en cada push.
 
 Qué busca, solo en archivos versionados (git ls-files):
-- archivos que viven en el repositorio privado: CLAUDE.md, perfil/, datos/, notas/;
+- archivos que viven en el repositorio privado: CLAUDE.md, skills/, perfil/, datos/, notas/;
 - rutas de usuario de Windows o macOS/Linux y enlaces a artifacts de claude.ai,
   que delatan el entorno de una persona o apuntan a sus datos.
 """
@@ -16,7 +16,7 @@ import re
 import subprocess
 import sys
 
-PRIVADOS = ("CLAUDE.md", "perfil/", "datos/", "notas/")
+PRIVADOS = ("CLAUDE.md", "skills/", "perfil/", "datos/", "notas/")
 
 PATRONES = [
     (re.compile(r"[A-Za-z]:\\+Users\\+", re.I), "ruta de usuario de Windows"),
@@ -26,9 +26,6 @@ PATRONES = [
 
 # Rutas excluidas de la búsqueda de patrones, con su motivo.
 EXCLUIDOS = {
-    # Copias de referencia de las skills de cuenta de Omar: llevan su carpeta de trabajo.
-    # Pendiente de que Omar decida si pasan al repositorio privado (2026-10-11).
-    "skills/": "copias de skills de cuenta, pendiente de decisión",
     "herramientas/revisar_publico.py": "este archivo describe los patrones",
 }
 

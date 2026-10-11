@@ -9,7 +9,7 @@ import casosMd from '../../../modelo/casos-de-prueba.md?raw'
 import type { Adaptador, Pedido } from '../modelos/adaptador'
 import { prompt, rellenar } from '../modelos/prompts'
 import { categoriasEsperadas, leerCasos } from './casos'
-import { evaluarCaso, leerEvidencias, leerHabilidades, variablesCaso, type ResultadoEvidencia } from './evidencias'
+import { esAcierto, evaluarCaso, leerEvidencias, leerHabilidades, leerRespuestas, variablesCaso, type ResultadoEvidencia } from './evidencias'
 import { resumir, resumirEvidencias, type ResultadoCaso } from './metricas'
 
 describe('casos de clasificación', () => {
@@ -82,6 +82,23 @@ describe('evidencias de referencia (B.2c)', () => {
     }
   })
 
+  it('D-011: lee preguntas, retraso y respuestas, y los exige en el acierto', () => {
+    const e10 = casos.find((c) => c.id === 'E-10')!
+    const e13 = casos.find((c) => c.id === 'E-13')!
+    const e14 = casos.find((c) => c.id === 'E-14')!
+    expect(e10).toMatchObject({ esperado: false, debePreguntar: true, acordado: true })
+    expect(e13).toMatchObject({ esperado: true, conRetraso: true, acordado: true })
+    expect(e14.respuestas).toHaveLength(3)
+    expect(variablesCaso(e14).respuestas).toContain('Respuesta: Un inventor viaja al futuro')
+    expect(variablesCaso(e10).respuestas).toBe('ninguna todavía')
+    const no = { aprobado: false, preguntas: [], con_retraso: false }
+    expect(esAcierto(e10, no)).toBe(false)
+    expect(esAcierto(e10, { ...no, preguntas: ['¿De qué trata?'] })).toBe(true)
+    expect(esAcierto(e13, { aprobado: true, preguntas: [], con_retraso: false })).toBe(false)
+    expect(esAcierto(e13, { aprobado: true, preguntas: [], con_retraso: true })).toBe(true)
+    expect(() => leerRespuestas('pregunta sin respuesta', 'E-99')).toThrow(/E-99/)
+  })
+
   it('rechaza casos mal escritos en lugar de adivinar', () => {
     expect(() => leerHabilidades('hablar: nivel dos', 'E-99')).toThrow(/E-99/)
     const roto = '### E-01 · Roto\n- **Objetivo:** x\n- **Veredicto esperado:** QUIZÁS\n'
@@ -90,7 +107,7 @@ describe('evidencias de referencia (B.2c)', () => {
 
   it('corre un caso con la imagen y registra los errores sin lanzar', async () => {
     let pedido: Pedido | undefined
-    const falso: Adaptador = { proveedor: 'openai-compatible', modelo: 'falso', generar: async (p) => { pedido = p; return { aprobado: true, explicacion: 'x', falta: '' } } }
+    const falso: Adaptador = { proveedor: 'openai-compatible', modelo: 'falso', generar: async (p) => { pedido = p; return { aprobado: true, explicacion: 'x', falta: '', con_retraso: false, preguntas: [] } } }
     const e02 = casos.find((c) => c.id === 'E-02')!
     const r = await evaluarCaso(falso, e02, async (nombre) => ({ tipo: 'image/png', base64: `img:${nombre}` }))
     expect(pedido?.imagenes).toEqual([{ tipo: 'image/png', base64: 'img:resultado-72-alex.png' }])

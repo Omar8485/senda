@@ -8,9 +8,10 @@ __pycache__/
 .env.*
 node_modules/
 
-# Datos personales de Omar e instrucciones privadas de trabajo con Claude:
+# Datos personales de Omar, instrucciones privadas y skills de su cuenta de Claude:
 # viven en el repo privado Omar8485/senda-omar
 /CLAUDE.md
+/skills/
 /perfil/
 /datos/
 /notas/

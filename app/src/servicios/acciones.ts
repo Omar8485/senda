@@ -185,6 +185,8 @@ export function variablesLogro(d: {
   descripcion: string
   enlace?: string | null
   conImagen: boolean
+  /** D-011: respuestas a las preguntas de verificación de una evaluación anterior. */
+  respuestas?: { pregunta: string; respuesta: string }[]
 }): Record<string, string> {
   const o = d.objetivo
   return {
@@ -197,6 +199,9 @@ export function variablesLogro(d: {
     evidencia: d.descripcion.slice(0, 4000),
     enlace: d.enlace?.trim() || 'ninguno',
     imagen: d.conImagen ? 'sí (resultado o certificado adjunto)' : 'no',
+    respuestas: d.respuestas?.length
+      ? d.respuestas.map((r, i) => `${i + 1}. ${r.pregunta}\nRespuesta: ${r.respuesta.slice(0, 1000)}`).join('\n')
+      : 'ninguna todavía',
   }
 }
 
@@ -204,7 +209,13 @@ export function variablesLogro(d: {
 export async function evaluarLogro(
   adaptador: Adaptador,
   db: SendaDB,
-  e: { objetivo: string; descripcion: string; enlace?: string; imagen?: Imagen & { nombre: string } },
+  e: {
+    objetivo: string
+    descripcion: string
+    enlace?: string
+    imagen?: Imagen & { nombre: string }
+    respuestas?: { pregunta: string; respuesta: string }[]
+  },
 ): Promise<{ evaluacion: EvaluacionLogro; evidencia?: string }> {
   const o = await db.objetivos.get(e.objetivo)
   if (!o) throw new Error('El objetivo no existe.')
@@ -216,18 +227,25 @@ export async function evaluarLogro(
     descripcion: e.descripcion,
     enlace: e.enlace,
     conImagen: Boolean(e.imagen),
+    respuestas: e.respuestas,
   }), { imagenes: e.imagen ? [e.imagen] : undefined })
 
   if (!puedeMarcarLogrado(r.resultado)) {
     await guardar(db, 'objetivos', {
       ...o,
-      intentos_logro: [...o.intentos_logro, { fecha: hoy(), descripcion: e.descripcion.slice(0, 500), falta: r.resultado.falta || r.resultado.explicacion }].slice(-10),
+      intentos_logro: [...o.intentos_logro, {
+        fecha: hoy(),
+        descripcion: e.descripcion.slice(0, 500),
+        falta: r.resultado.preguntas.length ? 'responder las preguntas de verificación' : r.resultado.falta || r.resultado.explicacion,
+      }].slice(-10),
     })
     return { evaluacion: r.resultado }
   }
   const ev = await agregar(db, 'evidencias', {
     objetivo: o.id, fecha: hoy(), tipo: 'resultado', externa: Boolean(e.enlace?.trim() || e.imagen), contexto: 'evidencia de logro',
-    fuente: 'logro', descripcion: e.descripcion.slice(0, 1000) + (e.imagen ? ` (imagen: ${e.imagen.nombre})` : ''),
+    fuente: 'logro',
+    descripcion: e.descripcion.slice(0, 1000) + (e.imagen ? ` (imagen: ${e.imagen.nombre})` : '')
+      + (e.respuestas?.length ? `\nVerificación: ${e.respuestas.map((x) => `${x.pregunta} → ${x.respuesta}`).join(' · ')}`.slice(0, 1500) : ''),
     enlace: e.enlace?.trim() || undefined, evaluacion: r,
   } as never)
   return { evaluacion: r.resultado, evidencia: ev.id }
@@ -241,14 +259,17 @@ export async function marcarLogrado(db: SendaDB, objetivo: string, evidencia: st
   if (!o || !ev || ev.objetivo !== o.id || !puedeMarcarLogrado(resultado)) {
     throw new Error('Para marcar un objetivo como logrado hace falta una evidencia aprobada.')
   }
-  await guardar(db, 'objetivos', { ...o, estado: 'logrado', fecha_logro: hoy(), evidencia_logro: ev.id, pendiente_ficha: true })
+  await guardar(db, 'objetivos', {
+    ...o, estado: 'logrado', fecha_logro: hoy(), evidencia_logro: ev.id,
+    logrado_con_retraso: resultado?.con_retraso === true, pendiente_ficha: true,
+  })
   await sumarXP(db, XP.objetivoLogrado, `objetivo logrado: ${o.titulo}`)
 }
 
 export async function reabrirObjetivo(db: SendaDB, id: string) {
   const o = await db.objetivos.get(id)
   if (!o) throw new Error('El objetivo no existe.')
-  return guardar(db, 'objetivos', { ...o, estado: 'activo', fecha_logro: null, pendiente_ficha: true })
+  return guardar(db, 'objetivos', { ...o, estado: 'activo', fecha_logro: null, logrado_con_retraso: undefined, pendiente_ficha: true })
 }
 
 // ---------- rutas ----------

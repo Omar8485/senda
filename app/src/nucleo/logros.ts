@@ -7,6 +7,10 @@ export interface EvaluacionLogro {
   aprobado: boolean
   explicacion: string
   falta: string
+  /** D-011: se cumplió después de la fecha límite. No invalida el logro. */
+  con_retraso?: boolean
+  /** D-011: preguntas de verificación para un logro sin resultado externo. */
+  preguntas?: string[]
 }
 
 /** Un objetivo solo se puede marcar como logrado con una evaluación aprobada de su evidencia. */
