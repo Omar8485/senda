@@ -9,6 +9,6 @@ __pycache__/
 node_modules/
 
 # Datos personales de Omar: viven en el repo privado Omar8485/senda-omar
-perfil/
-datos/
-notas/
+/perfil/
+/datos/
+/notas/

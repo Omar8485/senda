@@ -1,0 +1,75 @@
+{
+  "_nota": "Datos inventados para pruebas. No corresponden a ninguna persona real.",
+  "jugador": {
+    "estado": { "xp": 320, "racha": 4, "ultimo_dia": "2026-10-08", "minutos_dia": 45, "avatar": "a3" }
+  },
+  "valores": {
+    "val-cumplir-a-tiempo": {
+      "tipo": "valor",
+      "enunciado": "Cumplir a tiempo lo que comprometo",
+      "corto": "Cumplir a tiempo",
+      "area": "transversal",
+      "importancia": 9,
+      "consistencia": 6,
+      "origen": "senda",
+      "fecha": "2026-10-01",
+      "contextos": [
+        { "situacion": "Entregas con fecha en el trabajo", "habilidades": ["Estimar tiempos de tareas"] }
+      ],
+      "historial": [{ "fecha": "2026-10-02", "cambio": "editado: importancia" }],
+      "pendiente_ficha": true
+    },
+    "prin-no-mentir": { "tipo": "principio", "enunciado": "No mentir para quedar bien", "estado": "activo" },
+    "val-viejo": { "tipo": "valor", "enunciado": "Un valor archivado", "estado": "archivado", "area": "area-que-no-existe" }
+  },
+  "habilidades": {
+    "hab-estimar-tiempos-de-tareas": {
+      "nombre": "Estimar tiempos de tareas",
+      "tipo": "cognitiva",
+      "clase": "indispensable",
+      "nivel": 2,
+      "sospechado": 3,
+      "requerido": 3,
+      "confianza": "media",
+      "xp": 120,
+      "fuentes": ["val-cumplir-a-tiempo", "obj-terminar-curso"],
+      "estado": "activa",
+      "evidencias": [
+        { "fecha": "2026-10-05", "tipo": "evaluacion", "externa": true, "contexto": "reto en Senda", "descripcion": "Reto \"Plan semanal\": aprobado (80/100)" },
+        { "fecha": "2026-10-06", "tipo": "autoobservacion", "externa": false, "contexto": "registrada en Senda", "descripcion": "Estimé la semana y acerté en 4 de 5 tareas" }
+      ],
+      "ultimo_reto": { "fecha": "2026-10-05", "aprobado": true, "puntaje": 80 }
+    },
+    "hab-tocar-guitarra": { "nombre": "Tocar acordes básicos", "nivel": null, "estado": "pausada", "motivo_pausa": "sin tiempo", "xp": 0 }
+  },
+  "objetivos": {
+    "obj-terminar-curso": {
+      "titulo": "Terminar curso",
+      "enunciado": "Terminar el curso de planificación",
+      "criterio": "Tener el certificado emitido",
+      "fecha_limite": "2026-12-15",
+      "valores": ["val-cumplir-a-tiempo"],
+      "estado": "logrado",
+      "fecha_logro": "2026-10-07",
+      "evidencia_logro": { "fecha": "2026-10-07", "descripcion": "Recibí el certificado", "enlace": "https://ejemplo.org/certificado", "imagen": null, "evaluacion": "El enlace respalda el criterio." }
+    },
+    "obj-sin-evidencia": { "titulo": "Logrado sin evidencia", "estado": "logrado", "valores": [] }
+  },
+  "rutas": {
+    "ruta-cumplir-a-tiempo": {
+      "titulo": "Dos semanas para cumplir a tiempo",
+      "descripcion": "Ruta inventada",
+      "origen": "val-cumplir-a-tiempo",
+      "creada": "2026-10-01",
+      "unidades": [
+        {
+          "titulo": "Semana 1: medir",
+          "nodos": [
+            { "tipo": "sesion", "titulo": "Autoevaluación", "tareas": [{ "texto": "Anotar tres entregas", "min": 15 }], "habilidades": ["hab-estimar-tiempos-de-tareas"], "estado": "hecho", "fecha": "2026-10-02", "tareas_hechas": [0], "minutos_reales": 15, "xp": 15 },
+            { "tipo": "reto", "titulo": "Reto de la semana", "tareas": [], "habilidades": ["hab-estimar-tiempos-de-tareas"], "estado": "pendiente" }
+          ]
+        }
+      ]
+    }
+  }
+}
